@@ -27,14 +27,13 @@ export default function Home() {
           style={{ objectFit: "cover" }}
           fill
         />
-        <div className="absolute inset-0 animate-people-walk">
-          <Image
-            src={heroImagePeople}
-            alt="people"
-            sizes="100vw"
-            style={{ objectFit: "cover" }}
-            fill
-          />
+        {/* Layer A — normal direction, fades out after Layer B appears */}
+        <div className="absolute inset-0 animate-people-a" style={{ transform: "scale(1.05)" }}>
+          <Image src={heroImagePeople} alt="people" sizes="100vw" style={{ objectFit: "cover" }} fill />
+        </div>
+        {/* Layer B — flipped direction, fades in while Layer A still showing */}
+        <div className="absolute inset-0 animate-people-b" style={{ transform: "scale(1.05) scaleX(-1)" }}>
+          <Image src={heroImagePeople} alt="people" sizes="100vw" style={{ objectFit: "cover" }} fill />
         </div>
       </section>
     </div>
