@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Old_Standard_TT } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +17,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "The Age Collective",
   description: "We are all aging. Lets talk about it",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FCF2E0",
 };
 
 export default function RootLayout({
