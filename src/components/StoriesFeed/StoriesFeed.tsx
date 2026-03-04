@@ -3,9 +3,8 @@
 import { ArrowRight, ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import testPhoto from "../../../public/test.webp";
-import treeRings from "../../../public/treerings.svg";
 
 type Story = {
   id: number;
@@ -87,27 +86,81 @@ const stories: Story[] = [
   },
 ];
 
-const DECADES = ["all", "40", "50", "60", "70", "80", "90"] as const;
+const DECADES = [
+  "all",
+  "20",
+  "30",
+  "40",
+  "50",
+  "60",
+  "70",
+  "80",
+  "90",
+] as const;
 type Decade = (typeof DECADES)[number];
 
 const decadeLabel = (d: Decade) => (d === "all" ? "All Ages" : `${d}s`);
 
-function TreeRingDivider() {
+// Golden angle gives nicely distributed values across 0–360 with no state or hydration risk
+const goldenRotation = (i: number) => (i * 137.508) % 360;
+
+function TreeRingDivider({
+  isDrawn,
+  rotation,
+}: {
+  isDrawn: boolean;
+  rotation: number;
+}) {
+  const ring = (delay: number): React.CSSProperties => ({
+    strokeDasharray: 1,
+    strokeDashoffset: isDrawn ? 0 : 1,
+    transition: `stroke-dashoffset 0.4s ease-out ${delay}s`,
+  });
+
   return (
-    <div className="flex items-center -my-2 md:my-0 gap-5 py-2">
+    <div className="-my-2 flex items-center gap-5 py-2 md:my-0">
       <div className="h-px flex-1 bg-primary/20" />
-      <Image
-        src={treeRings}
-        alt=""
+      <svg
+        viewBox="0 0 287 299"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
-        width={96}
-        height={96}
         className="opacity-60"
         style={{
           width: "clamp(3rem, 6vw, 8rem)",
           height: "clamp(3rem, 6vw, 8rem)",
+          transform: `rotate(${rotation}deg)`,
         }}
-      />
+      >
+        <path
+          d="M143.5 2C221.572 2 285 67.96 285 149.5C285 231.04 221.572 297 143.5 297C65.4281 297 2 231.04 2 149.5C2 67.96 65.4281 2 143.5 2Z"
+          stroke="#D87D3C"
+          strokeWidth="4"
+          pathLength={1}
+          style={ring(0)}
+        />
+        <path
+          d="M143.5 33C210.673 33 265 85.452 265 150C265 214.548 210.673 267 143.5 267C76.3268 267 22 214.548 22 150C22 85.452 76.3268 33 143.5 33Z"
+          stroke="#D7B88F"
+          strokeWidth="4"
+          pathLength={1}
+          style={ring(0.07)}
+        />
+        <path
+          d="M144.5 61C186.483 61 221 100.559 221 150C221 199.441 186.483 239 144.5 239C102.517 239 68 199.441 68 150C68 100.559 102.517 61 144.5 61Z"
+          stroke="#B39C66"
+          strokeWidth="4"
+          pathLength={1}
+          style={ring(0.14)}
+        />
+        <path
+          d="M156 118C171.289 118 184 131.696 184 149C184 166.304 171.289 180 156 180C140.711 180 128 166.304 128 149C128 131.696 140.711 118 156 118Z"
+          stroke="#AF4106"
+          strokeWidth="4"
+          pathLength={1}
+          style={ring(0.21)}
+        />
+      </svg>
       <div className="h-px flex-1 bg-primary/20" />
     </div>
   );
@@ -125,7 +178,7 @@ function StoryCard({
   const isEven = index % 2 === 1;
   return (
     <article
-      className={`relative grid grid-cols-1 items-center gap-6 py-10 transition-all duration-700 md:gap-12 ${isEven ? "md:grid-cols-[3fr_2fr]" : "md:grid-cols-[2fr_3fr]"} ${
+      className={`relative grid grid-cols-1 items-center gap-6 py-10 transition-all duration-700 md:gap-28 ${isEven ? "md:grid-cols-[3fr_2fr]" : "md:grid-cols-[2fr_3fr]"} ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       }`}
       style={{ transitionDelay: `${index * 80}ms` }}
@@ -183,17 +236,6 @@ function StoryCard({
           Read {story.pronoun} story
           <ArrowRight size={16} />
         </Link>
-
-        {/* Ghost age */}
-        <span
-          className="-translate-y-1/2 -right-4 pointer-events-none absolute top-1/2 hidden select-none font-serif text-primary/[0.055] leading-none md:block"
-          style={{
-            fontSize: "clamp(5rem,10vw,9rem)",
-          }}
-          aria-hidden="true"
-        >
-          {story.age}
-        </span>
       </div>
     </article>
   );
@@ -203,31 +245,48 @@ export default function StoriesFeed() {
   const [activeDecade, setActiveDecade] = useState<Decade>("all");
   const [newestFirst, setNewestFirst] = useState(true);
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
+  const [drawnDividers, setDrawnDividers] = useState<Set<number>>(new Set());
   const cardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const dividerRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
-  const filtered = stories
-    .filter((s) => activeDecade === "all" || s.decade === activeDecade)
-    .sort((a, b) => (newestFirst ? b.age - a.age : a.age - b.age));
+  const filtered = useMemo(
+    () =>
+      stories
+        .filter((s) => activeDecade === "all" || s.decade === activeDecade)
+        .sort((a, b) => (newestFirst ? b.age - a.age : a.age - b.age)),
+    [activeDecade, newestFirst],
+  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: activeDecade/newestFirst trigger re-observation when filter/sort changes
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (e.isIntersecting) {
-            const id = Number((e.target as HTMLElement).dataset.storyId);
-            setVisibleCards((prev) => new Set([...prev, id]));
-            observer.unobserve(e.target);
+          if (!e.isIntersecting) continue;
+          const el = e.target as HTMLElement;
+          if (el.dataset.storyId) {
+            const id = Number(el.dataset.storyId);
+            setVisibleCards((prev) => {
+              if (prev.has(id)) return prev;
+              return new Set([...prev, id]);
+            });
           }
+          if (el.dataset.dividerId) {
+            const id = Number(el.dataset.dividerId);
+            setDrawnDividers((prev) => {
+              if (prev.has(id)) return prev;
+              return new Set([...prev, id]);
+            });
+          }
+          observer.unobserve(el);
         }
       },
       { threshold: 0.12 },
     );
 
     const timer = setTimeout(() => {
-      for (const el of cardRefs.current.values()) {
-        observer.observe(el);
-      }
+      for (const el of cardRefs.current.values()) observer.observe(el);
+      for (const el of dividerRefs.current.values()) observer.observe(el);
     }, 0);
 
     return () => {
@@ -237,14 +296,14 @@ export default function StoriesFeed() {
   }, [activeDecade, newestFirst]);
 
   return (
-    <div className="bg-white">
+    <div className="container">
       {/* Filter bar */}
       <div className="flex flex-col items-center gap-5 px-4 pt-16">
         <span className="font-sans text-[0.55rem] text-foreground/50 uppercase tracking-[0.3em]">
           Filter by decade
         </span>
         <fieldset
-          className="flex border border-primary/20"
+          className="flex flex-wrap justify-center gap-1.5"
           aria-label="Decade filter"
         >
           {DECADES.map((d) => (
@@ -252,10 +311,10 @@ export default function StoriesFeed() {
               key={d}
               type="button"
               onClick={() => setActiveDecade(d)}
-              className={`cursor-pointer border-primary/20 border-r px-4 py-2.5 font-sans text-[0.58rem] uppercase tracking-[0.18em] transition-all last:border-r-0 ${
+              className={`cursor-pointer border rounded-lg px-4 py-2 font-sans text-[0.58rem] uppercase tracking-[0.18em] transition-all ${
                 activeDecade === d
-                  ? "bg-primary text-white"
-                  : "text-foreground/50 hover:bg-primary/5 hover:text-primary"
+                  ? "border-primary bg-primary text-white"
+                  : "border-primary/20 text-foreground/50 hover:bg-primary/5 hover:text-primary"
               }`}
             >
               {decadeLabel(d)}
@@ -269,7 +328,7 @@ export default function StoriesFeed() {
       </div>
 
       {/* Meta row */}
-      <div className="flex items-center justify-between px-6 pt-10 md:px-24">
+      <div className="flex items-center justify-between pt-10">
         <span className="font-sans text-[0.55rem] text-foreground/50 uppercase tracking-[0.25em]">
           <span className="font-normal text-primary text-sm">
             {filtered.length}
@@ -287,7 +346,7 @@ export default function StoriesFeed() {
       </div>
 
       {/* Stories feed */}
-      <div className="px-6 pb-24 md:px-24">
+      <div>
         {filtered.length === 0 ? (
           <p className="py-20 text-center font-serif text-foreground/40 text-xl italic">
             No stories in this decade yet.
@@ -295,7 +354,19 @@ export default function StoriesFeed() {
         ) : (
           filtered.map((story, index) => (
             <Fragment key={story.id}>
-              {index > 0 && <TreeRingDivider />}
+              {index > 0 && (
+                <div
+                  ref={(el) => {
+                    if (el) dividerRefs.current.set(index, el);
+                  }}
+                  data-divider-id={index}
+                >
+                  <TreeRingDivider
+                    isDrawn={drawnDividers.has(index)}
+                    rotation={goldenRotation(index)}
+                  />
+                </div>
+              )}
               <div
                 ref={(el) => {
                   if (el) cardRefs.current.set(story.id, el);
