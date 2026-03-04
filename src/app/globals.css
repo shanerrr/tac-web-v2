@@ -14,24 +14,57 @@
 
 /* Layer A — normal direction: visible → fades out AFTER layer B appears */
 @keyframes people-a {
-    0%   { opacity: 1; }
-    40%  { opacity: 1; }  /* B starts fading in at 40% */
-    52%  { opacity: 0; }  /* A fully gone after B is visible */
-    88%  { opacity: 0; }
-    100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  /* B starts fading in at 40% */
+  52% {
+    opacity: 0;
+  }
+
+  /* A fully gone after B is visible */
+  88% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 /* Layer B — flipped direction: fades in while A still showing → fades out */
 @keyframes people-b {
-    0%   { opacity: 0; }
-    40%  { opacity: 0; }  /* starts fading in as A begins to fade */
-    52%  { opacity: 1; }  /* fully visible, A now gone */
-    88%  { opacity: 1; }
-    100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0;
+  }
+
+  /* starts fading in as A begins to fade */
+  52% {
+    opacity: 1;
+  }
+
+  /* fully visible, A now gone */
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 @utility container {
     padding-inline: 1rem;
+    margin: auto;
 
     @media (width >=640px) {
         padding-inline: 2rem;
@@ -39,7 +72,7 @@
 }
 
 body {
-    background: url(/texture.jpg);
-    background-repeat: repeat;
-    color: var(--foreground);
+  background: url(/texture.jpg);
+  background-repeat: repeat;
+  color: var(--foreground);
 }

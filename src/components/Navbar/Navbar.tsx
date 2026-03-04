@@ -2,15 +2,13 @@
 
 import { ChevronDown, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import logo from "../../../public/logo.svg";
 
 const navItems = [
   { label: "about us" },
-  {
-    label: "storytelling",
-    children: ["stories", "films", "poetry"],
-  },
+  { label: "storytelling", children: ["stories", "films", "poetry"] },
   { label: "resources" },
   { label: "events" },
 ];
@@ -31,57 +29,50 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({
+  textColour = "text-black",
+}: {
+  textColour: string;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-
-  function toggleSubmenu(label: string) {
-    setOpenSubmenu((prev) => (prev === label ? null : label));
-  }
 
   return (
     <>
-      <nav className="container relative z-50 mx-auto py-8 font-sans">
+      <nav className={`container relative z-50 py-8 font-sans ${textColour}`}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center gap-3">
             <Image
               src={logo}
               alt="tac logo"
               width={64}
               height={64}
-              className="h-11 w-11 rounded-full md:h-16 md:w-16"
+              className="h-11 w-11 shrink-0 rounded-full md:h-16 md:w-16"
             />
-            <span className="font-medium text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-[-1px]">
-              the age collective
-            </span>
-          </div>
+            <div className="flex flex-col justify-center font-normal text-base leading-none md:h-16 md:text-2xl">
+              <span>the age</span>
+              <span>collective</span>
+            </div>
+          </Link>
 
-          {/* Desktop nav */}
+          {/* Desktop nav — CSS hover, no state needed */}
           <ol className="ml-8 hidden items-center gap-8 font-light text-lg md:flex lg:gap-12 lg:text-xl xl:text-2xl">
             {navItems.map((item) =>
               item.children ? (
-                <li
-                  key={item.label}
-                  className="relative"
-                  onMouseEnter={() => setOpenDropdown(item.label)}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
+                <li key={item.label} className="group relative">
                   <button type="button" className="flex items-center gap-1">
                     {item.label}
                     <ChevronDown
                       size={20}
-                      className={`transition-transform duration-200 ${openDropdown === item.label ? "rotate-180" : ""}`}
+                      className="transition-transform duration-200 group-hover:rotate-180"
                     />
                   </button>
-                  <ul
-                    className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-200 ${openDropdown === item.label ? "opacity-100 pointer-events-auto translate-y-0" : "opacity-0 pointer-events-none -translate-y-1"}`}
-                  >
+                  <ul className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 -translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
                     <div className="flex flex-col gap-3 whitespace-nowrap rounded-xl bg-white/80 px-6 py-4 text-base shadow-sm backdrop-blur-sm">
                       {item.children.map((child) => (
                         <li
                           key={child}
-                          className="transition-colors hover:text-primary cursor-pointer"
+                          className="cursor-pointer text-black transition-colors hover:text-primary"
                         >
                           {child}
                         </li>
@@ -95,9 +86,9 @@ export default function Navbar() {
             )}
           </ol>
 
-          {/* Hamburger button — mobile only */}
+          {/* Hamburger — mobile only */}
           <button
-            className="relative ml-auto h-11 w-11 md:hidden"
+            className="relative h-11 w-11 md:hidden"
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
             aria-label="Toggle menu"
@@ -128,14 +119,18 @@ export default function Navbar() {
             : "pointer-events-none -translate-y-8 opacity-0"
         }`}
       >
-        <ol className="flex flex-col items-center gap-10 font-serif text-5xl">
+        <ol className="flex flex-col items-center gap-10 font-serif text-4xl">
           {navItems.map((item) =>
             item.children ? (
               <li key={item.label} className="flex flex-col items-center">
                 <button
                   type="button"
                   className="flex items-center gap-2"
-                  onClick={() => toggleSubmenu(item.label)}
+                  onClick={() =>
+                    setOpenSubmenu((p) =>
+                      p === item.label ? null : item.label,
+                    )
+                  }
                 >
                   {item.label}
                   <ChevronDown
