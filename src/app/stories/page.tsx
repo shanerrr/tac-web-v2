@@ -23,7 +23,7 @@ export default function Stories() {
     <div className="min-h-dvh w-screen">
       <div className="bg-secondary">
         <Navbar textColour="text-white" />
-        <section className="flex h-[50vh] flex-col items-center justify-center py-20 text-center text-white">
+        <section className="flex h-[50vh] flex-col items-center justify-center text-center text-white">
           <h1 className="font-bold font-serif text-7xl sm:text-8xl lg:text-9xl">
             Stories
           </h1>

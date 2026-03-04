@@ -7,7 +7,7 @@ import heroImagePeople from "../../public/landingHeroPeople.svg";
 export default function Home() {
   return (
     <div className="relative flex h-dvh w-screen flex-col overflow-hidden">
-      <Navbar textColour="text-black" />
+      <Navbar />
       <section className="flex flex-2 items-end justify-center text-center tracking-[-4px] md:flex-2 md:items-center">
         <div className="font-serif text-5xl sm:text-6xl md:pt-10 md:text-6xl lg:text-7xl">
           <h1 className="italic">We're all aging. </h1>
@@ -26,6 +26,7 @@ export default function Home() {
           sizes="100vw"
           className="object-cover object-center md:object-top"
           fill
+          priority
         />
         {/* Layer A — normal direction, fades out after Layer B appears */}
         <div className="absolute inset-0 animate-people-a">

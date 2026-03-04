@@ -16,7 +16,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "The Age Collective",
-  description: "We are all aging. Lets talk about it",
+  description: "We are all aging. Let's talk about it",
 };
 
 export const viewport: Viewport = {

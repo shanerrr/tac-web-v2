@@ -6,11 +6,21 @@ import Link from "next/link";
 import { useState } from "react";
 import logo from "../../../public/logo.svg";
 
-const navItems = [
-  { label: "about us" },
-  { label: "storytelling", children: ["stories", "films", "poetry"] },
-  { label: "resources" },
-  { label: "events" },
+type NavChild = { label: string; href: string };
+type NavItem = { label: string; href?: string; children?: NavChild[] };
+
+const navItems: NavItem[] = [
+  { label: "about us", href: "/about" },
+  {
+    label: "storytelling",
+    children: [
+      { label: "stories", href: "/stories" },
+      { label: "films", href: "/films" },
+      { label: "poetry", href: "/poetry" },
+    ],
+  },
+  { label: "resources", href: "/resources" },
+  { label: "events", href: "/events" },
 ];
 
 function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
@@ -30,12 +40,17 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
 }
 
 export default function Navbar({
-  textColour = "text-black",
+  textColour = "text-foreground",
 }: {
-  textColour: string;
+  textColour?: string;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+
+  function closeMenu() {
+    setMenuOpen(false);
+    setOpenSubmenu(null);
+  }
 
   return (
     <>
@@ -44,7 +59,7 @@ export default function Navbar({
           <Link href="/" className="flex items-center gap-3">
             <Image
               src={logo}
-              alt="tac logo"
+              alt="The Age Collective logo"
               width={64}
               height={64}
               className="h-11 w-11 shrink-0 rounded-full md:h-16 md:w-16"
@@ -67,21 +82,30 @@ export default function Navbar({
                       className="transition-transform duration-200 group-hover:rotate-180"
                     />
                   </button>
-                  <ul className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 -translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
+                  <ul className="-translate-x-1/2 -translate-y-1 pointer-events-none absolute top-full left-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
                     <div className="flex flex-col gap-3 whitespace-nowrap rounded-xl bg-white/80 px-6 py-4 text-base shadow-sm backdrop-blur-sm">
                       {item.children.map((child) => (
-                        <li
-                          key={child}
-                          className="cursor-pointer text-black transition-colors hover:text-primary"
-                        >
-                          {child}
+                        <li key={child.label}>
+                          <Link
+                            href={child.href}
+                            className="text-black transition-colors hover:text-primary"
+                          >
+                            {child.label}
+                          </Link>
                         </li>
                       ))}
                     </div>
                   </ul>
                 </li>
               ) : (
-                <li key={item.label}>{item.label}</li>
+                <li key={item.label}>
+                  <Link
+                    href={item.href ?? "/"}
+                    className="transition-colors hover:text-primary"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
               ),
             )}
           </ol>
@@ -92,6 +116,7 @@ export default function Navbar({
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
           >
             <div
               className={`absolute inset-0 transition-all duration-500 ease-in-out ${menuOpen ? "rotate-90 scale-75 opacity-0" : "rotate-0 scale-100 opacity-100"}`}
@@ -116,7 +141,7 @@ export default function Navbar({
         className={`fixed inset-0 z-40 flex flex-col items-center justify-center transition-all duration-500 ease-in-out md:hidden ${
           menuOpen
             ? "pointer-events-auto translate-y-0 opacity-100"
-            : "pointer-events-none -translate-y-8 opacity-0"
+            : "-translate-y-8 pointer-events-none opacity-0"
         }`}
       >
         <ol className="flex flex-col items-center gap-10 font-serif text-4xl">
@@ -142,12 +167,20 @@ export default function Navbar({
                   className={`flex flex-col items-center gap-4 overflow-hidden font-light text-3xl transition-all duration-300 ${openSubmenu === item.label ? "max-h-40 pt-4 opacity-100" : "max-h-0 opacity-0"}`}
                 >
                   {item.children.map((child) => (
-                    <li key={child}>{child}</li>
+                    <li key={child.label}>
+                      <Link href={child.href} onClick={closeMenu}>
+                        {child.label}
+                      </Link>
+                    </li>
                   ))}
                 </ul>
               </li>
             ) : (
-              <li key={item.label}>{item.label}</li>
+              <li key={item.label}>
+                <Link href={item.href ?? "/"} onClick={closeMenu}>
+                  {item.label}
+                </Link>
+              </li>
             ),
           )}
         </ol>

@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme inline {
-    --color-background: #ffffff;
-    --color-foreground: #171717;
-    --color-primary: #af4106;
-    --color-secondary: #d87d3c;
-    --color-tertiary: #b39c66;
-    --font-sans: var(--font-inter-sans);
-    --font-serif: var(--font-old-standard-serif);
-    --animate-people-a: people-a 12s ease-in-out infinite;
-    --animate-people-b: people-b 12s ease-in-out infinite;
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-primary: #af4106;
+  --color-secondary: #d87d3c;
+  --color-tertiary: #b39c66;
+  --font-sans: var(--font-inter-sans);
+  --font-serif: var(--font-old-standard-serif);
+  --animate-people-a: people-a 12s ease-in-out infinite;
+  --animate-people-b: people-b 12s ease-in-out infinite;
 }
 
 /* Layer A — normal direction: visible → fades out AFTER layer B appears */
@@ -63,12 +63,12 @@
 }
 
 @utility container {
-    padding-inline: 1rem;
-    margin: auto;
+  padding-inline: 1rem;
+  margin: auto;
 
-    @media (width >=640px) {
-        padding-inline: 2rem;
-    }
+  @media (width >= 640px) {
+    padding-inline: 2rem;
+  }
 }
 
 body {
