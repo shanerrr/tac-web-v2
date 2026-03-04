@@ -1,3 +1,4 @@
+import Footer from "@tac/components/Footer";
 import type { Metadata, Viewport } from "next";
 import { Inter, Old_Standard_TT } from "next/font/google";
 import "./globals.css";
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${oldStandardTT.variable} ${inter.variable} font-sans antialiased`}
       >
         {children}
+        <Footer />
       </body>
     </html>
   );

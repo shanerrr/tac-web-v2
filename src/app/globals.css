@@ -10,6 +10,7 @@
   --font-serif: var(--font-old-standard-serif);
   --animate-people-a: people-a 12s ease-in-out infinite;
   --animate-people-b: people-b 12s ease-in-out infinite;
+  --animate-spin-slow: spin-slow 5s linear infinite;
 }
 
 /* Layer A — normal direction: visible → fades out AFTER layer B appears */
@@ -59,6 +60,15 @@
 
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 

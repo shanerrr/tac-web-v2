@@ -3,7 +3,15 @@
 import { ArrowRight, ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import testPhoto from "../../../public/test.webp";
 
 type Story = {
@@ -101,10 +109,10 @@ type Decade = (typeof DECADES)[number];
 
 const decadeLabel = (d: Decade) => (d === "all" ? "All Ages" : `${d}s`);
 
-// Golden angle gives nicely distributed values across 0–360 with no state or hydration risk
+// Golden angle: deterministic, nicely distributed, no state or hydration risk
 const goldenRotation = (i: number) => (i * 137.508) % 360;
 
-function TreeRingDivider({
+const TreeRingDivider = memo(function TreeRingDivider({
   isDrawn,
   rotation,
 }: {
@@ -164,21 +172,23 @@ function TreeRingDivider({
       <div className="h-px flex-1 bg-primary/20" />
     </div>
   );
-}
+});
 
-function StoryCard({
+const StoryCard = memo(function StoryCard({
   story,
   index,
   isVisible,
+  priority,
 }: {
   story: Story;
   index: number;
   isVisible: boolean;
+  priority?: boolean;
 }) {
   const isEven = index % 2 === 1;
   return (
     <article
-      className={`relative grid grid-cols-1 items-center gap-6 py-10 transition-all duration-700 md:gap-28 ${isEven ? "md:grid-cols-[3fr_2fr]" : "md:grid-cols-[2fr_3fr]"} ${
+      className={`relative grid grid-cols-1 items-center gap-6 py-10 transition-[opacity,transform] duration-700 md:gap-28 ${isEven ? "md:grid-cols-[3fr_2fr]" : "md:grid-cols-[2fr_3fr]"} ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       }`}
       style={{ transitionDelay: `${index * 80}ms` }}
@@ -186,7 +196,7 @@ function StoryCard({
       {/* Photo */}
       <div className={`relative z-10 ${isEven ? "md:order-2" : ""}`}>
         <div
-          className={`relative aspect-square overflow-hidden rounded-lg shadow-2xl transition-transform duration-500 hover:scale-[1.01] ${
+          className={`relative aspect-square overflow-hidden rounded-lg shadow-2xl transition-transform duration-500 will-change-transform hover:scale-[1.01] ${
             isEven
               ? "md:rotate-[1.5deg] md:hover:rotate-0"
               : "md:-rotate-[1.5deg] md:hover:rotate-0"
@@ -195,10 +205,11 @@ function StoryCard({
           <Image
             src={testPhoto}
             fill
+            sizes="(min-width: 768px) 40vw, 100vw"
             className="object-cover"
             alt={`Photo of ${story.name}`}
+            priority={priority}
           />
-
           {/* Decade badge */}
           <div className="absolute bottom-4 left-4 z-10 rounded-sm bg-primary px-3 py-1.5 font-sans text-[0.5rem] text-white uppercase tracking-[0.25em]">
             {story.decade}s
@@ -239,7 +250,7 @@ function StoryCard({
       </div>
     </article>
   );
-}
+});
 
 export default function StoriesFeed() {
   const [activeDecade, setActiveDecade] = useState<Decade>("all");
@@ -256,6 +267,15 @@ export default function StoriesFeed() {
         .sort((a, b) => (newestFirst ? b.age - a.age : a.age - b.age)),
     [activeDecade, newestFirst],
   );
+
+  // Stable ref callbacks — read id from data attribute, no closure over changing values
+  const setCardRef = useCallback((el: HTMLDivElement | null) => {
+    if (el) cardRefs.current.set(Number(el.dataset.storyId), el);
+  }, []);
+
+  const setDividerRef = useCallback((el: HTMLDivElement | null) => {
+    if (el) dividerRefs.current.set(Number(el.dataset.dividerId), el);
+  }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: activeDecade/newestFirst trigger re-observation when filter/sort changes
   useEffect(() => {
@@ -311,7 +331,7 @@ export default function StoriesFeed() {
               key={d}
               type="button"
               onClick={() => setActiveDecade(d)}
-              className={`cursor-pointer border rounded-lg px-4 py-2 font-sans text-[0.58rem] uppercase tracking-[0.18em] transition-all ${
+              className={`cursor-pointer border px-4 py-2 font-sans text-[0.58rem] uppercase tracking-[0.18em] transition-colors ${
                 activeDecade === d
                   ? "border-primary bg-primary text-white"
                   : "border-primary/20 text-foreground/50 hover:bg-primary/5 hover:text-primary"
@@ -355,28 +375,19 @@ export default function StoriesFeed() {
           filtered.map((story, index) => (
             <Fragment key={story.id}>
               {index > 0 && (
-                <div
-                  ref={(el) => {
-                    if (el) dividerRefs.current.set(index, el);
-                  }}
-                  data-divider-id={index}
-                >
+                <div ref={setDividerRef} data-divider-id={index}>
                   <TreeRingDivider
                     isDrawn={drawnDividers.has(index)}
                     rotation={goldenRotation(index)}
                   />
                 </div>
               )}
-              <div
-                ref={(el) => {
-                  if (el) cardRefs.current.set(story.id, el);
-                }}
-                data-story-id={story.id}
-              >
+              <div ref={setCardRef} data-story-id={story.id}>
                 <StoryCard
                   story={story}
                   index={index}
                   isVisible={visibleCards.has(story.id)}
+                  priority={index === 0}
                 />
               </div>
             </Fragment>
