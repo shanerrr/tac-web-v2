@@ -14,8 +14,7 @@ export default function Home() {
           <h2 className="font-bold">Let's talk about it.</h2>
           <p className="flex items-center justify-center gap-3 pt-4 font-extralight font-sans text-primary text-xl italic tracking-[-2px] sm:text-2xl md:text-3xl lg:text-4xl">
             Click to learn more.
-            <MoveRight size={24} className="sm:hidden" />
-            <MoveRight size={34} className="hidden sm:block" />
+            <MoveRight className="h-6 w-6 sm:h-[34px] sm:w-[34px]" />
           </p>
         </div>
       </section>

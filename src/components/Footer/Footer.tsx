@@ -1,3 +1,9 @@
+import {
+  EmailIcon,
+  InstagramIcon,
+  LinkedInIcon,
+  YouTubeIcon,
+} from "@tac/components/Icons";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../../public/logo-rings.svg";
@@ -13,75 +19,6 @@ const projectLinks = [
   { label: "My Aging Story", href: "/projects/my-aging-story" },
   { label: "GOLD", href: "/projects/gold" },
 ];
-
-function EmailIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className="h-4 w-4"
-    >
-      <rect x="2" y="4" width="20" height="16" rx="2" />
-      <path d="m2 7 10 7 10-7" />
-    </svg>
-  );
-}
-
-function LinkedInIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-      className="h-4 w-4"
-    >
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
-
-function InstagramIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className="h-4 w-4"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <circle cx="12" cy="12" r="5" />
-      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function YouTubeIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-      className="h-4 w-4"
-    >
-      {/* Compound path: outer rounded rect + inner play triangle as evenodd cutout */}
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M19.8 5.8a2.46 2.46 0 0 1 1.74 1.74C22 9.22 22 12 22 12s0 2.78-.46 4.46a2.46 2.46 0 0 1-1.74 1.74C18.12 18.66 12 18.66 12 18.66s-6.12 0-7.8-.46a2.46 2.46 0 0 1-1.74-1.74C2 14.78 2 12 2 12s0-2.78.46-4.46A2.46 2.46 0 0 1 4.2 5.8C5.88 5.34 12 5.34 12 5.34s6.12 0 7.8.46zM10 15l5-3-5-3v6z"
-      />
-    </svg>
-  );
-}
 
 const socialLinks = [
   { label: "Email", href: "mailto:hello@theagecollective.ca", icon: EmailIcon },
@@ -119,10 +56,10 @@ export default function Footer() {
               className="animate-spin-slow"
             />
             <div className="font-normal text-lg text-white leading-none tracking-[-1px]">
-              <span>the age collective</span>
+              the age collective
             </div>
           </Link>
-          <p className="font-serif text-sm text-white/80 italic leading-[-2px]">
+          <p className="font-serif text-md text-white/80 italic">
             We're all aging. Let's talk about it.
           </p>
         </div>
@@ -193,7 +130,7 @@ export default function Footer() {
 
       {/* Land acknowledgement + copyright */}
       <div className="container flex flex-col gap-4 py-8 text-white/80 sm:flex-row sm:items-end sm:justify-between">
-        <p className="font-sans text-[0.6rem] leading-relaxed sm:max-w-2xl">
+        <p className="font-sans text-xs leading-relaxed sm:max-w-2xl">
           {LAND_ACKNOWLEDGEMENT}
         </p>
         <p className="shrink-0 font-sans text-[0.6rem]">

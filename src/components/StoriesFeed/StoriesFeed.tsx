@@ -207,7 +207,7 @@ const StoryCard = memo(function StoryCard({
             fill
             sizes="(min-width: 768px) 40vw, 100vw"
             className="object-cover"
-            alt={`Photo of ${story.name}`}
+            alt="Story portrait placeholder"
             priority={priority}
           />
           {/* Decade badge */}
@@ -277,7 +277,11 @@ export default function StoriesFeed() {
     if (el) dividerRefs.current.set(Number(el.dataset.dividerId), el);
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: activeDecade/newestFirst trigger re-observation when filter/sort changes
+  // Re-run the observer whenever the filtered set changes so newly rendered
+  // cards and dividers get observed. The linter flags activeDecade/newestFirst
+  // as unused deps since they're not referenced inside the effect body, but
+  // they're the signals that cause filtered to change and new DOM nodes to mount.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see comment above
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {

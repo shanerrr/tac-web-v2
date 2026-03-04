@@ -31,13 +31,13 @@ const HamburgerIcon = memo(function HamburgerIcon({
   return (
     <div className="flex h-11 w-11 flex-col items-end justify-around rounded-[10px] bg-primary/60 p-[25%]">
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-200" : "w-full opacity-100 delay-0"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-[200ms]" : "w-full opacity-100 delay-0"}`}
       />
       <span
         className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-100" : "w-4/5 opacity-100 delay-100"}`}
       />
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-200"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-[200ms]"}`}
       />
     </div>
   );
@@ -68,6 +68,7 @@ export default function Navbar({
               alt="The Age Collective logo"
               width={64}
               height={64}
+              sizes="(max-width: 768px) 44px, 64px"
               className="h-11 w-11 shrink-0 rounded-full md:h-16 md:w-16"
             />
             <div className="flex flex-col justify-center font-normal text-lg leading-none md:h-16 md:text-2xl">
@@ -125,7 +126,7 @@ export default function Navbar({
             aria-expanded={menuOpen}
           >
             <div
-              className={`absolute inset-0 transition-[opacity,transform] duration-500 ease-in-out ${menuOpen ? "rotate-90 scale-75 opacity-0" : "rotate-0 scale-100 opacity-100"}`}
+              className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${menuOpen ? "opacity-0" : "opacity-100"}`}
             >
               <HamburgerIcon isOpen={menuOpen} />
             </div>
@@ -144,10 +145,10 @@ export default function Navbar({
           backgroundImage: "url('/texture.jpg')",
           backgroundRepeat: "repeat",
         }}
-        className={`fixed inset-0 z-40 flex flex-col items-center justify-center transition-[opacity,transform] duration-500 ease-in-out md:hidden ${
+        className={`fixed inset-0 z-40 flex flex-col items-center justify-center transition-opacity duration-300 ease-in-out md:hidden ${
           menuOpen
-            ? "pointer-events-auto translate-y-0 opacity-100"
-            : "-translate-y-8 pointer-events-none opacity-0"
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         }`}
       >
         <ol className="flex flex-col items-center gap-10 font-serif text-4xl">

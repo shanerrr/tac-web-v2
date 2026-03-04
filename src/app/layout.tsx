@@ -21,6 +21,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // Matches the site's warm cream background — sets the mobile browser chrome colour
   themeColor: "#FCF2E0",
 };
 
