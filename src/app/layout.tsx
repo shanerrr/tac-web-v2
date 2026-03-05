@@ -36,7 +36,6 @@ export default function RootLayout({
         className={`${oldStandardTT.variable} ${inter.variable} font-sans antialiased`}
       >
         {children}
-        <Footer />
       </body>
     </html>
   );
