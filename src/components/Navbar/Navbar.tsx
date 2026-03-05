@@ -132,10 +132,12 @@ const HamburgerIcon = memo(function HamburgerIcon({
 
 export default function Navbar({
   textColour = "text-black",
+  burgerBgColour,
   transparent = false,
   scrollThreshold = 20,
 }: {
   textColour?: string;
+  burgerBgColour: string;
   transparent?: boolean;
   scrollThreshold?: number;
 }) {
@@ -267,7 +269,7 @@ export default function Navbar({
                 <HamburgerIcon isOpen={menuOpen} />
               </div>
               <div
-                className={`absolute inset-0 flex items-center justify-center rounded-[10px] bg-primary/60 p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${menuOpen ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0"}`}
+                className={`absolute inset-0 flex items-center justify-center rounded-[10px] ${burgerBgColour} p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${menuOpen ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0"}`}
               >
                 <X className="h-full w-full" color="white" />
               </div>
@@ -278,23 +280,38 @@ export default function Navbar({
 
       {/* Full-screen mobile menu */}
       <div
-        // style={{
-        //   backgroundImage: "url('/texture.jpg')",
-        //   backgroundRepeat: "repeat",
-        // }}
-        className={`fixed inset-0 z-40 flex flex-col items-center justify-center bg-white transition-opacity duration-300 ease-in-out md:hidden ${
+        className={`fixed inset-0 z-40 flex flex-col justify-center overflow-hidden bg-white transition-[opacity,transform] duration-500 ease-in-out md:hidden ${
           menuOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-4 opacity-0"
         }`}
       >
-        <ol className="flex flex-col items-center gap-10 font-serif text-4xl">
+        {/* Rings watermark — large, off-center bottom-right */}
+        <div
+          className="pointer-events-none absolute animate-spin-slow"
+          style={{
+            width: "min(100vw, 100vh)",
+            height: "min(100vw, 100vh)",
+            bottom: "calc(min(100vw, 100vh) / -2)",
+            right: "calc(min(100vw, 100vh) / -2)",
+          }}
+        >
+          <Image
+            src={logoRings}
+            alt=""
+            fill
+            className="object-contain opacity-[0.06]"
+            style={{ filter: "invert(1)" }}
+          />
+        </div>
+
+        <ol className="container relative flex flex-col gap-10 font-serif text-4xl">
           {navItems.map((item) =>
             item.children ? (
-              <li key={item.label} className="flex flex-col items-center">
+              <li key={item.label} className="flex flex-col">
                 <button
                   type="button"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 self-start"
                   onClick={() =>
                     setOpenSubmenu((p) =>
                       p === item.label ? null : item.label,
@@ -308,18 +325,30 @@ export default function Navbar({
                   />
                 </button>
                 <ul
-                  className={`flex flex-col items-center gap-4 overflow-hidden font-light text-3xl transition-[max-height,opacity] duration-300 ${openSubmenu === item.label ? "max-h-60 pt-4 opacity-100" : "max-h-0 opacity-0"}`}
+                  className={`flex flex-col gap-3 overflow-hidden font-light transition-[max-height,opacity] duration-300 ${openSubmenu === item.label ? "max-h-60 pt-4 opacity-100" : "max-h-0 opacity-0"}`}
                 >
                   {item.children.map((child) => (
-                    <li key={child.label} className="flex items-center gap-3">
-                      {child.color && (
-                        <span
-                          className="h-2 w-2 shrink-0 rounded-full"
-                          style={{ backgroundColor: child.color }}
-                        />
-                      )}
-                      <Link href={child.href} onClick={closeMenu}>
-                        {child.label}
+                    <li key={child.label}>
+                      <Link
+                        href={child.href}
+                        onClick={closeMenu}
+                        className="flex items-center gap-4 text-3xl"
+                      >
+                        {child.color && (
+                          <span
+                            className="h-8 w-1 shrink-0 rounded-full"
+                            style={{ backgroundColor: child.color }}
+                          />
+                        )}
+                        <span className="flex flex-col">
+                          <span
+                            className="font-sans text-[10px] uppercase tracking-[0.25em]"
+                            style={{ color: child.color }}
+                          >
+                            {child.accentLabel}
+                          </span>
+                          {child.label}
+                        </span>
                       </Link>
                     </li>
                   ))}

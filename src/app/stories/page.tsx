@@ -6,7 +6,12 @@ import logo from "../../../public/logo-rings.svg";
 export default function Stories() {
   return (
     <div className="min-h-dvh w-screen">
-      <Navbar transparent textColour="text-white" scrollThreshold={500} />
+      <Navbar
+        transparent
+        textColour="text-white"
+        burgerBgColour="bg-secondary/60"
+        scrollThreshold={500}
+      />
 
       {/* Hero */}
       <div className="heroTexture -mt-27 bg-secondary md:-mt-32">

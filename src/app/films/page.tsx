@@ -6,7 +6,12 @@ import logo from "../../../public/logo-rings.svg";
 export default function Films() {
   return (
     <div className="min-h-dvh w-screen">
-      <Navbar transparent textColour="text-white" scrollThreshold={500} />
+      <Navbar
+        transparent
+        textColour="text-white"
+        burgerBgColour="bg-primary/60"
+        scrollThreshold={500}
+      />
 
       {/* Hero */}
       <div className="heroTexture -mt-27 bg-primary md:-mt-32">
