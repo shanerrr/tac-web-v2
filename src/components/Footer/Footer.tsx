@@ -11,7 +11,7 @@ import logo from "../../../public/logo-rings.svg";
 const exploreLinks = [
   { label: "About Us", href: "/about" },
   { label: "Stories", href: "/stories" },
-  { label: "Videos", href: "/videos" },
+  { label: "Films", href: "/films" },
   { label: "Resources", href: "/resources" },
 ];
 
@@ -42,9 +42,9 @@ const socialLinks = [
 const LAND_ACKNOWLEDGEMENT =
   "The Age Collective is based on the traditional territories of Indigenous Peoples across Canada. As a project that works with individuals from many regions, we recognize that our community gathers across diverse lands and nations. We acknowledge the enduring presence, knowledge, and sovereignty of First Nations, Inuit, and Métis Peoples, and we are committed to learning how our work can contribute to justice, respect, and accountability.";
 
-export default function Footer({ bgColour }: { bgColour: string }) {
+export default function Footer({ bgColor }: { bgColor: string }) {
   return (
-    <footer className={`heroTexture text-white ${bgColour}`}>
+    <footer className={`heroTexture text-white ${bgColor}`}>
       <div className="container grid grid-cols-2 gap-x-6 gap-y-12 py-16 lg:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="col-span-2 flex flex-col gap-2 lg:col-span-1">
           <Link href="/" className="flex flex-col justify-center gap-3">

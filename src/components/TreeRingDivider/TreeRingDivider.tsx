@@ -1,4 +1,4 @@
-import type React from "react";
+import type { CSSProperties } from "react";
 import { memo } from "react";
 
 /** Deterministic rotation via the golden angle — nicely distributed, no hydration risk. */
@@ -11,7 +11,7 @@ const TreeRingDivider = memo(function TreeRingDivider({
   isDrawn: boolean;
   rotation: number;
 }) {
-  const ring = (delay: number): React.CSSProperties => ({
+  const ring = (delay: number): CSSProperties => ({
     strokeDasharray: 1,
     strokeDashoffset: isDrawn ? 0 : 1,
     transition: `stroke-dashoffset 0.6s ease-out ${delay}s`,

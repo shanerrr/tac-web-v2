@@ -13,8 +13,8 @@ export default async function Films() {
     <div className="min-h-dvh w-screen">
       <Navbar
         transparent
-        textColour="text-white"
-        burgerBgColour="bg-primary/60"
+        textColor="text-white"
+        burgerBgColor="bg-primary/60"
         scrollThreshold={500}
       />
       <PageHero

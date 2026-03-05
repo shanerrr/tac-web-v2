@@ -5,7 +5,7 @@ export default function FilmsLayout({ children }: { children: ReactNode }) {
   return (
     <main>
       {children}
-      <Footer bgColour="bg-primary" />
+      <Footer bgColor="bg-primary" />
     </main>
   );
 }

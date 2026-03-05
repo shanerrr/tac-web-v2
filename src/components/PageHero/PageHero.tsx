@@ -66,7 +66,7 @@ export default function PageHero({
         </div>
 
         {/* Scroll cue */}
-        <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
+        <div className="-translate-x-1/2 absolute bottom-8 left-1/2 flex flex-col items-center gap-2">
           <span className="font-sans text-white/60 text-xs uppercase tracking-[0.4em]">
             scroll
           </span>

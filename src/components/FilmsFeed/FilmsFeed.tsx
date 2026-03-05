@@ -1,13 +1,14 @@
 "use client";
 
-import TreeRingDivider, { goldenRotation } from "@tac/components/TreeRingDivider";
-import type { Film } from "@tac/types";
+import TreeRingDivider, {
+  goldenRotation,
+} from "@tac/components/TreeRingDivider";
 import { useScrollReveal } from "@tac/hooks/useScrollReveal";
+import type { Film } from "@tac/types";
 import { ArrowRight, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, memo } from "react";
-import testPhoto from "../../../public/test.webp";
 
 const FilmCard = memo(function FilmCard({
   film,
@@ -39,19 +40,24 @@ const FilmCard = memo(function FilmCard({
                 : "md:-rotate-[1.5deg] md:hover:rotate-0"
             }`}
           >
-            <Image
-              src={film.thumbnail ?? testPhoto}
-              fill
-              sizes="(min-width: 768px) 40vw, 100vw"
-              className="object-cover"
-              alt={`Thumbnail for ${film.title}`}
-              priority={priority}
-            />
+            {film.thumbnail && (
+              <Image
+                src={film.thumbnail}
+                fill
+                sizes="(min-width: 768px) 40vw, 100vw"
+                className="object-cover"
+                alt={`Thumbnail for ${film.title}`}
+                priority={priority}
+              />
+            )}
 
             {/* Play overlay */}
             <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-300 group-hover:bg-black/35">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110">
-                <Play size={20} className="translate-x-0.5 fill-primary text-primary" />
+                <Play
+                  size={20}
+                  className="translate-x-0.5 fill-primary text-primary"
+                />
               </div>
             </div>
 
@@ -72,7 +78,9 @@ const FilmCard = memo(function FilmCard({
           &ldquo;{film.title}&rdquo;
         </h2>
         <div className="mb-6 flex items-center gap-3">
-          <span className="font-serif text-lg text-primary italic md:text-xl">{film.name}</span>
+          <span className="font-serif text-lg text-primary italic md:text-xl">
+            {film.name}
+          </span>
           <span className="h-px w-8 shrink-0 bg-primary/40" />
           <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.2em]">
             {film.location}
@@ -91,14 +99,18 @@ const FilmCard = memo(function FilmCard({
 });
 
 export default function FilmsFeed({ films }: { films: Film[] }) {
-  const { setItemRef, setDividerRef, visibleItems, drawnDividers } = useScrollReveal();
+  const { setItemRef, setDividerRef, visibleItems, drawnDividers } =
+    useScrollReveal();
 
   return (
     <div className="container py-16">
       {/* Meta row */}
       <div className="flex items-center">
         <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.25em]">
-          <span className="font-normal text-primary text-sm">{films.length}</span> films
+          <span className="font-normal text-primary text-sm">
+            {films.length}
+          </span>{" "}
+          films
         </span>
       </div>
 

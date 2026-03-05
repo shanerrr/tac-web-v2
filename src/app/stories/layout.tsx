@@ -5,7 +5,7 @@ export default function StoriesLayout({ children }: { children: ReactNode }) {
   return (
     <main>
       {children}
-      <Footer bgColour="bg-secondary" />
+      <Footer bgColor="bg-secondary" />
     </main>
   );
 }

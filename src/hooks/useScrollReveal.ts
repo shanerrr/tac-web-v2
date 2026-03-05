@@ -20,16 +20,16 @@ export function useScrollReveal() {
   const [observationKey, setObservationKey] = useState(0);
 
   const setItemRef = useCallback((el: HTMLDivElement | null) => {
-    if (el && el.dataset.itemId) itemRefs.current.set(el.dataset.itemId, el);
+    if (el?.dataset.itemId) itemRefs.current.set(el.dataset.itemId, el);
   }, []);
 
   const setDividerRef = useCallback((el: HTMLDivElement | null) => {
     if (el) dividerRefs.current.set(Number(el.dataset.dividerId), el);
   }, []);
 
-  /** Call this when the rendered list changes to re-observe new elements. */
   const reset = useCallback(() => setObservationKey((k) => k + 1), []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: observationKey triggers re-observation after reset
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {

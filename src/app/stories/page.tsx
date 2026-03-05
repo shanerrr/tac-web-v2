@@ -12,8 +12,8 @@ export default async function Stories() {
     <div className="min-h-dvh w-screen">
       <Navbar
         transparent
-        textColour="text-white"
-        burgerBgColour="bg-secondary/60"
+        textColor="text-white"
+        burgerBgColor="bg-secondary/60"
         scrollThreshold={500}
       />
       <PageHero

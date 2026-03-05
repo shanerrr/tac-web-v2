@@ -71,7 +71,7 @@ const StoryCard = memo(function StoryCard({
       {/* Text */}
       <div className={`relative z-10 py-2 ${isEven ? "md:order-1" : ""}`}>
         <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
-          {story.date}
+          {story.published}
         </p>
         <h2 className="mb-1.5 font-serif text-4xl text-foreground leading-none md:text-5xl lg:text-7xl">
           {story.name}
@@ -86,7 +86,7 @@ const StoryCard = memo(function StoryCard({
           </span>
         </div>
         <blockquote className="relative mb-6 border-tertiary/50 border-l-2 pl-5 font-light font-sans text-base text-foreground/70 italic leading-relaxed md:text-lg lg:text-xl">
-          <span className="absolute -top-3 -left-2 select-none font-serif text-4xl text-tertiary/50 not-italic leading-none">
+          <span className="-top-3 -left-2 absolute select-none font-serif text-4xl text-tertiary/50 not-italic leading-none">
             &ldquo;
           </span>
           {story.quote}
@@ -111,6 +111,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
     useScrollReveal();
 
   // Re-observe whenever the filtered list changes and new DOM nodes mount
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional — re-observe on filter/sort change
   useEffect(() => {
     reset();
   }, [activeDecade, newestFirst, reset]);

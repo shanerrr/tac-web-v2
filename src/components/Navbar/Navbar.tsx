@@ -7,10 +7,10 @@ import { memo, useCallback, useEffect, useState } from "react";
 import logo from "../../../public/logo.svg";
 import logoRings from "../../../public/logo-rings.svg";
 
-type AccentColour = "primary" | "secondary" | "tertiary";
+type AccentColor = "primary" | "secondary" | "tertiary";
 
 const accent: Record<
-  AccentColour,
+  AccentColor,
   { text: string; dot: string; hover: string }
 > = {
   primary: {
@@ -34,7 +34,7 @@ type NavChild = {
   label: string;
   href: string;
   description?: string;
-  accent?: AccentColour;
+  accent?: AccentColor;
   accentLabel?: string;
 };
 
@@ -131,11 +131,15 @@ const DropdownLink = memo(function DropdownLink({
 
 const HamburgerIcon = memo(function HamburgerIcon({
   isOpen,
+  bgColor = "bg-primary/60",
 }: {
   isOpen: boolean;
+  bgColor?: string;
 }) {
   return (
-    <div className="flex h-11 w-11 flex-col items-end justify-around rounded-[10px] bg-primary/60 p-[25%]">
+    <div
+      className={`flex h-11 w-11 flex-col items-end justify-around rounded-[10px] ${bgColor} p-[25%]`}
+    >
       <span
         className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${
           isOpen ? "w-0 opacity-0 delay-200" : "w-full opacity-100 delay-0"
@@ -158,13 +162,13 @@ const HamburgerIcon = memo(function HamburgerIcon({
 // --- Main component ---
 
 export default function Navbar({
-  textColour = "text-black",
-  burgerBgColour = "bg-primary/60",
+  textColor = "text-black",
+  burgerBgColor = "bg-primary/60",
   transparent = false,
   scrollThreshold = 20,
 }: {
-  textColour?: string;
-  burgerBgColour?: string;
+  textColor?: string;
+  burgerBgColor?: string;
   transparent?: boolean;
   scrollThreshold?: number;
 }) {
@@ -186,8 +190,8 @@ export default function Navbar({
   }, []);
 
   // When scrolled, always use dark text so it reads on the solid background
-  const activeTextColour =
-    transparent && scrolled ? "text-foreground" : textColour;
+  const activeTextColor =
+    transparent && scrolled ? "text-foreground" : textColor;
 
   // Hover box tint differs based on whether the nav sits on a dark or light bg
   const hoverBoxClass =
@@ -208,7 +212,7 @@ export default function Navbar({
       >
         <nav
           className={`container relative py-8 font-sans transition-colors duration-300 ${
-            menuOpen ? "text-foreground" : activeTextColour
+            menuOpen ? "text-foreground" : activeTextColor
           }`}
         >
           <div className="flex items-center justify-between">
@@ -240,10 +244,10 @@ export default function Navbar({
                       />
                     </button>
                     <div
-                      className={`pointer-events-none absolute top-full -translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${
+                      className={`-translate-y-1 pointer-events-none absolute top-full pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${
                         item.menuAlign === "right"
                           ? "right-0"
-                          : "left-1/2 -translate-x-1/2"
+                          : "-translate-x-1/2 left-1/2"
                       }`}
                     >
                       <div className="relative w-72 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/8">
@@ -301,10 +305,10 @@ export default function Navbar({
                   menuOpen ? "opacity-0" : "opacity-100"
                 }`}
               >
-                <HamburgerIcon isOpen={menuOpen} />
+                <HamburgerIcon isOpen={menuOpen} bgColor={burgerBgColor} />
               </div>
               <div
-                className={`absolute inset-0 flex items-center justify-center rounded-[10px] ${burgerBgColour} p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${
+                className={`absolute inset-0 flex items-center justify-center rounded-[10px] ${burgerBgColor} p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${
                   menuOpen
                     ? "rotate-0 scale-100 opacity-100"
                     : "-rotate-90 scale-75 opacity-0"
