@@ -5,117 +5,100 @@ import TreeRingDivider, {
 } from "@tac/components/TreeRingDivider";
 import { useScrollReveal } from "@tac/hooks/useScrollReveal";
 import type { Film } from "@tac/types";
-import { ArrowRight, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, memo } from "react";
 
 const FilmCard = memo(function FilmCard({
   film,
-  index,
   isVisible,
   priority,
 }: {
   film: Film;
-  index: number;
   isVisible: boolean;
   priority?: boolean;
 }) {
-  const isEven = index % 2 === 1;
-
   return (
     <article
-      className={`relative grid grid-cols-1 items-center gap-6 py-10 transition-[opacity,transform] duration-700 md:gap-20 lg:gap-28 ${
-        isEven ? "md:grid-cols-[3fr_2fr]" : "md:grid-cols-[2fr_3fr]"
-      } ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
-      style={{ transitionDelay: index === 0 ? "0ms" : "500ms" }}
+      className={`mx-auto max-w-4xl transition-[opacity,transform] duration-700 ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+      }`}
+      style={{ transitionDelay: isVisible ? "400ms" : "0ms" }}
     >
-      {/* Thumbnail */}
-      <div className={`relative z-10 ${isEven ? "md:order-2" : ""}`}>
-        <Link href={`/films/${film.slug}`}>
-          <div
-            className={`group relative aspect-video overflow-hidden rounded-lg shadow-2xl transition-transform duration-500 will-change-transform hover:scale-[1.01] ${
-              isEven
-                ? "md:rotate-[1.5deg] md:hover:rotate-0"
-                : "md:-rotate-[1.5deg] md:hover:rotate-0"
-            }`}
-          >
+      {/* Framed thumbnail */}
+      <Link href={`/films/${film.slug}`} className="group block">
+        <div className="rounded-xl bg-white p-2 shadow-[0_4px_30px_rgba(0,0,0,0.08)] transition-shadow duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)] sm:p-3">
+          <div className="relative aspect-video overflow-hidden rounded-lg">
             {film.thumbnail && (
               <Image
                 src={film.thumbnail}
                 fill
-                sizes="(min-width: 768px) 40vw, 100vw"
-                className="object-cover"
+                sizes="(min-width: 896px) 896px, 90vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                 alt={`Thumbnail for ${film.title}`}
                 priority={priority}
               />
             )}
 
-            {/* Play overlay */}
-            <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-300 group-hover:bg-black/35">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110">
+            {/* Subtle vignette */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
+            {/* Play button */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 opacity-0 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:opacity-100 md:h-16 md:w-16">
                 <Play
-                  size={20}
+                  size={24}
                   className="translate-x-0.5 fill-primary text-primary"
                 />
               </div>
             </div>
 
-            {/* Duration badge */}
-            <div className="absolute bottom-4 left-4 z-10 rounded-sm bg-primary px-3 py-1.5 font-sans text-white text-xs tracking-[0.25em]">
+            {/* Duration */}
+            <div className="absolute top-3 right-3 rounded-full bg-black/40 px-2.5 py-0.5 font-sans text-white/90 text-xs tracking-wider backdrop-blur-sm">
               {film.duration}
             </div>
           </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
 
-      {/* Text */}
-      <div className={`relative z-10 py-2 ${isEven ? "md:order-1" : ""}`}>
-        <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
-          {film.date}
-        </p>
-        <h2 className="mb-4 font-light font-serif text-3xl text-foreground italic leading-snug md:text-4xl lg:text-5xl">
+      {/* Plaque — centered beneath the frame */}
+      <div className="mt-5 flex flex-col items-center text-center md:mt-6">
+        <h2 className="font-light font-serif text-2xl text-foreground italic leading-snug md:text-3xl">
           &ldquo;{film.title}&rdquo;
         </h2>
-        <div className="mb-6 flex items-center gap-3">
-          <span className="font-serif text-lg text-primary italic md:text-xl">
+        <div className="mt-2 flex items-center gap-3">
+          <span className="font-serif text-primary italic md:text-lg">
             {film.name}
           </span>
-          <span className="h-px w-8 shrink-0 bg-primary/40" />
-          <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.2em]">
+          <span className="h-px w-5 shrink-0 bg-primary/30" />
+          <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
             {film.location}
           </span>
         </div>
-        <Link
-          href={`/films/${film.slug}`}
-          className="inline-flex items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
-        >
-          Watch film
-          <ArrowRight size={16} />
-        </Link>
+        <p className="mt-1 font-sans text-foreground/30 text-xs tracking-[0.15em]">
+          {film.date}
+        </p>
       </div>
     </article>
   );
 });
 
 export default function FilmsFeed({ films }: { films: Film[] }) {
-  const { setItemRef, setDividerRef, visibleItems, drawnDividers } =
+  const { setDividerRef, drawnDividers, setItemRef, visibleItems } =
     useScrollReveal();
 
   return (
-    <div className="container py-16">
-      {/* Meta row */}
-      <div className="flex items-center">
-        <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.25em]">
-          <span className="font-normal text-primary text-sm">
-            {films.length}
-          </span>{" "}
-          films
+    <div className="py-20 md:py-28">
+      {/* Meta */}
+      <div className="container mb-16 text-center">
+        <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.3em]">
+          <span className="text-primary">{films.length}</span> films collected
         </span>
       </div>
 
-      {/* Films feed */}
-      <div>
+      {/* Gallery */}
+      <div className="container flex flex-col gap-20 md:gap-28">
         {films.map((film, index) => (
           <Fragment key={film.id}>
             {index > 0 && (
@@ -126,11 +109,17 @@ export default function FilmsFeed({ films }: { films: Film[] }) {
                 />
               </div>
             )}
-            <div ref={index === 0 ? setItemRef : undefined} data-item-id={film.id}>
+            <div
+              ref={index === 0 ? setItemRef : undefined}
+              data-item-id={film.id}
+            >
               <FilmCard
                 film={film}
-                index={index}
-                isVisible={index === 0 ? visibleItems.has(film.id) : drawnDividers.has(index)}
+                isVisible={
+                  index === 0
+                    ? visibleItems.has(film.id)
+                    : drawnDividers.has(index)
+                }
                 priority={index === 0}
               />
             </div>
