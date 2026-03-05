@@ -189,7 +189,7 @@ const FilmCard = memo(function FilmCard({
         <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
           {film.date}
         </p>
-        <h2 className="mb-4 font-serif text-3xl text-foreground font-light italic leading-snug md:text-4xl lg:text-5xl">
+        <h2 className="mb-4 font-light font-serif text-3xl text-foreground italic leading-snug md:text-4xl lg:text-5xl">
           &ldquo;{film.title}&rdquo;
         </h2>
         <div className="mb-6 flex items-center gap-3">

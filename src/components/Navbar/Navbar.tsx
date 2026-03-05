@@ -5,28 +5,110 @@ import Image from "next/image";
 import Link from "next/link";
 import { memo, useCallback, useEffect, useState } from "react";
 import logo from "../../../public/logo.svg";
+import logoRings from "../../../public/logo-rings.svg";
 
-type NavChild = { label: string; href: string };
-type NavItem = { label: string; href?: string; children?: NavChild[] };
+type NavChild = {
+  label: string;
+  href: string;
+  description?: string;
+  colorClass?: string;
+  color?: string;
+  accentLabel?: string;
+};
+type NavItem = {
+  label: string;
+  href?: string;
+  children?: NavChild[];
+  logoCorner?: "bottom-left" | "bottom-right";
+  menuAlign?: "center" | "right";
+};
 
 const navItems: NavItem[] = [
   { label: "about us", href: "/about" },
   {
     label: "storytelling",
+    logoCorner: "bottom-right",
     children: [
-      { label: "stories", href: "/stories" },
-      { label: "films", href: "/films" },
+      {
+        label: "stories",
+        href: "/stories",
+        description: "Personal stories about aging from across the lifespan",
+        colorClass: "bg-secondary",
+        color: "#d96900",
+        accentLabel: "Written",
+      },
+      {
+        label: "films",
+        href: "/films",
+        description: "Short films about aging told by real voices",
+        colorClass: "bg-primary",
+        color: "#af4106",
+        accentLabel: "Visual",
+      },
     ],
   },
   { label: "resources", href: "/resources" },
   {
     label: "projects",
+    logoCorner: "bottom-left",
+    menuAlign: "right",
     children: [
-      { label: "My Aging Story Exhibit", href: "/projects/my-aging-story" },
-      { label: "GOLD Poetry Project", href: "/projects/gold" },
+      {
+        label: "My Aging Story Exhibit",
+        href: "/projects/my-aging-story",
+        description:
+          "An interactive exhibit exploring personal aging narratives",
+        colorClass: "bg-tertiary",
+        color: "#b39c66",
+        accentLabel: "Exhibit",
+      },
+      {
+        label: "GOLD Poetry Project",
+        href: "/projects/gold",
+        description:
+          "Poems celebrating the golden threads of a life well-lived",
+        colorClass: "bg-secondary",
+        color: "#d96900",
+        accentLabel: "Poetry",
+      },
     ],
   },
 ];
+
+const DropdownLink = memo(function DropdownLink({
+  child,
+}: {
+  child: NavChild;
+}) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <Link
+      href={child.href}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="flex flex-col gap-0.5 px-5 py-4 transition-colors duration-200"
+      style={{ backgroundColor: hovered ? `${child.color}18` : undefined }}
+    >
+      <span
+        className="font-sans text-xs uppercase tracking-[0.25em] transition-colors duration-200"
+        style={{ color: child.color }}
+      >
+        {child.accentLabel}
+      </span>
+      <p
+        className="font-bold font-serif text-xl capitalize transition-colors duration-200"
+        style={{ color: hovered ? child.color : child.color }}
+      >
+        {child.label}
+      </p>
+      {child.description && (
+        <p className="font-sans text-foreground/50 text-sm leading-snug">
+          {child.description}
+        </p>
+      )}
+    </Link>
+  );
+});
 
 const HamburgerIcon = memo(function HamburgerIcon({
   isOpen,
@@ -78,6 +160,12 @@ export default function Navbar({
   const activeTextColour =
     transparent && scrolled ? "text-foreground" : textColour;
 
+  // Hover box tint: white wash on dark/transparent bg, dark wash on white bg
+  const hoverBoxClass =
+    transparent && !scrolled
+      ? "hover:bg-white/15 rounded-lg px-3 py-1"
+      : "hover:bg-foreground/8 rounded-lg px-3 py-1";
+
   return (
     <>
       <header
@@ -120,26 +208,43 @@ export default function Navbar({
                         className="transition-transform duration-200 group-hover:rotate-180"
                       />
                     </button>
-                    <ul className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 -translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
-                      <div className="flex flex-col gap-3 whitespace-nowrap rounded-xl bg-white/80 px-6 py-4 text-base shadow-sm backdrop-blur-sm">
-                        {item.children.map((child) => (
-                          <li key={child.label}>
-                            <Link
-                              href={child.href}
-                              className="text-black transition-colors hover:text-primary"
-                            >
-                              {child.label}
-                            </Link>
-                          </li>
-                        ))}
+                    <div
+                      className={`pointer-events-none absolute top-full -translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${item.menuAlign === "right" ? "right-0" : "left-1/2 -translate-x-1/2"}`}
+                    >
+                      <div className="relative w-72 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/8">
+                        {/* Corner rings watermark */}
+                        <div
+                          className="pointer-events-none absolute"
+                          style={{
+                            bottom: "-80px",
+                            ...(item.logoCorner === "bottom-left"
+                              ? { left: "-80px" }
+                              : { right: "-80px" }),
+                          }}
+                        >
+                          <Image
+                            src={logoRings}
+                            alt=""
+                            width={180}
+                            height={180}
+                            className="opacity-5"
+                            style={{ filter: "invert(1)" }}
+                          />
+                        </div>
+                        {/* List items */}
+                        <div className="relative flex flex-col divide-y divide-black/6">
+                          {item.children.map((child) => (
+                            <DropdownLink key={child.label} child={child} />
+                          ))}
+                        </div>
                       </div>
-                    </ul>
+                    </div>
                   </li>
                 ) : (
                   <li key={item.label}>
                     <Link
                       href={item.href ?? "/"}
-                      className="transition-colors hover:text-primary"
+                      className={`transition-[background-color] duration-200 ${hoverBoxClass}`}
                     >
                       {item.label}
                     </Link>
@@ -203,10 +308,16 @@ export default function Navbar({
                   />
                 </button>
                 <ul
-                  className={`flex flex-col items-center gap-4 overflow-hidden font-light text-3xl transition-[max-height,opacity] duration-300 ${openSubmenu === item.label ? "max-h-40 pt-4 opacity-100" : "max-h-0 opacity-0"}`}
+                  className={`flex flex-col items-center gap-4 overflow-hidden font-light text-3xl transition-[max-height,opacity] duration-300 ${openSubmenu === item.label ? "max-h-60 pt-4 opacity-100" : "max-h-0 opacity-0"}`}
                 >
                   {item.children.map((child) => (
-                    <li key={child.label}>
+                    <li key={child.label} className="flex items-center gap-3">
+                      {child.color && (
+                        <span
+                          className="h-2 w-2 shrink-0 rounded-full"
+                          style={{ backgroundColor: child.color }}
+                        />
+                      )}
                       <Link href={child.href} onClick={closeMenu}>
                         {child.label}
                       </Link>

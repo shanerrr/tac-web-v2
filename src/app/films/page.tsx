@@ -10,7 +10,7 @@ export default function Films() {
 
       {/* Hero */}
       <div className="heroTexture -mt-27 bg-primary md:-mt-32">
-        <section className="relative flex h-[70vh] flex-col items-center justify-center overflow-hidden pt-27 pb-27 text-center text-white md:pt-32 md:pb-32">
+        <section className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden pt-27 pb-27 text-center text-white md:pt-32 md:pb-32">
           {/* Radial vignette */}
           <div
             className="pointer-events-none absolute inset-0 select-none"
