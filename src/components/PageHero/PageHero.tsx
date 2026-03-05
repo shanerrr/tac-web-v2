@@ -44,7 +44,12 @@ export default function PageHero({
             right: watermarkRight,
           }}
         >
-          <Image src={logo} alt="" fill className="object-contain opacity-[0.08]" />
+          <Image
+            src={logo}
+            alt=""
+            fill
+            className="object-contain opacity-[0.08]"
+          />
         </div>
 
         {/* Content */}
@@ -55,7 +60,9 @@ export default function PageHero({
           <h1 className="my-6 font-bold font-serif text-8xl leading-none tracking-tight sm:text-9xl lg:text-[11rem]">
             {title}
           </h1>
-          <p className="font-light font-sans text-2xl sm:text-4xl">{subtitle}</p>
+          <p className="font-light font-sans text-2xl sm:text-4xl">
+            {subtitle}
+          </p>
         </div>
 
         {/* Scroll cue */}

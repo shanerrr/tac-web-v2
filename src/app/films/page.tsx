@@ -1,8 +1,14 @@
 import FilmsFeed from "@tac/components/FilmsFeed";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
+import { getFilms } from "@tac/lib/contentful";
 
-export default function Films() {
+// Revalidate the page at most once per hour
+export const revalidate = 3600;
+
+export default async function Films() {
+  const films = await getFilms();
+
   return (
     <div className="min-h-dvh w-screen">
       <Navbar
@@ -22,7 +28,7 @@ export default function Films() {
         bgClass="bg-primary"
         watermarkRight="calc(min(110vw, 110vh) / 2)"
       />
-      <FilmsFeed />
+      <FilmsFeed films={films} />
     </div>
   );
 }

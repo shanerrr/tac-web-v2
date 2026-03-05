@@ -1,61 +1,13 @@
 "use client";
 
 import TreeRingDivider, { goldenRotation } from "@tac/components/TreeRingDivider";
+import type { Film } from "@tac/types";
 import { useScrollReveal } from "@tac/hooks/useScrollReveal";
 import { ArrowRight, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, memo } from "react";
 import testPhoto from "../../../public/test.webp";
-
-type Film = {
-  id: number;
-  title: string;
-  name: string;
-  age: number;
-  date: string;
-  location: string;
-  duration: string;
-};
-
-const films: Film[] = [
-  {
-    id: 1,
-    title: "What 45 years together taught us about life",
-    name: "Ruth & Gerald",
-    age: 74,
-    date: "Nov 12th, 2024",
-    location: "Vancouver, BC",
-    duration: "8 min",
-  },
-  {
-    id: 2,
-    title: "Made with love, lessons, & legends",
-    name: "Dora",
-    age: 88,
-    date: "Sep 3rd, 2024",
-    location: "Toronto, ON",
-    duration: "12 min",
-  },
-  {
-    id: 3,
-    title: "I've lived for 76 years — change is inevitable",
-    name: "Thomas",
-    age: 76,
-    date: "Jun 18th, 2024",
-    location: "Calgary, AB",
-    duration: "6 min",
-  },
-  {
-    id: 4,
-    title: "We chose to live together again later in life",
-    name: "Carol & Frank",
-    age: 71,
-    date: "Mar 22nd, 2024",
-    location: "Halifax, NS",
-    duration: "10 min",
-  },
-];
 
 const FilmCard = memo(function FilmCard({
   film,
@@ -79,7 +31,7 @@ const FilmCard = memo(function FilmCard({
     >
       {/* Thumbnail */}
       <div className={`relative z-10 ${isEven ? "md:order-2" : ""}`}>
-        <Link href={`/films/${film.id}`}>
+        <Link href={`/films/${film.slug}`}>
           <div
             className={`group relative aspect-video overflow-hidden rounded-lg shadow-2xl transition-transform duration-500 will-change-transform hover:scale-[1.01] ${
               isEven
@@ -88,11 +40,11 @@ const FilmCard = memo(function FilmCard({
             }`}
           >
             <Image
-              src={testPhoto}
+              src={film.thumbnail ?? testPhoto}
               fill
               sizes="(min-width: 768px) 40vw, 100vw"
               className="object-cover"
-              alt="Film thumbnail placeholder"
+              alt={`Thumbnail for ${film.title}`}
               priority={priority}
             />
 
@@ -127,7 +79,7 @@ const FilmCard = memo(function FilmCard({
           </span>
         </div>
         <Link
-          href={`/films/${film.id}`}
+          href={`/films/${film.slug}`}
           className="inline-flex items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
         >
           Watch film
@@ -138,7 +90,7 @@ const FilmCard = memo(function FilmCard({
   );
 });
 
-export default function FilmsFeed() {
+export default function FilmsFeed({ films }: { films: Film[] }) {
   const { setItemRef, setDividerRef, visibleItems, drawnDividers } = useScrollReveal();
 
   return (

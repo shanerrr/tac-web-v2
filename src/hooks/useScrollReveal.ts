@@ -9,24 +9,27 @@ import { useCallback, useEffect, useRef, useState } from "react";
  *   - Items:    `data-item-id={id}`
  *   - Dividers: `data-divider-id={index}`
  *
- * @param extraDeps - Additional deps that trigger re-observation when the
- *   rendered list changes (e.g. active filter state in StoriesFeed).
+ * Call `reset()` in a `useEffect` whenever the rendered list changes
+ * (e.g. when a filter updates) so newly mounted elements get observed.
  */
-export function useScrollReveal(extraDeps: unknown[] = []) {
-  const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
+export function useScrollReveal() {
+  const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
   const [drawnDividers, setDrawnDividers] = useState<Set<number>>(new Set());
-  const itemRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const dividerRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const [observationKey, setObservationKey] = useState(0);
 
   const setItemRef = useCallback((el: HTMLDivElement | null) => {
-    if (el) itemRefs.current.set(Number(el.dataset.itemId), el);
+    if (el && el.dataset.itemId) itemRefs.current.set(el.dataset.itemId, el);
   }, []);
 
   const setDividerRef = useCallback((el: HTMLDivElement | null) => {
     if (el) dividerRefs.current.set(Number(el.dataset.dividerId), el);
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: extraDeps signals new DOM nodes to observe
+  /** Call this when the rendered list changes to re-observe new elements. */
+  const reset = useCallback(() => setObservationKey((k) => k + 1), []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -35,13 +38,17 @@ export function useScrollReveal(extraDeps: unknown[] = []) {
           const el = e.target as HTMLElement;
 
           if (el.dataset.itemId) {
-            const id = Number(el.dataset.itemId);
-            setVisibleItems((prev) => (prev.has(id) ? prev : new Set([...prev, id])));
+            const id = el.dataset.itemId;
+            setVisibleItems((prev) =>
+              prev.has(id) ? prev : new Set([...prev, id]),
+            );
           }
 
           if (el.dataset.dividerId) {
             const id = Number(el.dataset.dividerId);
-            setDrawnDividers((prev) => (prev.has(id) ? prev : new Set([...prev, id])));
+            setDrawnDividers((prev) =>
+              prev.has(id) ? prev : new Set([...prev, id]),
+            );
           }
 
           observer.unobserve(el);
@@ -59,7 +66,7 @@ export function useScrollReveal(extraDeps: unknown[] = []) {
       clearTimeout(timer);
       observer.disconnect();
     };
-  }, extraDeps);
+  }, [observationKey]);
 
-  return { setItemRef, setDividerRef, visibleItems, drawnDividers };
+  return { setItemRef, setDividerRef, visibleItems, drawnDividers, reset };
 }

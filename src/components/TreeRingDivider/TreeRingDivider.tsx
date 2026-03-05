@@ -1,5 +1,5 @@
-import { memo } from "react";
 import type React from "react";
+import { memo } from "react";
 
 /** Deterministic rotation via the golden angle — nicely distributed, no hydration risk. */
 export const goldenRotation = (i: number) => (i * 137.508) % 360;

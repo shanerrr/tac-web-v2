@@ -1,94 +1,26 @@
 "use client";
 
-import TreeRingDivider, { goldenRotation } from "@tac/components/TreeRingDivider";
+import TreeRingDivider, {
+  goldenRotation,
+} from "@tac/components/TreeRingDivider";
 import { useScrollReveal } from "@tac/hooks/useScrollReveal";
+import type { Story } from "@tac/types";
 import { ArrowRight, ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, memo, useMemo, useState } from "react";
-import testPhoto from "../../../public/test.webp";
+import { Fragment, memo, useEffect, useMemo, useState } from "react";
 
-type Story = {
-  id: number;
-  name: string;
-  age: number;
-  decade: string;
-  date: string;
-  location: string;
-  quote: string;
-  pronoun: string;
-};
-
-const stories: Story[] = [
-  {
-    id: 1,
-    name: "Deb",
-    age: 64,
-    decade: "60",
-    date: "Oct 13th, 2024",
-    location: "Vancouver, BC",
-    quote:
-      "I read a statistic somewhere that said 97% of people who say they're going to write a book never do. And I thought, I'm going to be one of that 3%!",
-    pronoun: "her",
-  },
-  {
-    id: 2,
-    name: "Margaret",
-    age: 95,
-    decade: "90",
-    date: "Jun 23rd, 2024",
-    location: "Toronto, ON",
-    quote:
-      "My husband passed away, and I've never lived alone until now. I didn't expect to be alone. You have to re-learn, I guess, how to live.",
-    pronoun: "her",
-  },
-  {
-    id: 3,
-    name: "Ranee",
-    age: 81,
-    decade: "80",
-    date: "Aug 20th, 2023",
-    location: "Calgary, AB",
-    quote:
-      "I used to be quick to judge others. So, I learned to accept people as they are. The two words I find important are 'loving' and 'forgiving.'",
-    pronoun: "her",
-  },
-  {
-    id: 4,
-    name: "Thomas",
-    age: 72,
-    decade: "70",
-    date: "Mar 4th, 2024",
-    location: "Montréal, QC",
-    quote:
-      "Retirement felt like a cliff I'd fall off. Instead it was a door — to the garden, to my grandchildren, to the person I'd been delaying becoming for fifty years.",
-    pronoun: "his",
-  },
-  {
-    id: 5,
-    name: "Carol",
-    age: 58,
-    decade: "50",
-    date: "Jan 15th, 2024",
-    location: "Halifax, NS",
-    quote:
-      "The grey hair was the moment. Not a crisis — a declaration. I stopped asking permission to take up space and started deciding what space I actually wanted.",
-    pronoun: "her",
-  },
-  {
-    id: 6,
-    name: "Bernard",
-    age: 44,
-    decade: "40",
-    date: "Nov 30th, 2023",
-    location: "Edmonton, AB",
-    quote:
-      "I look at my father at 80 and see the destination. But for the first time, I'm not afraid of it. I'm studying him like a map.",
-    pronoun: "his",
-  },
-];
-
-const DECADES = ["all", "20", "30", "40", "50", "60", "70", "80", "90"] as const;
+const DECADES = [
+  "all",
+  "20",
+  "30",
+  "40",
+  "50",
+  "60",
+  "70",
+  "80",
+  "90",
+] as const;
 type Decade = (typeof DECADES)[number];
 
 const decadeLabel = (d: Decade) => (d === "all" ? "All Ages" : `${d}s`);
@@ -117,15 +49,17 @@ const StoryCard = memo(function StoryCard({
       <div className={`relative z-10 ${isEven ? "md:order-2" : ""}`}>
         <div
           className={`relative aspect-square overflow-hidden rounded-lg shadow-2xl transition-transform duration-500 will-change-transform hover:scale-[1.01] ${
-            isEven ? "md:rotate-[1.5deg] md:hover:rotate-0" : "md:-rotate-[1.5deg] md:hover:rotate-0"
+            isEven
+              ? "md:rotate-[1.5deg] md:hover:rotate-0"
+              : "md:-rotate-[1.5deg] md:hover:rotate-0"
           }`}
         >
           <Image
-            src={testPhoto}
+            src={story.portrait}
             fill
             sizes="(min-width: 768px) 40vw, 100vw"
             className="object-cover"
-            alt="Story portrait placeholder"
+            alt={`Portrait of ${story.name}`}
             priority={priority}
           />
           <div className="absolute bottom-4 left-4 z-10 rounded-sm bg-primary px-3 py-1.5 font-sans text-white text-xs tracking-[0.25em]">
@@ -158,7 +92,7 @@ const StoryCard = memo(function StoryCard({
           {story.quote}
         </blockquote>
         <Link
-          href={`/stories/${story.id}`}
+          href={`/stories/${story.slug}`}
           className="inline-flex items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
         >
           Read {story.pronoun} story
@@ -169,22 +103,24 @@ const StoryCard = memo(function StoryCard({
   );
 });
 
-export default function StoriesFeed() {
+export default function StoriesFeed({ stories }: { stories: Story[] }) {
   const [activeDecade, setActiveDecade] = useState<Decade>("all");
   const [newestFirst, setNewestFirst] = useState(true);
 
-  // Re-observe when the filtered list changes (new DOM nodes are mounted)
-  const { setItemRef, setDividerRef, visibleItems, drawnDividers } = useScrollReveal([
-    activeDecade,
-    newestFirst,
-  ]);
+  const { setItemRef, setDividerRef, visibleItems, drawnDividers, reset } =
+    useScrollReveal();
+
+  // Re-observe whenever the filtered list changes and new DOM nodes mount
+  useEffect(() => {
+    reset();
+  }, [activeDecade, newestFirst, reset]);
 
   const filtered = useMemo(
     () =>
       stories
         .filter((s) => activeDecade === "all" || s.decade === activeDecade)
         .sort((a, b) => (newestFirst ? b.age - a.age : a.age - b.age)),
-    [activeDecade, newestFirst],
+    [stories, activeDecade, newestFirst],
   );
 
   return (
@@ -194,7 +130,10 @@ export default function StoriesFeed() {
         <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.3em]">
           Filter by decade
         </span>
-        <fieldset className="flex flex-wrap justify-center gap-1.5" aria-label="Decade filter">
+        <fieldset
+          className="flex flex-wrap justify-center gap-1.5"
+          aria-label="Decade filter"
+        >
           {DECADES.map((d) => (
             <button
               key={d}
@@ -211,15 +150,18 @@ export default function StoriesFeed() {
           ))}
         </fieldset>
         <span className="font-sans text-foreground/40 text-xs">
-          Showing {filtered.length} {filtered.length === 1 ? "story" : "stories"}
+          Showing {filtered.length}{" "}
+          {filtered.length === 1 ? "story" : "stories"}
         </span>
       </div>
 
       {/* Meta row */}
       <div className="flex items-center justify-between pt-10">
         <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.25em]">
-          <span className="font-normal text-primary text-sm">{filtered.length}</span> stories
-          collected
+          <span className="font-normal text-primary text-sm">
+            {filtered.length}
+          </span>{" "}
+          stories collected
         </span>
         <button
           type="button"

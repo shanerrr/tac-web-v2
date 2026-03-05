@@ -7,14 +7,37 @@ import { memo, useCallback, useEffect, useState } from "react";
 import logo from "../../../public/logo.svg";
 import logoRings from "../../../public/logo-rings.svg";
 
+type AccentColour = "primary" | "secondary" | "tertiary";
+
+const accent: Record<
+  AccentColour,
+  { text: string; dot: string; hover: string }
+> = {
+  primary: {
+    text: "text-primary",
+    dot: "bg-primary",
+    hover: "hover:bg-primary/10",
+  },
+  secondary: {
+    text: "text-secondary",
+    dot: "bg-secondary",
+    hover: "hover:bg-secondary/10",
+  },
+  tertiary: {
+    text: "text-tertiary",
+    dot: "bg-tertiary",
+    hover: "hover:bg-tertiary/10",
+  },
+};
+
 type NavChild = {
   label: string;
   href: string;
   description?: string;
-  colorClass?: string;
-  color?: string;
+  accent?: AccentColour;
   accentLabel?: string;
 };
+
 type NavItem = {
   label: string;
   href?: string;
@@ -33,16 +56,14 @@ const navItems: NavItem[] = [
         label: "stories",
         href: "/stories",
         description: "Personal stories about aging from across the lifespan",
-        colorClass: "bg-secondary",
-        color: "#d96900",
+        accent: "secondary",
         accentLabel: "Written",
       },
       {
         label: "films",
         href: "/films",
         description: "Short films about aging told by real voices",
-        colorClass: "bg-primary",
-        color: "#af4106",
+        accent: "primary",
         accentLabel: "Visual",
       },
     ],
@@ -58,46 +79,44 @@ const navItems: NavItem[] = [
         href: "/projects/my-aging-story",
         description:
           "An interactive exhibit exploring personal aging narratives",
-        colorClass: "bg-tertiary",
-        color: "#b39c66",
+        accent: "tertiary",
         accentLabel: "Exhibit",
       },
       {
-        label: "GOLD Poetry Project",
+        label: "GOLD",
         href: "/projects/gold",
         description:
           "Poems celebrating the golden threads of a life well-lived",
-        colorClass: "bg-secondary",
-        color: "#d96900",
+        accent: "secondary",
         accentLabel: "Poetry",
       },
     ],
   },
 ];
 
+// --- Sub-components ---
+
 const DropdownLink = memo(function DropdownLink({
   child,
 }: {
   child: NavChild;
 }) {
-  const [hovered, setHovered] = useState(false);
+  const ac = child.accent ? accent[child.accent] : null;
+
   return (
     <Link
       href={child.href}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="flex flex-col gap-0.5 px-5 py-4 transition-colors duration-200"
-      style={{ backgroundColor: hovered ? `${child.color}18` : undefined }}
+      className={`flex flex-col gap-0.5 px-5 py-4 transition-colors duration-200 ${ac?.hover ?? ""}`}
     >
-      <span
-        className="font-sans text-xs uppercase tracking-[0.25em] transition-colors duration-200"
-        style={{ color: child.color }}
-      >
-        {child.accentLabel}
-      </span>
+      {ac && (
+        <span
+          className={`font-sans text-xs uppercase tracking-[0.25em] ${ac.text}`}
+        >
+          {child.accentLabel}
+        </span>
+      )}
       <p
-        className="font-bold font-serif text-xl capitalize transition-colors duration-200"
-        style={{ color: child.color }}
+        className={`font-bold font-serif text-xl capitalize ${ac?.text ?? "text-foreground"}`}
       >
         {child.label}
       </p>
@@ -118,17 +137,25 @@ const HamburgerIcon = memo(function HamburgerIcon({
   return (
     <div className="flex h-11 w-11 flex-col items-end justify-around rounded-[10px] bg-primary/60 p-[25%]">
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-200" : "w-full opacity-100 delay-0"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${
+          isOpen ? "w-0 opacity-0 delay-200" : "w-full opacity-100 delay-0"
+        }`}
       />
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-100" : "w-4/5 opacity-100 delay-100"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${
+          isOpen ? "w-0 opacity-0 delay-100" : "w-4/5 opacity-100 delay-100"
+        }`}
       />
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-200"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${
+          isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-200"
+        }`}
       />
     </div>
   );
 });
+
+// --- Main component ---
 
 export default function Navbar({
   textColour = "text-black",
@@ -158,11 +185,11 @@ export default function Navbar({
     setOpenSubmenu(null);
   }, []);
 
-  // When scrolled, always use dark text so it reads on the white background
+  // When scrolled, always use dark text so it reads on the solid background
   const activeTextColour =
     transparent && scrolled ? "text-foreground" : textColour;
 
-  // Hover box tint: white wash on dark/transparent bg, dark wash on white bg
+  // Hover box tint differs based on whether the nav sits on a dark or light bg
   const hoverBoxClass =
     transparent && !scrolled
       ? "hover:bg-white/15 rounded-lg px-3 py-1"
@@ -180,7 +207,9 @@ export default function Navbar({
         }`}
       >
         <nav
-          className={`container relative py-8 font-sans transition-colors duration-300 ${menuOpen ? "text-foreground" : activeTextColour}`}
+          className={`container relative py-8 font-sans transition-colors duration-300 ${
+            menuOpen ? "text-foreground" : activeTextColour
+          }`}
         >
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3">
@@ -198,7 +227,7 @@ export default function Navbar({
               </div>
             </Link>
 
-            {/* Desktop nav — CSS hover, no state needed */}
+            {/* Desktop nav — CSS group-hover, no JS state needed */}
             <ol className="ml-8 hidden items-center gap-8 font-light text-lg md:flex lg:gap-12 lg:text-xl xl:text-2xl">
               {navItems.map((item) =>
                 item.children ? (
@@ -211,7 +240,11 @@ export default function Navbar({
                       />
                     </button>
                     <div
-                      className={`pointer-events-none absolute top-full -translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${item.menuAlign === "right" ? "right-0" : "left-1/2 -translate-x-1/2"}`}
+                      className={`pointer-events-none absolute top-full -translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${
+                        item.menuAlign === "right"
+                          ? "right-0"
+                          : "left-1/2 -translate-x-1/2"
+                      }`}
                     >
                       <div className="relative w-72 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/8">
                         {/* Corner rings watermark */}
@@ -226,14 +259,14 @@ export default function Navbar({
                         >
                           <Image
                             src={logoRings}
-                            alt=""
+                            alt="tree rings"
                             width={180}
                             height={180}
                             className="opacity-5"
                             style={{ filter: "invert(1)" }}
                           />
                         </div>
-                        {/* List items */}
+                        {/* Dropdown items */}
                         <div className="relative flex flex-col divide-y divide-black/6">
                           {item.children.map((child) => (
                             <DropdownLink key={child.label} child={child} />
@@ -264,14 +297,20 @@ export default function Navbar({
               aria-expanded={menuOpen}
             >
               <div
-                className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${menuOpen ? "opacity-0" : "opacity-100"}`}
+                className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+                  menuOpen ? "opacity-0" : "opacity-100"
+                }`}
               >
                 <HamburgerIcon isOpen={menuOpen} />
               </div>
               <div
-                className={`absolute inset-0 flex items-center justify-center rounded-[10px] ${burgerBgColour} p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${menuOpen ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0"}`}
+                className={`absolute inset-0 flex items-center justify-center rounded-[10px] ${burgerBgColour} p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${
+                  menuOpen
+                    ? "rotate-0 scale-100 opacity-100"
+                    : "-rotate-90 scale-75 opacity-0"
+                }`}
               >
-                <X className="h-full w-full" color="white" />
+                <X className="h-full w-full text-white" />
               </div>
             </button>
           </div>
@@ -286,7 +325,7 @@ export default function Navbar({
             : "pointer-events-none translate-y-4 opacity-0"
         }`}
       >
-        {/* Rings watermark — large, off-center bottom-right */}
+        {/* Rings watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow"
           style={{
@@ -298,7 +337,7 @@ export default function Navbar({
         >
           <Image
             src={logoRings}
-            alt=""
+            alt="tree rings"
             fill
             className="object-contain opacity-[0.06]"
             style={{ filter: "invert(1)" }}
@@ -321,37 +360,46 @@ export default function Navbar({
                   {item.label}
                   <ChevronDown
                     size={28}
-                    className={`transition-transform duration-300 ${openSubmenu === item.label ? "rotate-180" : ""}`}
+                    className={`transition-transform duration-300 ${
+                      openSubmenu === item.label ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
                 <ul
-                  className={`flex flex-col gap-3 overflow-hidden font-light transition-[max-height,opacity] duration-300 ${openSubmenu === item.label ? "max-h-60 pt-4 opacity-100" : "max-h-0 opacity-0"}`}
+                  className={`flex flex-col gap-3 overflow-hidden font-light transition-[max-height,opacity] duration-300 ${
+                    openSubmenu === item.label
+                      ? "max-h-60 pt-4 opacity-100"
+                      : "max-h-0 opacity-0"
+                  }`}
                 >
-                  {item.children.map((child) => (
-                    <li key={child.label}>
-                      <Link
-                        href={child.href}
-                        onClick={closeMenu}
-                        className="flex items-center gap-4 text-3xl"
-                      >
-                        {child.color && (
-                          <span
-                            className="h-8 w-1 shrink-0 rounded-full"
-                            style={{ backgroundColor: child.color }}
-                          />
-                        )}
-                        <span className="flex flex-col">
-                          <span
-                            className="font-sans text-[10px] uppercase tracking-[0.25em]"
-                            style={{ color: child.color }}
-                          >
-                            {child.accentLabel}
+                  {item.children.map((child) => {
+                    const ac = child.accent ? accent[child.accent] : null;
+                    return (
+                      <li key={child.label}>
+                        <Link
+                          href={child.href}
+                          onClick={closeMenu}
+                          className="flex items-center gap-4 text-3xl"
+                        >
+                          {ac && (
+                            <span
+                              className={`h-8 w-1 shrink-0 rounded-full ${ac.dot}`}
+                            />
+                          )}
+                          <span className="flex flex-col">
+                            {ac && (
+                              <span
+                                className={`font-sans text-[10px] uppercase tracking-[0.25em] ${ac.text}`}
+                              >
+                                {child.accentLabel}
+                              </span>
+                            )}
+                            {child.label}
                           </span>
-                          {child.label}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </li>
             ) : (

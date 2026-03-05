@@ -1,8 +1,13 @@
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import StoriesFeed from "@tac/components/StoriesFeed";
+import { getStories } from "@tac/lib/contentful";
 
-export default function Stories() {
+export const revalidate = 3600;
+
+export default async function Stories() {
+  const stories = await getStories();
+
   return (
     <div className="min-h-dvh w-screen">
       <Navbar
@@ -21,7 +26,7 @@ export default function Stories() {
         }
         bgClass="bg-secondary"
       />
-      <StoriesFeed />
+      <StoriesFeed stories={stories} />
     </div>
   );
 }
