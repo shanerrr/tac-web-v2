@@ -211,7 +211,7 @@ const StoryCard = memo(function StoryCard({
             priority={priority}
           />
           {/* Decade badge */}
-          <div className="absolute bottom-4 left-4 z-10 rounded-sm bg-primary px-3 py-1.5 font-sans text-xs text-white tracking-[0.25em]">
+          <div className="absolute bottom-4 left-4 z-10 rounded-sm bg-primary px-3 py-1.5 font-sans text-white text-xs tracking-[0.25em]">
             {story.decade}s
           </div>
         </div>
@@ -219,7 +219,7 @@ const StoryCard = memo(function StoryCard({
 
       {/* Text */}
       <div className={`relative z-10 py-2 ${isEven ? "md:order-1" : ""}`}>
-        <p className="mb-2 font-sans text-xs text-secondary uppercase tracking-[0.28em]">
+        <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
           {story.date}
         </p>
         <h2 className="mb-1.5 font-serif text-4xl text-foreground leading-none md:text-5xl lg:text-7xl">
@@ -230,19 +230,19 @@ const StoryCard = memo(function StoryCard({
             {story.age} years old
           </span>
           <span className="h-px w-8 shrink-0 bg-primary/40" />
-          <span className="font-sans text-xs text-foreground/50 uppercase tracking-[0.2em]">
+          <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.2em]">
             {story.location}
           </span>
         </div>
-        <blockquote className="relative mb-6 border-tertiary/50 border-l-2 pl-5 font-sans font-light text-base text-foreground/70 italic leading-relaxed md:text-lg lg:text-xl">
-          <span className="-top-3 -left-2 absolute select-none font-serif text-4xl text-tertiary/50 not-italic leading-none">
+        <blockquote className="relative mb-6 border-tertiary/50 border-l-2 pl-5 font-light font-sans text-base text-foreground/70 italic leading-relaxed md:text-lg lg:text-xl">
+          <span className="absolute -top-3 -left-2 select-none font-serif text-4xl text-tertiary/50 not-italic leading-none">
             &ldquo;
           </span>
           {story.quote}
         </blockquote>
         <Link
           href={`/stories/${story.id}`}
-          className="inline-flex items-center gap-3 border-primary/30 border-b pb-1 font-sans text-xs text-primary uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
+          className="inline-flex items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
         >
           Read {story.pronoun} story
           <ArrowRight size={16} />
@@ -320,10 +320,10 @@ export default function StoriesFeed() {
   }, [activeDecade, newestFirst]);
 
   return (
-    <div className="container">
+    <div className="container py-16">
       {/* Filter bar */}
-      <div className="flex flex-col items-center gap-5 px-4 pt-16">
-        <span className="font-sans text-xs text-foreground/50 uppercase tracking-[0.3em]">
+      <div className="flex flex-col items-center gap-5">
+        <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.3em]">
           Filter by decade
         </span>
         <fieldset
@@ -353,7 +353,7 @@ export default function StoriesFeed() {
 
       {/* Meta row */}
       <div className="flex items-center justify-between pt-10">
-        <span className="font-sans text-xs text-foreground/50 uppercase tracking-[0.25em]">
+        <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.25em]">
           <span className="font-normal text-primary text-sm">
             {filtered.length}
           </span>{" "}
@@ -361,7 +361,7 @@ export default function StoriesFeed() {
         </span>
         <button
           type="button"
-          className="flex cursor-pointer items-center gap-2 font-sans text-xs text-foreground/50 uppercase tracking-[0.2em] transition-colors hover:text-primary"
+          className="flex cursor-pointer items-center gap-2 font-sans text-foreground/50 text-xs uppercase tracking-[0.2em] transition-colors hover:text-primary"
           onClick={() => setNewestFirst((n) => !n)}
         >
           <ArrowUpDown size={10} className="opacity-60" />

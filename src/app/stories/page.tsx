@@ -1,57 +1,68 @@
 import Navbar from "@tac/components/Navbar";
 import StoriesFeed from "@tac/components/StoriesFeed";
-import WaveDivider from "@tac/components/WaveDivider";
-
-function RingAccent() {
-  return (
-    <svg
-      viewBox="80.7 154.9 85.8 84.2"
-      fill="none"
-      aria-hidden="true"
-      className="h-8 w-8 shrink-0 opacity-80"
-    >
-      <path
-        d="M154.159 179.362C163.477 195.502 157.436 216.554 140.489 226.338C123.543 236.122 102.291 230.827 92.9731 214.688C83.6551 198.548 89.6954 177.496 106.642 167.712C123.588 157.928 144.841 163.223 154.159 179.362Z"
-        stroke="white"
-        strokeWidth="3"
-      />
-      <path
-        d="M147.545 183.18C155.558 197.058 151.177 214.479 137.92 222.133C124.662 229.787 107.385 224.872 99.3717 210.993C91.3591 197.114 95.7409 179.694 108.998 172.04C122.256 164.386 139.532 169.301 147.545 183.18Z"
-        stroke="white"
-        strokeWidth="3"
-      />
-      <path
-        d="M141.697 186.842C146.522 195.2 142.691 206.863 132.501 212.747C122.31 218.63 110.295 216.115 105.47 207.758C100.645 199.4 104.474 187.737 114.664 181.853C124.855 175.97 136.871 178.485 141.697 186.842Z"
-        stroke="white"
-        strokeWidth="3"
-      />
-      <path
-        d="M130.952 196.316C132.513 199.019 131.446 202.831 128.156 204.731C124.867 206.63 121.032 205.648 119.471 202.945C117.91 200.241 118.977 196.429 122.267 194.53C125.557 192.63 129.392 193.612 130.952 196.316Z"
-        stroke="white"
-        strokeWidth="3"
-      />
-    </svg>
-  );
-}
+import Image from "next/image";
+import logo from "../../../public/logo-rings.svg";
 
 export default function Stories() {
   return (
     <div className="min-h-dvh w-screen">
       <Navbar transparent textColour="text-white" scrollThreshold={500} />
-      {/* Negative margin pulls the hero up under the transparent sticky nav */}
-      <div className="-mt-27 md:-mt-32 bg-secondary heroTexture">
-        <section className="relative flex h-[70vh] pb-27 md:pb-32 flex-col items-center justify-center overflow-hidden pt-27 text-center text-white md:pt-32">
-          {/* Title */}
-          <h1 className="my-6 font-bold font-serif text-8xl leading-none tracking-tight sm:text-9xl lg:text-[11rem]">
-            Stories
-          </h1>
 
-          {/* Subtitle */}
-          <p className="mt-6 font-light font-sans text-2xl sm:text-4xl">
-            Read stories about aging from <br /> people across the lifespan
-          </p>
+      {/* Hero */}
+      <div className="heroTexture -mt-27 bg-secondary md:-mt-32">
+        <section className="relative flex h-[70vh] flex-col items-center justify-center overflow-hidden pt-27 pb-27 text-center text-white md:pt-32 md:pb-32">
+          {/* Radial vignette */}
+          <div
+            className="pointer-events-none absolute inset-0 select-none"
+            aria-hidden="true"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.18) 100%)",
+            }}
+          />
+
+          {/* Off-center logo-rings watermark */}
+          <div
+            className="pointer-events-none absolute animate-spin-slow select-none"
+            aria-hidden="true"
+            style={{
+              width: "min(110vw, 110vh)",
+              height: "min(110vw, 110vh)",
+              bottom: "calc(min(110vw, 110vh) / -2)",
+              right: "calc(min(110vw, 110vh) / -2)",
+            }}
+          >
+            <Image
+              src={logo}
+              alt=""
+              fill
+              className="object-contain opacity-[0.08]"
+            />
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col items-center">
+            <p className="mb-6 font-sans text-sm text-white/60 uppercase tracking-[0.5em]">
+              Storytelling
+            </p>
+            <h1 className="my-6 font-bold font-serif text-8xl leading-none tracking-tight sm:text-9xl lg:text-[11rem]">
+              Stories
+            </h1>
+            <p className="font-light font-sans text-2xl sm:text-4xl">
+              Read stories about aging from <br /> people across the lifespan
+            </p>
+          </div>
+
+          {/* Scroll cue */}
+          <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
+            <span className="font-sans text-white/60 text-xs uppercase tracking-[0.4em]">
+              scroll
+            </span>
+            <div className="h-5 w-px bg-white/20" />
+          </div>
         </section>
       </div>
+
       <StoriesFeed />
     </div>
   );

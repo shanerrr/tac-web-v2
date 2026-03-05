@@ -120,7 +120,7 @@ export default function Navbar({
                         className="transition-transform duration-200 group-hover:rotate-180"
                       />
                     </button>
-                    <ul className="-translate-x-1/2 -translate-y-1 pointer-events-none absolute top-full left-1/2 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
+                    <ul className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 -translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
                       <div className="flex flex-col gap-3 whitespace-nowrap rounded-xl bg-white/80 px-6 py-4 text-base shadow-sm backdrop-blur-sm">
                         {item.children.map((child) => (
                           <li key={child.label}>
