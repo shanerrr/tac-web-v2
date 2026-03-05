@@ -44,7 +44,7 @@ const LAND_ACKNOWLEDGEMENT =
 
 export default function Footer() {
   return (
-    <footer className="bg-secondary text-white">
+    <footer className="bg-secondary heroTexture text-white">
       <div className="container grid grid-cols-2 gap-x-6 gap-y-12 py-16 lg:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="col-span-2 flex flex-col gap-2 lg:col-span-1">
           <Link href="/" className="flex flex-col justify-center gap-3">

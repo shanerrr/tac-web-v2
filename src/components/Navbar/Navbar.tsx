@@ -3,7 +3,7 @@
 import { ChevronDown, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import logo from "../../../public/logo.svg";
 
 type NavChild = { label: string; href: string };
@@ -16,11 +16,16 @@ const navItems: NavItem[] = [
     children: [
       { label: "stories", href: "/stories" },
       { label: "films", href: "/films" },
-      { label: "poetry", href: "/poetry" },
     ],
   },
   { label: "resources", href: "/resources" },
-  { label: "events", href: "/events" },
+  {
+    label: "projects",
+    children: [
+      { label: "My Aging Story Exhibit", href: "/projects/my-aging-story" },
+      { label: "GOLD Poetry Project", href: "/projects/gold" },
+    ],
+  },
 ];
 
 const HamburgerIcon = memo(function HamburgerIcon({
@@ -31,13 +36,13 @@ const HamburgerIcon = memo(function HamburgerIcon({
   return (
     <div className="flex h-11 w-11 flex-col items-end justify-around rounded-[10px] bg-primary/60 p-[25%]">
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-[200ms]" : "w-full opacity-100 delay-0"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-200ms" : "w-full opacity-100 delay-0"}`}
       />
       <span
         className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-100" : "w-4/5 opacity-100 delay-100"}`}
       />
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-[200ms]"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-200ms"}`}
       />
     </div>
   );
@@ -45,107 +50,134 @@ const HamburgerIcon = memo(function HamburgerIcon({
 
 export default function Navbar({
   textColour = "text-black",
+  transparent = false,
+  scrollThreshold = 20,
 }: {
   textColour?: string;
+  transparent?: boolean;
+  scrollThreshold?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!transparent) return;
+    const onScroll = () => setScrolled(window.scrollY > scrollThreshold);
+    onScroll(); // check on mount in case page loads mid-scroll
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [transparent, scrollThreshold]);
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
     setOpenSubmenu(null);
   }, []);
 
+  // When scrolled, always use dark text so it reads on the white background
+  const activeTextColour =
+    transparent && scrolled ? "text-foreground" : textColour;
+
   return (
     <>
-      <nav
-        className={`container relative z-50 py-8 font-sans transition-colors duration-300 ${menuOpen ? "text-black" : textColour}`}
+      <header
+        className={`sticky top-0 z-50 transition-[background-color,box-shadow] duration-300 ease-in-out ${
+          transparent
+            ? scrolled
+              ? `bg-white/95 ${menuOpen ? "" : "shadow-sm"} backdrop-blur-sm`
+              : "bg-transparent"
+            : ""
+        }`}
       >
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <Image
-              src={logo}
-              alt="The Age Collective logo"
-              width={64}
-              height={64}
-              sizes="(max-width: 768px) 44px, 64px"
-              className="h-11 w-11 shrink-0 rounded-full md:h-16 md:w-16"
-            />
-            <div className="flex flex-col justify-center font-normal text-lg leading-none md:h-16 md:text-2xl">
-              <span>the age</span>
-              <span>collective</span>
-            </div>
-          </Link>
+        <nav
+          className={`container relative py-8 font-sans transition-colors duration-300 ${menuOpen ? "text-foreground" : activeTextColour}`}
+        >
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src={logo}
+                alt="The Age Collective logo"
+                width={64}
+                height={64}
+                sizes="(max-width: 768px) 44px, 64px"
+                className="h-11 w-11 shrink-0 rounded-full md:h-16 md:w-16"
+              />
+              <div className="flex flex-col justify-center font-normal text-lg leading-none md:h-16 md:text-2xl">
+                <span>the age</span>
+                <span>collective</span>
+              </div>
+            </Link>
 
-          {/* Desktop nav — CSS hover, no state needed */}
-          <ol className="ml-8 hidden items-center gap-8 font-light text-lg md:flex lg:gap-12 lg:text-xl xl:text-2xl">
-            {navItems.map((item) =>
-              item.children ? (
-                <li key={item.label} className="group relative">
-                  <button type="button" className="flex items-center gap-1">
-                    {item.label}
-                    <ChevronDown
-                      size={20}
-                      className="transition-transform duration-200 group-hover:rotate-180"
-                    />
-                  </button>
-                  <ul className="-translate-x-1/2 -translate-y-1 pointer-events-none absolute top-full left-1/2 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
-                    <div className="flex flex-col gap-3 whitespace-nowrap rounded-xl bg-white/80 px-6 py-4 text-base shadow-sm backdrop-blur-sm">
-                      {item.children.map((child) => (
-                        <li key={child.label}>
-                          <Link
-                            href={child.href}
-                            className="text-black transition-colors hover:text-primary"
-                          >
-                            {child.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </div>
-                  </ul>
-                </li>
-              ) : (
-                <li key={item.label}>
-                  <Link
-                    href={item.href ?? "/"}
-                    className="transition-colors hover:text-primary"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ),
-            )}
-          </ol>
+            {/* Desktop nav — CSS hover, no state needed */}
+            <ol className="ml-8 hidden items-center gap-8 font-light text-lg md:flex lg:gap-12 lg:text-xl xl:text-2xl">
+              {navItems.map((item) =>
+                item.children ? (
+                  <li key={item.label} className="group relative">
+                    <button type="button" className="flex items-center gap-1">
+                      {item.label}
+                      <ChevronDown
+                        size={20}
+                        className="transition-transform duration-200 group-hover:rotate-180"
+                      />
+                    </button>
+                    <ul className="-translate-x-1/2 -translate-y-1 pointer-events-none absolute top-full left-1/2 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
+                      <div className="flex flex-col gap-3 whitespace-nowrap rounded-xl bg-white/80 px-6 py-4 text-base shadow-sm backdrop-blur-sm">
+                        {item.children.map((child) => (
+                          <li key={child.label}>
+                            <Link
+                              href={child.href}
+                              className="text-black transition-colors hover:text-primary"
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </div>
+                    </ul>
+                  </li>
+                ) : (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href ?? "/"}
+                      className="transition-colors hover:text-primary"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ),
+              )}
+            </ol>
 
-          {/* Hamburger — mobile only */}
-          <button
-            className="relative h-11 w-11 md:hidden"
-            type="button"
-            onClick={() => setMenuOpen((o) => !o)}
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-          >
-            <div
-              className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${menuOpen ? "opacity-0" : "opacity-100"}`}
+            {/* Hamburger — mobile only */}
+            <button
+              className="relative h-11 w-11 md:hidden"
+              type="button"
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-label="Toggle menu"
+              aria-expanded={menuOpen}
             >
-              <HamburgerIcon isOpen={menuOpen} />
-            </div>
-            <div
-              className={`absolute inset-0 flex items-center justify-center rounded-[10px] bg-primary/60 p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${menuOpen ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0"}`}
-            >
-              <X className="h-full w-full" color="white" />
-            </div>
-          </button>
-        </div>
-      </nav>
+              <div
+                className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${menuOpen ? "opacity-0" : "opacity-100"}`}
+              >
+                <HamburgerIcon isOpen={menuOpen} />
+              </div>
+              <div
+                className={`absolute inset-0 flex items-center justify-center rounded-[10px] bg-primary/60 p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${menuOpen ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0"}`}
+              >
+                <X className="h-full w-full" color="white" />
+              </div>
+            </button>
+          </div>
+        </nav>
+      </header>
 
       {/* Full-screen mobile menu */}
       <div
-        style={{
-          backgroundImage: "url('/texture.jpg')",
-          backgroundRepeat: "repeat",
-        }}
-        className={`fixed inset-0 z-40 flex flex-col items-center justify-center transition-opacity duration-300 ease-in-out md:hidden ${
+        // style={{
+        //   backgroundImage: "url('/texture.jpg')",
+        //   backgroundRepeat: "repeat",
+        // }}
+        className={`fixed inset-0 z-40 flex flex-col items-center justify-center bg-white transition-opacity duration-300 ease-in-out md:hidden ${
           menuOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0"
