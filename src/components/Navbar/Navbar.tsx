@@ -54,7 +54,7 @@ const navItems: NavItem[] = [
     menuAlign: "right",
     children: [
       {
-        label: "My Aging Story Exhibit",
+        label: "My Aging Story",
         href: "/projects/my-aging-story",
         description:
           "An interactive exhibit exploring personal aging narratives",
@@ -97,7 +97,7 @@ const DropdownLink = memo(function DropdownLink({
       </span>
       <p
         className="font-bold font-serif text-xl capitalize transition-colors duration-200"
-        style={{ color: hovered ? child.color : child.color }}
+        style={{ color: child.color }}
       >
         {child.label}
       </p>
@@ -118,13 +118,13 @@ const HamburgerIcon = memo(function HamburgerIcon({
   return (
     <div className="flex h-11 w-11 flex-col items-end justify-around rounded-[10px] bg-primary/60 p-[25%]">
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-200ms" : "w-full opacity-100 delay-0"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-200" : "w-full opacity-100 delay-0"}`}
       />
       <span
         className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-100" : "w-4/5 opacity-100 delay-100"}`}
       />
       <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-200ms"}`}
+        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-200"}`}
       />
     </div>
   );
@@ -132,12 +132,12 @@ const HamburgerIcon = memo(function HamburgerIcon({
 
 export default function Navbar({
   textColour = "text-black",
-  burgerBgColour,
+  burgerBgColour = "bg-primary/60",
   transparent = false,
   scrollThreshold = 20,
 }: {
   textColour?: string;
-  burgerBgColour: string;
+  burgerBgColour?: string;
   transparent?: boolean;
   scrollThreshold?: number;
 }) {
