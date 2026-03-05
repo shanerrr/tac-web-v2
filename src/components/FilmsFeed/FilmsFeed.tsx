@@ -28,7 +28,7 @@ const FilmCard = memo(function FilmCard({
       className={`relative grid grid-cols-1 items-center gap-6 py-10 transition-[opacity,transform] duration-700 md:gap-20 lg:gap-28 ${
         isEven ? "md:grid-cols-[3fr_2fr]" : "md:grid-cols-[2fr_3fr]"
       } ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
-      style={{ transitionDelay: `${index * 80}ms` }}
+      style={{ transitionDelay: index === 0 ? "0ms" : "500ms" }}
     >
       {/* Thumbnail */}
       <div className={`relative z-10 ${isEven ? "md:order-2" : ""}`}>
@@ -126,11 +126,11 @@ export default function FilmsFeed({ films }: { films: Film[] }) {
                 />
               </div>
             )}
-            <div ref={setItemRef} data-item-id={film.id}>
+            <div ref={index === 0 ? setItemRef : undefined} data-item-id={film.id}>
               <FilmCard
                 film={film}
                 index={index}
-                isVisible={visibleItems.has(film.id)}
+                isVisible={index === 0 ? visibleItems.has(film.id) : drawnDividers.has(index)}
                 priority={index === 0}
               />
             </div>
