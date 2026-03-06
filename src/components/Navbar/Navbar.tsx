@@ -244,10 +244,10 @@ export default function Navbar({
                       />
                     </button>
                     <div
-                      className={`-translate-y-1 pointer-events-none absolute top-full pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${
+                      className={`pointer-events-none absolute top-full -translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${
                         item.menuAlign === "right"
                           ? "right-0"
-                          : "-translate-x-1/2 left-1/2"
+                          : "left-1/2 -translate-x-1/2"
                       }`}
                     >
                       <div className="relative w-72 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/8">

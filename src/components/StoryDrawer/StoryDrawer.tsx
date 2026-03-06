@@ -3,15 +3,22 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Block, Inline } from "@contentful/rich-text-types";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
+import { formatDate } from "@tac/lib/utils";
 import type { Story } from "@tac/types";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const richTextOptions = {
+  renderText: (text: string) =>
+    text
+      .split("\n")
+      .flatMap((segment, i) =>
+        i === 0 ? [segment] : [<br key={`br-${i}`} />, segment],
+      ),
   renderNode: {
     [BLOCKS.PARAGRAPH]: (_node: unknown, children: React.ReactNode) => (
-      <p className="mb-5 font-sans text-base selection:bg-primary selection:text-white leading-relaxed md:text-lg">
+      <p className="mb-5 font-sans text-base leading-relaxed selection:bg-primary selection:text-white md:text-lg">
         {children}
       </p>
     ),
@@ -62,6 +69,8 @@ export default function StoryDrawer({
   onClose: () => void;
 }) {
   const drawerRef = useRef<HTMLDivElement>(null);
+  const metaRef = useRef<HTMLDivElement>(null);
+  const [metaScrolledPast, setMetaScrolledPast] = useState(false);
   const isOpen = story !== null;
 
   // Lock body scroll when open
@@ -90,6 +99,17 @@ export default function StoryDrawer({
       drawerRef.current.scrollTop = 0;
     }
   }, [isOpen, story?.id]);
+
+  // Observe when meta section scrolls out of view within the drawer
+  useEffect(() => {
+    if (!isOpen || !metaRef.current || !drawerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setMetaScrolledPast(!entry.isIntersecting),
+      { root: drawerRef.current, threshold: 0 },
+    );
+    observer.observe(metaRef.current);
+    return () => observer.disconnect();
+  }, [isOpen]);
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent) => {
@@ -136,53 +156,96 @@ export default function StoryDrawer({
               </button>
             </div>
 
-            {/* Hero section */}
-            <div className="px-6 pt-2 pb-6 md:px-12 lg:mx-auto lg:max-w-4xl">
-              <div className="flex items-center gap-5 md:gap-8">
-                {/* Portrait */}
-                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl shadow-md md:h-28 md:w-28">
-                  <Image
-                    src={story.portrait}
-                    fill
-                    sizes="112px"
-                    className="object-cover"
-                    alt={`Portrait of ${story.name}`}
-                  />
-                </div>
-
-                {/* Meta */}
-                <div className="flex flex-col">
-                  <p className="mb-1 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
-                    {story.published}
-                  </p>
-                  <h2 className="font-serif text-3xl text-foreground leading-none md:text-4xl">
-                    {story.name}
-                  </h2>
-                  <div className="mt-1.5 flex items-center gap-3">
-                    <span className="font-serif text-primary italic md:text-lg">
-                      {story.age} years old
-                    </span>
-                    <span className="h-px w-5 shrink-0 bg-primary/30" />
-                    <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
-                      {story.location}
-                    </span>
+            {/* Content — stacked on mobile, two-col on lg+ */}
+            <div className="px-6 pt-2 pb-16 md:px-12 lg:mx-auto lg:flex lg:max-w-6xl lg:gap-12 lg:pt-6">
+              {/* Left column — portrait + meta (sticky on desktop) */}
+              <div className="hidden shrink-0 lg:block lg:w-100">
+                <div className="sticky top-14">
+                  <div className="relative aspect-3/4 w-full overflow-hidden rounded-2xl shadow-lg">
+                    <Image
+                      src={story.portrait}
+                      fill
+                      sizes="320px"
+                      className="object-cover"
+                      alt={`Portrait of ${story.name}`}
+                    />
+                  </div>
+                  <div
+                    className={`mt-5 flex flex-col transition-opacity duration-300 ${
+                      metaScrolledPast ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    <p className="mb-1 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
+                      {formatDate(story.published)}
+                    </p>
+                    <h2 className="font-serif text-3xl text-foreground leading-none">
+                      {story.name}
+                    </h2>
+                    <div className="mt-1.5 flex items-center gap-3">
+                      <span className="font-serif text-primary italic lg:text-lg">
+                        {story.age} years old
+                      </span>
+                      <span className="h-px w-5 shrink-0 bg-primary/30" />
+                      <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
+                        {story.location}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Divider */}
-            <div className="mx-6 h-px bg-primary/10 md:mx-12 lg:mx-auto lg:max-w-4xl" />
+              {/* Right column — meta + body */}
+              <div className="min-w-0 flex-1">
+                {/* Hero section */}
+                <div
+                  ref={metaRef}
+                  className="flex items-center gap-5 pb-6 md:gap-8"
+                >
+                  {/* Portrait — mobile only */}
+                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl shadow-md md:h-28 md:w-28 lg:hidden">
+                    <Image
+                      src={story.portrait}
+                      fill
+                      sizes="112px"
+                      className="object-cover"
+                      alt={`Portrait of ${story.name}`}
+                    />
+                  </div>
 
-            {/* Story body */}
-            <div className="px-6 pt-8 pb-16 md:px-12 lg:mx-auto lg:max-w-4xl">
-              {story.body ? (
-                documentToReactComponents(story.body, richTextOptions)
-              ) : (
-                <p className="text-center font-serif text-foreground/40 italic">
-                  Full story coming soon.
-                </p>
-              )}
+                  {/* Meta */}
+                  <div className="flex flex-col">
+                    <p className="mb-1 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
+                      {formatDate(story.published)}
+                    </p>
+                    <h2 className="font-serif text-3xl text-foreground leading-none md:text-4xl">
+                      {story.name}
+                    </h2>
+                    <div className="mt-1.5 flex items-center gap-3">
+                      <span className="font-serif text-primary italic md:text-lg">
+                        {story.age} years old
+                      </span>
+                      <span className="h-px w-5 shrink-0 bg-primary/30" />
+                      <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
+                        {story.location}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="h-px bg-primary/10" />
+
+                {/* Story body */}
+                <div className="pt-8">
+                  {story.body ? (
+                    documentToReactComponents(story.body, richTextOptions)
+                  ) : (
+                    <p className="text-center font-serif text-foreground/40 italic">
+                      Full story coming soon.
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </>
         )}

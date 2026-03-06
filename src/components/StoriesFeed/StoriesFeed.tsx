@@ -5,6 +5,7 @@ import TreeRingDivider, {
   goldenRotation,
 } from "@tac/components/TreeRingDivider";
 import { useScrollReveal } from "@tac/hooks/useScrollReveal";
+import { formatDate } from "@tac/lib/utils";
 import type { Story } from "@tac/types";
 import { ArrowRight, ArrowUpDown } from "lucide-react";
 import Image from "next/image";
@@ -80,7 +81,7 @@ const StoryCard = memo(function StoryCard({
       {/* Text */}
       <div className={`relative z-10 py-2 ${isEven ? "md:order-1" : ""}`}>
         <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
-          {story.published}
+          {formatDate(story.published)}
         </p>
         <h2 className="mb-1.5 font-serif text-4xl text-foreground leading-none md:text-5xl lg:text-7xl">
           {story.name}
@@ -95,7 +96,7 @@ const StoryCard = memo(function StoryCard({
           </span>
         </div>
         <blockquote className="relative mb-6 border-tertiary/50 border-l-2 pl-5 font-light font-sans text-base text-foreground/70 italic leading-relaxed md:text-lg lg:text-xl">
-          <span className="-top-3 -left-2 absolute select-none font-serif text-4xl text-tertiary/50 not-italic leading-none">
+          <span className="absolute -top-3 -left-2 select-none font-serif text-4xl text-tertiary/50 not-italic leading-none">
             &ldquo;
           </span>
           {story.quote}
@@ -132,7 +133,11 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
     () =>
       stories
         .filter((s) => activeDecade === "all" || s.decade === activeDecade)
-        .sort((a, b) => (newestFirst ? b.age - a.age : a.age - b.age)),
+        .sort((a, b) => {
+          const da = new Date(a.published).getTime();
+          const db = new Date(b.published).getTime();
+          return newestFirst ? db - da : da - db;
+        }),
     [stories, activeDecade, newestFirst],
   );
 

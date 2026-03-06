@@ -36,12 +36,7 @@ interface FilmSkeleton extends EntrySkeletonType {
   };
 }
 
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+import { formatDate } from "@tac/lib/utils";
 
 export async function getStories(): Promise<Story[]> {
   const { items } = await client.getEntries<StorySkeleton>({
@@ -57,7 +52,7 @@ export async function getStories(): Promise<Story[]> {
       name: f.name,
       age: f.age,
       decade: String(Math.floor(f.age / 10) * 10),
-      published: formatDate(f.published),
+      published: f.published,
       location: f.location,
       quote: f.quote,
       pronoun: f.pronoun,
@@ -83,7 +78,7 @@ export async function getFilms(): Promise<Film[]> {
       name: f.name,
       age: f.age,
       date: formatDate(f.date ?? item.sys.createdAt),
-      location: f.location ?? "Edmonton, AB",
+      location: f.location,
       duration: f.duration,
       slug: f.slug ?? item.sys.id,
       banner: `https:${banner?.fields.file?.url}`,
