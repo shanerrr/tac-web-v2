@@ -61,6 +61,34 @@ const richTextOptions = {
   },
 };
 
+function StoryMeta({
+  story,
+  className,
+}: {
+  story: Story;
+  className?: string;
+}) {
+  return (
+    <div className={`flex flex-col ${className ?? ""}`}>
+      <p className="mb-1 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
+        {formatDate(story.published)}
+      </p>
+      <h2 className="font-serif text-3xl text-foreground leading-none md:text-4xl">
+        {story.name}
+      </h2>
+      <div className="mt-1.5 flex items-center gap-3">
+        <span className="font-serif text-primary italic md:text-lg">
+          {story.age} years old
+        </span>
+        <span className="h-px w-5 shrink-0 bg-primary/30" />
+        <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
+          {story.location}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function StoryDrawer({
   story,
   onClose,
@@ -73,24 +101,22 @@ export default function StoryDrawer({
   const [metaScrolledPast, setMetaScrolledPast] = useState(false);
   const isOpen = story !== null;
 
-  // Lock body scroll when open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = "";
-      };
-    }
-  }, [isOpen]);
-
-  // Close on Escape
   useEffect(() => {
     if (!isOpen) return;
+
+    // Lock body scroll
+    document.body.style.overflow = "hidden";
+
+    // Close on Escape
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
   }, [isOpen, onClose]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentional — reset scroll when story changes
@@ -170,37 +196,18 @@ export default function StoryDrawer({
                       alt={`Portrait of ${story.name}`}
                     />
                   </div>
-                  <div
-                    className={`mt-5 flex flex-col transition-opacity duration-300 ${
+                  <StoryMeta
+                    story={story}
+                    className={`mt-5 transition-opacity duration-300 ${
                       metaScrolledPast ? "opacity-100" : "opacity-0"
                     }`}
-                  >
-                    <p className="mb-1 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
-                      {formatDate(story.published)}
-                    </p>
-                    <h2 className="font-serif text-3xl text-foreground leading-none">
-                      {story.name}
-                    </h2>
-                    <div className="mt-1.5 flex items-center gap-3">
-                      <span className="font-serif text-primary italic lg:text-lg">
-                        {story.age} years old
-                      </span>
-                      <span className="h-px w-5 shrink-0 bg-primary/30" />
-                      <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
-                        {story.location}
-                      </span>
-                    </div>
-                  </div>
+                  />
                 </div>
               </div>
 
               {/* Right column — meta + body */}
               <div className="min-w-0 flex-1">
-                {/* Hero section */}
-                <div
-                  ref={metaRef}
-                  className="flex items-center gap-5 pb-6 md:gap-8"
-                >
+                <div ref={metaRef} className="flex items-center gap-5 pb-6 md:gap-8">
                   {/* Portrait — mobile only */}
                   <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl shadow-md md:h-28 md:w-28 lg:hidden">
                     <Image
@@ -211,31 +218,11 @@ export default function StoryDrawer({
                       alt={`Portrait of ${story.name}`}
                     />
                   </div>
-
-                  {/* Meta */}
-                  <div className="flex flex-col">
-                    <p className="mb-1 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
-                      {formatDate(story.published)}
-                    </p>
-                    <h2 className="font-serif text-3xl text-foreground leading-none md:text-4xl">
-                      {story.name}
-                    </h2>
-                    <div className="mt-1.5 flex items-center gap-3">
-                      <span className="font-serif text-primary italic md:text-lg">
-                        {story.age} years old
-                      </span>
-                      <span className="h-px w-5 shrink-0 bg-primary/30" />
-                      <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
-                        {story.location}
-                      </span>
-                    </div>
-                  </div>
+                  <StoryMeta story={story} />
                 </div>
 
-                {/* Divider */}
                 <div className="h-px bg-primary/10" />
 
-                {/* Story body */}
                 <div className="pt-8">
                   {story.body ? (
                     documentToReactComponents(story.body, richTextOptions)

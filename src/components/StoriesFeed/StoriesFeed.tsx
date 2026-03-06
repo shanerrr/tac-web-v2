@@ -1,6 +1,5 @@
 "use client";
 
-import StoryDrawer from "@tac/components/StoryDrawer";
 import TreeRingDivider, {
   goldenRotation,
 } from "@tac/components/TreeRingDivider";
@@ -8,6 +7,7 @@ import { useScrollReveal } from "@tac/hooks/useScrollReveal";
 import { formatDate } from "@tac/lib/utils";
 import type { Story } from "@tac/types";
 import { ArrowRight, ArrowUpDown } from "lucide-react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import {
   Fragment,
@@ -17,6 +17,12 @@ import {
   useMemo,
   useState,
 } from "react";
+
+const StoryDrawer = dynamic(() => import("@tac/components/StoryDrawer"), {
+  ssr: false,
+});
+
+const HASH_PREFIX = "#story-";
 
 const DECADES = [
   "all",
@@ -33,6 +39,11 @@ type Decade = (typeof DECADES)[number];
 
 const decadeLabel = (d: Decade) => (d === "all" ? "All Ages" : `${d}s`);
 
+function getStoryIdFromHash(): string | null {
+  const hash = window.location.hash;
+  return hash.startsWith(HASH_PREFIX) ? hash.slice(HASH_PREFIX.length) : null;
+}
+
 const StoryCard = memo(function StoryCard({
   story,
   index,
@@ -44,9 +55,10 @@ const StoryCard = memo(function StoryCard({
   index: number;
   isVisible: boolean;
   priority?: boolean;
-  onRead: () => void;
+  onRead: (id: string) => void;
 }) {
   const isEven = index % 2 === 1;
+  const handleRead = useCallback(() => onRead(story.id), [onRead, story.id]);
 
   return (
     <article
@@ -103,7 +115,7 @@ const StoryCard = memo(function StoryCard({
         </blockquote>
         <button
           type="button"
-          onClick={onRead}
+          onClick={handleRead}
           className="inline-flex cursor-pointer items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
         >
           Read {story.pronoun} story
@@ -118,28 +130,59 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
   const [activeDecade, setActiveDecade] = useState<Decade>("all");
   const [newestFirst, setNewestFirst] = useState(true);
   const [openStory, setOpenStory] = useState<Story | null>(null);
-  const closeDrawer = useCallback(() => setOpenStory(null), []);
+
+  const storiesById = useMemo(
+    () => new Map(stories.map((s) => [s.id, s])),
+    [stories],
+  );
+
+  const syncFromHash = useCallback(() => {
+    const id = getStoryIdFromHash();
+    setOpenStory(id ? storiesById.get(id) ?? null : null);
+  }, [storiesById]);
+
+  const openStoryById = useCallback(
+    (id: string) => {
+      const story = storiesById.get(id);
+      if (!story) return;
+      setOpenStory(story);
+      window.history.pushState(null, "", `${HASH_PREFIX}${id}`);
+    },
+    [storiesById],
+  );
+
+  const closeDrawer = useCallback(() => {
+    setOpenStory(null);
+    window.history.pushState(null, "", window.location.pathname);
+  }, []);
+
+  // Open story from URL hash on mount + handle browser back/forward
+  useEffect(() => {
+    syncFromHash();
+    window.addEventListener("popstate", syncFromHash);
+    return () => window.removeEventListener("popstate", syncFromHash);
+  }, [syncFromHash]);
 
   const { setItemRef, setDividerRef, visibleItems, drawnDividers, reset } =
     useScrollReveal();
 
-  // Re-observe whenever the filtered list changes and new DOM nodes mount
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentional — re-observe on filter/sort change
   useEffect(() => {
     reset();
   }, [activeDecade, newestFirst, reset]);
 
-  const filtered = useMemo(
-    () =>
-      stories
-        .filter((s) => activeDecade === "all" || s.decade === activeDecade)
-        .sort((a, b) => {
-          const da = new Date(a.published).getTime();
-          const db = new Date(b.published).getTime();
-          return newestFirst ? db - da : da - db;
-        }),
-    [stories, activeDecade, newestFirst],
-  );
+  const filtered = useMemo(() => {
+    const result =
+      activeDecade === "all"
+        ? [...stories]
+        : stories.filter((s) => s.decade === activeDecade);
+    result.sort((a, b) => {
+      const da = Date.parse(a.published);
+      const db = Date.parse(b.published);
+      return newestFirst ? db - da : da - db;
+    });
+    return result;
+  }, [stories, activeDecade, newestFirst]);
 
   return (
     <div className="container py-16">
@@ -221,7 +264,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
                       : drawnDividers.has(index)
                   }
                   priority={index === 0}
-                  onRead={() => setOpenStory(story)}
+                  onRead={openStoryById}
                 />
               </div>
             </Fragment>

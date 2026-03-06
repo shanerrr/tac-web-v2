@@ -1,3 +1,4 @@
+import { formatDate } from "@tac/lib/utils";
 import type { Film, Story } from "@tac/types";
 import type { Asset, EntryFieldTypes, EntrySkeletonType } from "contentful";
 import { createClient } from "contentful";
@@ -35,8 +36,6 @@ interface FilmSkeleton extends EntrySkeletonType {
     youtubeUrl: EntryFieldTypes.Text;
   };
 }
-
-import { formatDate } from "@tac/lib/utils";
 
 export async function getStories(): Promise<Story[]> {
   const { items } = await client.getEntries<StorySkeleton>({
