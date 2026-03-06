@@ -7,18 +7,33 @@ import { useScrollReveal } from "@tac/hooks/useScrollReveal";
 import type { Film } from "@tac/types";
 import { Play } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import { Fragment, memo } from "react";
+import { Fragment, memo, useCallback, useState } from "react";
+
+/**
+ * Extract YouTube video ID from various URL formats.
+ */
+function getYouTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/))([^?&/]+)/,
+  );
+  return match?.[1] ?? null;
+}
 
 const FilmCard = memo(function FilmCard({
   film,
   isVisible,
   priority,
+  playing,
+  onPlay,
 }: {
   film: Film;
   isVisible: boolean;
   priority?: boolean;
+  playing: boolean;
+  onPlay: () => void;
 }) {
+  const videoId = film.youtubeUrl ? getYouTubeId(film.youtubeUrl) : null;
+
   return (
     <article
       className={`mx-auto max-w-4xl transition-[opacity,transform] duration-700 ${
@@ -26,42 +41,60 @@ const FilmCard = memo(function FilmCard({
       }`}
       style={{ transitionDelay: isVisible ? "400ms" : "0ms" }}
     >
-      {/* Framed thumbnail */}
-      <Link href={`/films/${film.slug}`} className="group block">
+      {/* Framed thumbnail / YouTube embed */}
+      <button
+        type="button"
+        className="group block w-full cursor-pointer text-left"
+        onClick={onPlay}
+        disabled={!videoId || playing}
+      >
         <div className="rounded-xl bg-white p-2 shadow-[0_4px_30px_rgba(0,0,0,0.08)] transition-shadow duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)] sm:p-3">
           <div className="relative aspect-video overflow-hidden rounded-lg">
-            {film.banner && (
-              <Image
-                src={film.banner}
-                fill
-                sizes="(min-width: 896px) 896px, 90vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                alt={`Thumbnail for ${film.title}`}
-                priority={priority}
+            {playing && videoId ? (
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full"
+                title={film.title}
               />
+            ) : (
+              <>
+                {film.banner && (
+                  <Image
+                    src={film.banner}
+                    fill
+                    sizes="(min-width: 896px) 896px, 90vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    alt={`Thumbnail for ${film.title}`}
+                    priority={priority}
+                  />
+                )}
+
+                {/* Subtle vignette */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" />
+
+                {/* Play button */}
+                {videoId && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 opacity-0 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:opacity-100 md:h-16 md:w-16">
+                      <Play
+                        size={24}
+                        className="translate-x-0.5 fill-primary text-primary"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Duration */}
+                <div className="absolute top-4 right-4 z-10 rounded-sm bg-primary px-2 py-1.5 font-sans text-white text-xs tracking-[0.25em]">
+                  {film.duration}
+                </div>
+              </>
             )}
-
-            {/* Subtle vignette */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" />
-
-            {/* Play button */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 opacity-0 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:opacity-100 md:h-16 md:w-16">
-                <Play
-                  size={24}
-                  className="translate-x-0.5 fill-primary text-primary"
-                />
-              </div>
-            </div>
-
-            {/* Duration */}
-
-            <div className="absolute top-4 right-4 z-10 rounded-sm bg-primary px-2 py-1.5 font-sans text-white text-xs tracking-[0.25em]">
-              {film.duration}
-            </div>
           </div>
         </div>
-      </Link>
+      </button>
 
       {/* Plaque — centered beneath the frame */}
       <div className="mt-5 flex flex-col items-center text-center md:mt-6">
@@ -88,6 +121,11 @@ const FilmCard = memo(function FilmCard({
 export default function FilmsFeed({ films }: { films: Film[] }) {
   const { setDividerRef, drawnDividers, setItemRef, visibleItems } =
     useScrollReveal();
+  const [activeFilmId, setActiveFilmId] = useState<string | null>(null);
+
+  const handlePlay = useCallback((filmId: string) => {
+    setActiveFilmId(filmId);
+  }, []);
 
   return (
     <div className="py-20 md:py-28">
@@ -122,6 +160,8 @@ export default function FilmsFeed({ films }: { films: Film[] }) {
                     : drawnDividers.has(index)
                 }
                 priority={index === 0}
+                playing={activeFilmId === film.id}
+                onPlay={() => handlePlay(film.id)}
               />
             </div>
           </Fragment>

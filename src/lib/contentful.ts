@@ -32,6 +32,7 @@ interface FilmSkeleton extends EntrySkeletonType {
     duration: EntryFieldTypes.Text;
     slug: EntryFieldTypes.Text;
     banner: EntryFieldTypes.AssetLink;
+    youtubeUrl: EntryFieldTypes.Text;
   };
 }
 
@@ -76,7 +77,6 @@ export async function getFilms(): Promise<Film[]> {
   return items.map((item) => {
     const f = item.fields;
     const banner = f.banner as Asset | undefined;
-
     return {
       id: item.sys.id,
       title: f.title,
@@ -84,9 +84,10 @@ export async function getFilms(): Promise<Film[]> {
       age: f.age,
       date: formatDate(f.date ?? item.sys.createdAt),
       location: f.location ?? "Edmonton, AB",
-      duration: "6 mins",
+      duration: f.duration,
       slug: f.slug ?? item.sys.id,
       banner: `https:${banner?.fields.file?.url}`,
+      youtubeUrl: f.youtubeUrl,
     };
   });
 }

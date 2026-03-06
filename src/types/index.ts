@@ -24,4 +24,5 @@ export type Film = {
   duration: string;
   slug: string;
   banner: string | null;
+  youtubeUrl?: string | null;
 };
