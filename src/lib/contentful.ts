@@ -17,6 +17,7 @@ interface StorySkeleton extends EntrySkeletonType {
     quote: EntryFieldTypes.Text;
     pronoun: EntryFieldTypes.Text;
     portrait: EntryFieldTypes.AssetLink;
+    body: EntryFieldTypes.RichText;
   };
 }
 
@@ -30,7 +31,7 @@ interface FilmSkeleton extends EntrySkeletonType {
     location: EntryFieldTypes.Text;
     duration: EntryFieldTypes.Text;
     slug: EntryFieldTypes.Text;
-    thumbnail: EntryFieldTypes.AssetLink;
+    banner: EntryFieldTypes.AssetLink;
   };
 }
 
@@ -61,6 +62,7 @@ export async function getStories(): Promise<Story[]> {
       pronoun: f.pronoun,
       slug: item.sys.id,
       portrait: `https:${portrait.fields.file?.url}`,
+      body: f.body ?? null,
     };
   });
 }
@@ -73,8 +75,7 @@ export async function getFilms(): Promise<Film[]> {
 
   return items.map((item) => {
     const f = item.fields;
-    const thumb = f.thumbnail as Asset | undefined;
-    const thumbnailUrl = thumb?.fields.file?.url;
+    const banner = f.banner as Asset | undefined;
 
     return {
       id: item.sys.id,
@@ -82,10 +83,10 @@ export async function getFilms(): Promise<Film[]> {
       name: f.name,
       age: f.age,
       date: formatDate(f.date ?? item.sys.createdAt),
-      location: f.location,
-      duration: f.duration,
+      location: f.location ?? "Edmonton, AB",
+      duration: "6 mins",
       slug: f.slug ?? item.sys.id,
-      thumbnail: thumbnailUrl ? `https:${thumbnailUrl}` : null,
+      banner: `https:${banner?.fields.file?.url}`,
     };
   });
 }

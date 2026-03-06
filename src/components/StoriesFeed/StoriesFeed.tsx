@@ -1,5 +1,6 @@
 "use client";
 
+import StoryDrawer from "@tac/components/StoryDrawer";
 import TreeRingDivider, {
   goldenRotation,
 } from "@tac/components/TreeRingDivider";
@@ -7,8 +8,14 @@ import { useScrollReveal } from "@tac/hooks/useScrollReveal";
 import type { Story } from "@tac/types";
 import { ArrowRight, ArrowUpDown } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import { Fragment, memo, useEffect, useMemo, useState } from "react";
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 const DECADES = [
   "all",
@@ -30,11 +37,13 @@ const StoryCard = memo(function StoryCard({
   index,
   isVisible,
   priority,
+  onRead,
 }: {
   story: Story;
   index: number;
   isVisible: boolean;
   priority?: boolean;
+  onRead: () => void;
 }) {
   const isEven = index % 2 === 1;
 
@@ -91,13 +100,14 @@ const StoryCard = memo(function StoryCard({
           </span>
           {story.quote}
         </blockquote>
-        <Link
-          href={`/stories/${story.slug}`}
-          className="inline-flex items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
+        <button
+          type="button"
+          onClick={onRead}
+          className="inline-flex cursor-pointer items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
         >
           Read {story.pronoun} story
           <ArrowRight size={16} />
-        </Link>
+        </button>
       </div>
     </article>
   );
@@ -106,6 +116,8 @@ const StoryCard = memo(function StoryCard({
 export default function StoriesFeed({ stories }: { stories: Story[] }) {
   const [activeDecade, setActiveDecade] = useState<Decade>("all");
   const [newestFirst, setNewestFirst] = useState(true);
+  const [openStory, setOpenStory] = useState<Story | null>(null);
+  const closeDrawer = useCallback(() => setOpenStory(null), []);
 
   const { setItemRef, setDividerRef, visibleItems, drawnDividers, reset } =
     useScrollReveal();
@@ -191,18 +203,28 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
                   />
                 </div>
               )}
-              <div ref={index === 0 ? setItemRef : undefined} data-item-id={story.id}>
+              <div
+                ref={index === 0 ? setItemRef : undefined}
+                data-item-id={story.id}
+              >
                 <StoryCard
                   story={story}
                   index={index}
-                  isVisible={index === 0 ? visibleItems.has(story.id) : drawnDividers.has(index)}
+                  isVisible={
+                    index === 0
+                      ? visibleItems.has(story.id)
+                      : drawnDividers.has(index)
+                  }
                   priority={index === 0}
+                  onRead={() => setOpenStory(story)}
                 />
               </div>
             </Fragment>
           ))
         )}
       </div>
+
+      <StoryDrawer story={openStory} onClose={closeDrawer} />
     </div>
   );
 }

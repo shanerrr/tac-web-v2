@@ -1,3 +1,5 @@
+import type { Document } from "@contentful/rich-text-types";
+
 export type Story = {
   id: string;
   name: string;
@@ -9,6 +11,7 @@ export type Story = {
   pronoun: string;
   slug: string;
   portrait: string;
+  body: Document | null;
 };
 
 export type Film = {
@@ -20,5 +23,5 @@ export type Film = {
   location: string;
   duration: string;
   slug: string;
-  thumbnail: string | null;
+  banner: string | null;
 };

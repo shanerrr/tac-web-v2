@@ -1,8 +1,9 @@
 import Navbar from "@tac/components/Navbar";
 import { MoveRight } from "lucide-react";
 import Image from "next/image";
-import heroImage from "../../public/landingHero.svg";
-import heroImagePeople from "../../public/landingHeroPeople.svg";
+import heroImage from "../../public/landingHero.png";
+import people from "../../public/landingHeroPeople.png";
+import peopleLayer from "../../public/landingHeroPeopleLayer.png";
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
           <h2 className="font-bold">Let's talk about it.</h2>
           <p className="flex items-center justify-center gap-3 pt-4 font-extralight font-sans text-primary text-xl italic tracking-[-2px] sm:text-2xl md:text-3xl lg:text-4xl">
             Click to learn more.
-            <MoveRight className="h-6 w-6 sm:h-[34px] sm:w-[34px]" />
+            <MoveRight className="h-6 w-6 sm:h-8.5 sm:w-8.5" />
           </p>
         </div>
       </section>
@@ -23,30 +24,30 @@ export default function Home() {
           src={heroImage}
           alt="hero image"
           sizes="100vw"
-          className="object-cover object-center md:object-top"
+          className="object-cover object-center md:object-[25%_15%]"
           fill
           priority
         />
-        {/* Layer A — normal direction, fades out after Layer B appears */}
+        {/* Layer A — normal directions */}
         <div className="absolute inset-0 animate-people-a">
           <Image
-            src={heroImagePeople}
+            src={people}
             alt="people"
             sizes="100vw"
-            className="object-cover object-center md:object-top"
+            className="object-cover object-center md:object-[25%_15%]"
             fill
           />
         </div>
-        {/* Layer B — flipped direction, fades in while Layer A still showing */}
+        {/* Layer B — flipped directiong */}
         <div
           className="absolute inset-0 animate-people-b"
           style={{ transform: "scaleX(-1)" }}
         >
           <Image
-            src={heroImagePeople}
+            src={peopleLayer}
             alt="people"
             sizes="100vw"
-            className="object-cover object-center md:object-top"
+            className="object-cover object-center md:object-[25%_15%]"
             fill
           />
         </div>

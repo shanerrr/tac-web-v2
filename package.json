@@ -10,16 +10,18 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@contentful/rich-text-react-renderer": "^16.1.6",
+    "@contentful/rich-text-types": "^17.2.5",
     "contentful": "^11.10.5",
-    "lucide-react": "^0.575.0",
+    "lucide-react": "^0.577.0",
     "next": "16.1.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.0",
+    "@biomejs/biome": "2.4.6",
     "@tailwindcss/postcss": "^4.2.1",
-    "@types/node": "^20.19.35",
+    "@types/node": "^20.19.37",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",

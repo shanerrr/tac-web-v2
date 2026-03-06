@@ -15,7 +15,7 @@ export default async function Films() {
         transparent
         textColor="text-white"
         burgerBgColor="bg-primary/60"
-        scrollThreshold={500}
+        scrollThreshold={200}
       />
       <PageHero
         accentLabel="Storytelling"

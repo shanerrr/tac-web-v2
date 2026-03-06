@@ -30,9 +30,9 @@ const FilmCard = memo(function FilmCard({
       <Link href={`/films/${film.slug}`} className="group block">
         <div className="rounded-xl bg-white p-2 shadow-[0_4px_30px_rgba(0,0,0,0.08)] transition-shadow duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)] sm:p-3">
           <div className="relative aspect-video overflow-hidden rounded-lg">
-            {film.thumbnail && (
+            {film.banner && (
               <Image
-                src={film.thumbnail}
+                src={film.banner}
                 fill
                 sizes="(min-width: 896px) 896px, 90vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -42,7 +42,7 @@ const FilmCard = memo(function FilmCard({
             )}
 
             {/* Subtle vignette */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" />
 
             {/* Play button */}
             <div className="absolute inset-0 flex items-center justify-center">
@@ -55,7 +55,8 @@ const FilmCard = memo(function FilmCard({
             </div>
 
             {/* Duration */}
-            <div className="absolute top-3 right-3 rounded-full bg-black/40 px-2.5 py-0.5 font-sans text-white/90 text-xs tracking-wider backdrop-blur-sm">
+
+            <div className="absolute top-4 right-4 z-10 rounded-sm bg-primary px-2 py-1.5 font-sans text-white text-xs tracking-[0.25em]">
               {film.duration}
             </div>
           </div>
@@ -68,7 +69,7 @@ const FilmCard = memo(function FilmCard({
           &ldquo;{film.title}&rdquo;
         </h2>
         <div className="mt-2 flex items-center gap-3">
-          <span className="font-serif text-primary italic md:text-lg">
+          <span className="font-serif text-primary text-xl italic md:text-2xl">
             {film.name}
           </span>
           <span className="h-px w-5 shrink-0 bg-primary/30" />
@@ -76,7 +77,7 @@ const FilmCard = memo(function FilmCard({
             {film.location}
           </span>
         </div>
-        <p className="mt-1 font-sans text-foreground/30 text-xs tracking-[0.15em]">
+        <p className="mt-1 font-sans text-foreground/30 text-sm tracking-[0.15em]">
           {film.date}
         </p>
       </div>
@@ -93,7 +94,7 @@ export default function FilmsFeed({ films }: { films: Film[] }) {
       {/* Meta */}
       <div className="container mb-16 text-center">
         <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.3em]">
-          <span className="text-primary">{films.length}</span> films collected
+          <span className="text-primary">{films.length}</span> films
         </span>
       </div>
 

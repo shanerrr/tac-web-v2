@@ -1,93 +1,93 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #ffffff;
-  --color-foreground: #171717;
-  --color-primary: #af4106;
-  --color-secondary: #d96900;
-  --color-tertiary: #b39c66;
-  --font-sans: var(--font-inter-sans);
-  --font-serif: var(--font-old-standard-serif);
-  --animate-people-a: people-a 12s ease-in-out infinite;
-  --animate-people-b: people-b 12s ease-in-out infinite;
-  --animate-spin-slow: spin-slow 5s linear infinite;
+    --color-background: #ffffff;
+    --color-foreground: #171717;
+    --color-primary: #af4106;
+    --color-secondary: #d96900;
+    --color-tertiary: #b39c66;
+    --font-sans: var(--font-inter-sans);
+    --font-serif: var(--font-old-standard-serif);
+    --animate-people-a: people-a 12s ease-in-out infinite;
+    --animate-people-b: people-b 12s ease-in-out infinite;
+    --animate-spin-slow: spin-slow 5s linear infinite;
 }
 
 .heroTexture {
-  background-image: url("https://www.transparenttextures.com/patterns/snow.png");
+    background-image: url("https://www.transparenttextures.com/patterns/snow.png");
 }
 
 /* Layer A — normal direction: visible → fades out AFTER layer B appears */
 @keyframes people-a {
-  0% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 1;
+    }
 
-  40% {
-    opacity: 1;
-  }
+    40% {
+        opacity: 1;
+    }
 
-  /* B starts fading in at 40% */
-  52% {
-    opacity: 0;
-  }
+    /* B starts fading in at 40% */
+    52% {
+        opacity: 0;
+    }
 
-  /* A fully gone after B is visible */
-  88% {
-    opacity: 0;
-  }
+    /* A fully gone after B is visible */
+    88% {
+        opacity: 0;
+    }
 
-  100% {
-    opacity: 1;
-  }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Layer B — flipped direction: fades in while A still showing → fades out */
 @keyframes people-b {
-  0% {
-    opacity: 0;
-  }
+    0% {
+        opacity: 0;
+    }
 
-  40% {
-    opacity: 0;
-  }
+    40% {
+        opacity: 0;
+    }
 
-  /* starts fading in as A begins to fade */
-  52% {
-    opacity: 1;
-  }
+    /* starts fading in as A begins to fade */
+    52% {
+        opacity: 1;
+    }
 
-  /* fully visible, A now gone */
-  88% {
-    opacity: 1;
-  }
+    /* fully visible, A now gone */
+    88% {
+        opacity: 1;
+    }
 
-  100% {
-    opacity: 0;
-  }
+    100% {
+        opacity: 0;
+    }
 }
 
 @keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
 
-  to {
-    transform: rotate(360deg);
-  }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @utility container {
-  padding-inline: 1rem;
-  margin: auto;
+    padding-inline: 1rem;
+    margin: auto;
 
-  @media (width >= 640px) {
-    padding-inline: 2rem;
-  }
+    @media (width >=640px) {
+        padding-inline: 2rem;
+    }
 }
 
 body {
-  background: url(/texture.jpg);
-  background-repeat: repeat;
-  color: var(--foreground);
+    background-color: #fff;
+    background-image: url("https://www.transparenttextures.com/patterns/white-wall-3.png");
+    color: var(--foreground);
 }

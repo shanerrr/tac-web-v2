@@ -14,7 +14,7 @@ export default async function Stories() {
         transparent
         textColor="text-white"
         burgerBgColor="bg-secondary/60"
-        scrollThreshold={500}
+        scrollThreshold={200}
       />
       <PageHero
         accentLabel="Storytelling"
