@@ -15,13 +15,57 @@ const inter = Inter({
   variable: "--font-inter-sans",
 });
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://theagecollective.ca";
+
 export const metadata: Metadata = {
-  title: "The Age Collective",
-  description: "We are all aging. Let's talk about it",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "The Age Collective",
+    template: "%s | The Age Collective",
+  },
+  description:
+    "Challenging ageism through storytelling, film, art, and community. We're all aging — let's talk about it.",
+  keywords: [
+    "aging",
+    "ageism",
+    "storytelling",
+    "intergenerational",
+    "older adults",
+    "community",
+    "The Age Collective",
+  ],
+  authors: [{ name: "The Age Collective" }],
+  creator: "The Age Collective",
+  openGraph: {
+    type: "website",
+    locale: "en_CA",
+    siteName: "The Age Collective",
+    title: "The Age Collective",
+    description:
+      "Challenging ageism through storytelling, film, art, and community. We're all aging — let's talk about it.",
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Age Collective",
+    description:
+      "Challenging ageism through storytelling, film, art, and community.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {
-  // Matches the site's warm cream background — sets the mobile browser chrome colour
   themeColor: "#FCF2E0",
 };
 

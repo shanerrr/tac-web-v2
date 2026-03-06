@@ -26,9 +26,9 @@ const exhibits = [
   },
 ];
 
-export default async function MyAgingStory() {
+export default function MyAgingStory() {
   return (
-    <div className="min-h-dvh w-screen">
+    <div className="min-h-dvh w-full">
       <Navbar
         transparent
         textColor="text-white"

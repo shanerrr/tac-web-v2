@@ -96,6 +96,7 @@ export async function getFilms(): Promise<Film[]> {
   return items.map((item) => {
     const f = item.fields;
     const banner = f.banner as Asset | undefined;
+    const bannerUrl = banner?.fields.file?.url;
     return {
       id: item.sys.id,
       title: f.title,
@@ -105,7 +106,7 @@ export async function getFilms(): Promise<Film[]> {
       location: f.location,
       duration: f.duration,
       slug: f.slug ?? item.sys.id,
-      banner: `https:${banner?.fields.file?.url}`,
+      banner: bannerUrl ? `https:${bannerUrl}` : null,
       youtubeUrl: f.youtubeUrl,
     };
   });

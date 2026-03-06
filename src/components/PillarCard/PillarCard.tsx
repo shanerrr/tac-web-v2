@@ -22,9 +22,7 @@ export default function PillarCard({
       {/* Default state — number + title */}
       <div
         className={`transition-opacity duration-300 ${
-          open
-            ? "opacity-0"
-            : "md:group-hover:opacity-0"
+          open ? "opacity-0" : "md:group-hover:opacity-0"
         }`}
       >
         <span className="font-sans text-[10px] text-white/30 uppercase tracking-[0.3em]">

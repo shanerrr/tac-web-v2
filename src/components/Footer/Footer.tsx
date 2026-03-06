@@ -134,7 +134,7 @@ export default function Footer({ bgColor }: { bgColor: string }) {
           {LAND_ACKNOWLEDGEMENT}
         </p>
         <p className="shrink-0 font-sans text-[0.6rem]">
-          &copy; 2026 The Age Collective
+          &copy; {new Date().getFullYear()} The Age Collective
         </p>
       </div>
     </footer>

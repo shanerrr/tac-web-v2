@@ -9,7 +9,7 @@ export default async function Stories() {
   const stories = await getStories();
 
   return (
-    <div className="min-h-dvh w-screen">
+    <div className="min-h-dvh w-full">
       <Navbar
         transparent
         textColor="text-white"

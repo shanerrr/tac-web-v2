@@ -34,7 +34,7 @@ export default async function About() {
   ]);
 
   return (
-    <div className="min-h-dvh w-screen">
+    <div className="min-h-dvh w-full">
       <Navbar
         transparent
         textColor="text-white"
@@ -64,7 +64,7 @@ export default async function About() {
             <span className="text-tertiary italic">Ageism is.</span>
           </h2>
           <div className="mx-auto mt-2 h-px w-16 bg-tertiary/30" />
-          <div className="mt-8 space-y-5 font-sans text-lg text-foreground/70 leading-relaxed md:text-xl">
+          <div className="mt-8 space-y-5 font-sans text-foreground/70 text-lg leading-relaxed md:text-xl">
             <p>
               Ageism is the way we think, feel, or act towards people based on
               age. It is one of the most common and normalized forms of
@@ -185,6 +185,7 @@ export default async function About() {
             viewBox="0 0 1440 80"
             fill="none"
             preserveAspectRatio="none"
+            aria-hidden="true"
             className="block h-12 w-full md:h-20"
           >
             <path
@@ -245,6 +246,7 @@ export default async function About() {
             viewBox="0 0 1440 80"
             fill="none"
             preserveAspectRatio="none"
+            aria-hidden="true"
             className="block h-12 w-full rotate-180 md:h-20"
           >
             <path

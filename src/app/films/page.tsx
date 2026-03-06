@@ -10,7 +10,7 @@ export default async function Films() {
   const films = await getFilms();
 
   return (
-    <div className="min-h-dvh w-screen">
+    <div className="min-h-dvh w-full">
       <Navbar
         transparent
         textColor="text-white"

@@ -39,16 +39,22 @@ export function useScrollReveal() {
 
           if (el.dataset.itemId) {
             const id = el.dataset.itemId;
-            setVisibleItems((prev) =>
-              prev.has(id) ? prev : new Set([...prev, id]),
-            );
+            setVisibleItems((prev) => {
+              if (prev.has(id)) return prev;
+              const next = new Set(prev);
+              next.add(id);
+              return next;
+            });
           }
 
           if (el.dataset.dividerId) {
             const id = Number(el.dataset.dividerId);
-            setDrawnDividers((prev) =>
-              prev.has(id) ? prev : new Set([...prev, id]),
-            );
+            setDrawnDividers((prev) => {
+              if (prev.has(id)) return prev;
+              const next = new Set(prev);
+              next.add(id);
+              return next;
+            });
           }
 
           observer.unobserve(el);

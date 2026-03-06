@@ -222,7 +222,6 @@ export default function Navbar({
                 alt="The Age Collective logo"
                 width={64}
                 height={64}
-                sizes="(max-width: 768px) 44px, 64px"
                 className="h-11 w-11 shrink-0 rounded-full md:h-16 md:w-16"
               />
               <div className="flex flex-col justify-center font-normal text-lg leading-none md:h-16 md:text-2xl">
