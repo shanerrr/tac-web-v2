@@ -1,32 +1,38 @@
+import MediaCard from "@tac/components/MediaCard";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
+import PillarCard from "@tac/components/PillarCard";
+import { getAssetsByTag } from "@tac/lib/contentful";
 import Image from "next/image";
 import logo from "../../../public/logo-rings.svg";
 
-const values = [
+const pillars = [
   {
-    title: "Dignity",
+    title: "Community First",
     description:
-      "Every person's experience of aging deserves to be heard, honoured, and shared without reduction or stereotype.",
+      "Our work centers on building inclusive, intergenerational communities where people feel seen, valued, and heard. We bring younger and older adults into the same conversation because aging affects all of us.",
   },
   {
-    title: "Connection",
+    title: "Aging is Living",
     description:
-      "We believe intergenerational dialogue bridges divides and reveals the common threads of human experience.",
+      "We embrace the full and complex reality of aging, including joy, loss, growth, change, and resilience. We also recognize that factors such as income, race, gender, ability, and access to care all shape how people experience growing older.",
   },
   {
-    title: "Authenticity",
+    title: "Conversation Creates Change",
     description:
-      "We amplify real voices and unscripted stories — no filters, no formulas, just honest reflection.",
-  },
-  {
-    title: "Advocacy",
-    description:
-      "Storytelling is a tool for social change. We use it to challenge ageism and reshape cultural narratives.",
+      "When people are invited to listen and be listened to, change emerges. Through stories, poetry, film, and art, we challenge ageist assumptions and create space for empathy, understanding, and connection.",
   },
 ];
 
+export const revalidate = 3600;
+
 export default async function About() {
+  const [collageAssets, featureAssets, bottomAssets] = await Promise.all([
+    getAssetsByTag("aboutCollage"),
+    getAssetsByTag("aboutFeature"),
+    getAssetsByTag("aboutBottom"),
+  ]);
+
   return (
     <div className="min-h-dvh w-screen">
       <Navbar
@@ -58,47 +64,55 @@ export default async function About() {
             <span className="text-tertiary italic">Ageism is.</span>
           </h2>
           <div className="mx-auto mt-2 h-px w-16 bg-tertiary/30" />
-          <p className="mt-8 font-sans text-foreground/70 text-lg leading-relaxed md:text-xl">
-            The Age Collective is a storytelling initiative dedicated to
-            challenging ageism through the power of personal narrative. We
-            collect and share stories from people of all ages — honouring the
-            full spectrum of what it means to grow older in a world that too
-            often overlooks the wisdom, complexity, and beauty of aging.
-          </p>
+          <div className="mt-8 space-y-5 font-sans text-lg text-foreground/70 leading-relaxed md:text-xl">
+            <p>
+              Ageism is the way we think, feel, or act towards people based on
+              age. It is one of the most common and normalized forms of
+              discrimination, and it shows up in everyday language, in media,
+              and in how systems like healthcare, housing, and employment are
+              designed.
+            </p>
+            <p>
+              Ageism shapes whose voices are heard, whose lives are valued, and
+              whose needs are prioritized. Its impacts are even greater when
+              combined with sexism, racism, ableism, and other forms of
+              discrimination.
+            </p>
+            <p>
+              Ageism is linked to social isolation, poorer health outcomes, and
+              reduced access to care and opportunity. Over time, it can also
+              affect how people see themselves as they grow older.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* ─── Photo Collage ─── */}
-      <section className="container pb-8">
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
-          <div className="relative col-span-2 aspect-[16/9] overflow-hidden rounded-2xl bg-tertiary/20 md:col-span-1 md:row-span-2 md:aspect-auto">
-            {/* Replace src with your image */}
-            <div className="absolute inset-0 flex items-center justify-center font-sans text-sm text-tertiary/60 italic">
-              Photo 1
-            </div>
+      {collageAssets.length > 0 && (
+        <section className="container pb-8">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
+            {collageAssets.map((asset, i) => (
+              <div
+                key={asset.url}
+                className={`relative overflow-hidden rounded-2xl bg-tertiary/10 ${
+                  i === 0
+                    ? "col-span-2 aspect-video md:col-span-1 md:row-span-2 md:aspect-auto"
+                    : "aspect-4/3"
+                }`}
+              >
+                <MediaCard
+                  asset={asset}
+                  sizes={
+                    i === 0
+                      ? "(min-width: 768px) 33vw, 100vw"
+                      : "(min-width: 768px) 33vw, 50vw"
+                  }
+                />
+              </div>
+            ))}
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-tertiary/15">
-            <div className="absolute inset-0 flex items-center justify-center font-sans text-sm text-tertiary/50 italic">
-              Photo 2
-            </div>
-          </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-tertiary/10">
-            <div className="absolute inset-0 flex items-center justify-center font-sans text-sm text-tertiary/50 italic">
-              Photo 3
-            </div>
-          </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-tertiary/10">
-            <div className="absolute inset-0 flex items-center justify-center font-sans text-sm text-tertiary/50 italic">
-              Photo 4
-            </div>
-          </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-tertiary/20">
-            <div className="absolute inset-0 flex items-center justify-center font-sans text-sm text-tertiary/60 italic">
-              Photo 5
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ─── Changing the Narrative ─── */}
       <section className="relative overflow-hidden bg-tertiary/[0.07] py-24 md:py-32">
@@ -135,23 +149,29 @@ export default async function About() {
               </h2>
               <div className="mt-2 h-px w-16 bg-tertiary/30" />
               <p className="mt-8 font-sans text-foreground/70 text-lg leading-relaxed">
-                Through written stories, short films, interactive exhibits, and
-                community partnerships, we create spaces where people can
-                reflect on aging honestly — and see themselves reflected in
-                return.
+                How we think about aging shapes how we grow old and how we treat
+                one another across generations. We create space for honest
+                stories, creative expression, and meaningful conversation about
+                what it means to grow older across the life course.
               </p>
               <p className="mt-5 font-sans text-foreground/70 text-lg leading-relaxed">
-                We don&rsquo;t shy away from the hard parts. Loss, loneliness,
-                and change are part of the story. But so are resilience, joy,
-                and the quiet power of a life lived fully.
+                Through storytelling, art, educational resources, and community
+                engagement, we work to challenge ageism and support healthier,
+                more equitable aging for all.
               </p>
             </div>
 
             {/* Side photo */}
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-tertiary/15 shadow-lg">
-              <div className="absolute inset-0 flex items-center justify-center font-sans text-tertiary/50 italic">
-                Feature Photo
-              </div>
+              {featureAssets[0] && (
+                <Image
+                  src={featureAssets[0].url}
+                  alt={featureAssets[0].title}
+                  fill
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-cover"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -206,22 +226,14 @@ export default async function About() {
               <div className="mx-auto mt-2 h-px w-16 bg-white/20" />
             </div>
 
-            <div className="mx-auto mt-16 grid max-w-5xl gap-6 sm:grid-cols-2 lg:gap-8">
-              {values.map((value, i) => (
-                <div
-                  key={value.title}
-                  className="group relative rounded-2xl border border-white/10 bg-white/[0.06] px-8 py-8 backdrop-blur-sm transition-colors duration-300 hover:bg-white/[0.12]"
-                >
-                  <span className="font-sans text-[10px] text-white/30 uppercase tracking-[0.3em]">
-                    0{i + 1}
-                  </span>
-                  <h3 className="mt-2 font-serif text-2xl leading-none md:text-3xl">
-                    {value.title}
-                  </h3>
-                  <p className="mt-3 font-sans text-sm text-white/70 leading-relaxed md:text-base">
-                    {value.description}
-                  </p>
-                </div>
+            <div className="mx-auto mt-16 grid max-w-5xl gap-6 sm:grid-cols-3 lg:gap-8">
+              {pillars.map((pillar, i) => (
+                <PillarCard
+                  key={pillar.title}
+                  index={i}
+                  title={pillar.title}
+                  description={pillar.description}
+                />
               ))}
             </div>
           </div>
@@ -246,7 +258,7 @@ export default async function About() {
       {/* ─── Why We Are ─── */}
       <section className="container py-24 md:py-32">
         <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20">
-          <div className="lg:sticky lg:top-32">
+          <div className="lg:sticky lg:top-38">
             <p className="mb-4 font-sans text-tertiary text-xs uppercase tracking-[0.4em]">
               Origin
             </p>
@@ -258,56 +270,98 @@ export default async function About() {
 
           <div className="space-y-6 font-sans text-foreground/70 text-lg leading-relaxed">
             <p>
-              The Age Collective began with a simple observation: the stories we
-              tell about aging are incomplete. Media, advertising, and even
-              well-meaning health campaigns often reduce older adults to
-              stereotypes — frail, out of touch, or in need of saving.
+              The Age Collective was founded in 2021 by a sister duo who saw
+              gaps that needed addressing. We watched our own parents navigate
+              complex systems as older immigrants, often facing confusing
+              processes, limited support, and age-based assumptions. In our work
+              experiences, we also witnessed older adults being overlooked or
+              dismissed in healthcare and community settings.
             </p>
             <p>
-              Meanwhile, younger people rarely see aging as something that
-              concerns them. The result is a cultural blind spot — a failure to
-              see aging as the universal, deeply personal experience that it is.
+              These experiences made it clear to us that aging is not just
+              personal, but shaped by systems, power, and whose voices are taken
+              seriously.
             </p>
             <blockquote className="border-tertiary/50 border-l-2 pl-6 font-serif text-foreground/50 text-xl italic leading-relaxed md:text-2xl">
-              We started collecting stories because we believed that if people
-              could hear each other — really hear each other — something would
-              shift.
+              We also believe aging is not only an &ldquo;older adult
+              issue.&rdquo; Younger people are aging too. Intergenerational
+              relationships matter if we want greater understanding, solidarity,
+              and collective action.
             </blockquote>
             <p>
               What began as a small collection of written narratives has grown
               into a multi-platform initiative spanning films, exhibits, poetry,
               and community dialogue. Every story we share is a step toward a
-              culture that embraces aging rather than fearing it.
+              culture that embraces and normalizes aging rather than fearing it.
             </p>
             <p>
-              We are researchers, filmmakers, writers, and advocates. But above
-              all, we are listeners. And we believe the best way to fight ageism
-              is to let people speak for themselves.
+              We&rsquo;re grateful that many of our participants have become
+              ongoing collaborators (and more importantly, friends!) and these
+              relationships have challenged and reshaped our own assumptions
+              about aging. Through this work, we continue to learn and build
+              meaningful bonds across generations.
+            </p>
+            <p>
+              We remain committed to centering older adults&rsquo; voices,
+              questioning ageist systems, and creating space for honest
+              dialogue. Our work continues to evolve through reflection,
+              learning, and the relationships that make this collective
+              possible.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ─── Second Photo Row ─── */}
-      <section className="container pb-24 md:pb-32">
-        <div className="grid grid-cols-3 gap-3 md:gap-5">
-          <div className="relative aspect-3/4 overflow-hidden rounded-2xl bg-tertiary/15">
-            <div className="absolute inset-0 flex items-center justify-center font-sans text-sm text-tertiary/50 italic">
-              Photo 6
+      {/* ─── Bottom Photo ─── */}
+      {bottomAssets[0] && (
+        <section className="relative overflow-hidden py-24 md:py-32">
+          {/* Decorative background */}
+          <div className="absolute inset-0 bg-tertiary/[0.05]" />
+          <div
+            className="pointer-events-none absolute animate-spin-slow select-none"
+            aria-hidden="true"
+            style={{
+              width: "min(70vw, 70vh)",
+              height: "min(70vw, 70vh)",
+              bottom: "calc(min(70vw, 70vh) / -3)",
+              right: "calc(min(70vw, 70vh) / -3)",
+            }}
+          >
+            <Image
+              src={logo}
+              alt=""
+              fill
+              className="object-contain opacity-[0.04]"
+              style={{ filter: "invert(1)" }}
+            />
+          </div>
+
+          <div className="container relative">
+            <div className="mx-auto max-w-4xl">
+              {/* Rotated frame effect */}
+              <div className="relative">
+                <div className="absolute -inset-3 rotate-[1.5deg] rounded-3xl bg-tertiary/15 md:-inset-5" />
+                <div className="absolute -inset-3 -rotate-[1deg] rounded-3xl bg-primary/10 md:-inset-5" />
+                <div className="relative overflow-hidden rounded-2xl shadow-xl">
+                  <Image
+                    src={bottomAssets[0].url}
+                    alt={bottomAssets[0].title}
+                    width={1080}
+                    height={810}
+                    sizes="(min-width: 896px) 896px, 100vw"
+                    className="h-auto w-full"
+                  />
+                </div>
+              </div>
+
+              {/* Caption */}
+              <p className="mt-8 text-center font-serif text-foreground/40 italic md:text-lg">
+                The people behind the stories.
+              </p>
             </div>
           </div>
-          <div className="relative aspect-3/4 overflow-hidden rounded-2xl bg-tertiary/20">
-            <div className="absolute inset-0 flex items-center justify-center font-sans text-sm text-tertiary/60 italic">
-              Photo 7
-            </div>
-          </div>
-          <div className="relative aspect-3/4 overflow-hidden rounded-2xl bg-tertiary/10">
-            <div className="absolute inset-0 flex items-center justify-center font-sans text-sm text-tertiary/50 italic">
-              Photo 8
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ─── CTA ─── */}
       <section className="relative overflow-hidden bg-tertiary/5 py-24 md:py-32">

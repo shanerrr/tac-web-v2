@@ -62,6 +62,31 @@ export async function getStories(): Promise<Story[]> {
   });
 }
 
+export type MediaAsset = {
+  url: string;
+  type: "image" | "video";
+  title: string;
+};
+
+export async function getAssetsByTag(tag: string): Promise<MediaAsset[]> {
+  const { items } = await client.getAssets({
+    "metadata.tags.sys.id[in]": [tag],
+  });
+
+  return items
+    .map((asset) => {
+      const url = asset.fields.file?.url;
+      const contentType = asset.fields.file?.contentType ?? "";
+      if (!url) return null;
+      return {
+        url: `https:${url}`,
+        type: contentType.startsWith("video/") ? "video" : "image",
+        title: asset.fields.title ?? "",
+      } satisfies MediaAsset;
+    })
+    .filter((a): a is MediaAsset => a !== null);
+}
+
 export async function getFilms(): Promise<Film[]> {
   const { items } = await client.getEntries<FilmSkeleton>({
     content_type: "films",
