@@ -61,13 +61,7 @@ const richTextOptions = {
   },
 };
 
-function StoryMeta({
-  story,
-  className,
-}: {
-  story: Story;
-  className?: string;
-}) {
+function StoryMeta({ story, className }: { story: Story; className?: string }) {
   return (
     <div className={`flex flex-col ${className ?? ""}`}>
       <p className="mb-1 font-sans text-secondary text-xs uppercase tracking-[0.28em]">
@@ -207,7 +201,10 @@ export default function StoryDrawer({
 
               {/* Right column — meta + body */}
               <div className="min-w-0 flex-1">
-                <div ref={metaRef} className="flex items-center gap-5 pb-6 md:gap-8">
+                <div
+                  ref={metaRef}
+                  className="flex items-center gap-5 pb-6 md:gap-8"
+                >
                   {/* Portrait — mobile only */}
                   <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl shadow-md md:h-28 md:w-28 lg:hidden">
                     <Image

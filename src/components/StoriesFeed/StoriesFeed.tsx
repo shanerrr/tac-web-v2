@@ -138,7 +138,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
 
   const syncFromHash = useCallback(() => {
     const id = getStoryIdFromHash();
-    setOpenStory(id ? storiesById.get(id) ?? null : null);
+    setOpenStory(id ? (storiesById.get(id) ?? null) : null);
   }, [storiesById]);
 
   const openStoryById = useCallback(

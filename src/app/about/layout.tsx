@@ -3,15 +3,15 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Stories | The Age Collective",
+  title: "About Us | The Age Collective",
   description: "We are all aging. Let's talk about it",
 };
 
-export default function StoriesLayout({ children }: { children: ReactNode }) {
+export default function AboutLayout({ children }: { children: ReactNode }) {
   return (
     <main>
       {children}
-      <Footer bgColor="bg-secondary" />
+      <Footer bgColor="bg-tertiary" />
     </main>
   );
 }
