@@ -4,6 +4,7 @@ import { ChevronDown, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { memo, useCallback, useEffect, useState } from "react";
+import { useWebHaptics } from "web-haptics/react";
 import logo from "../../../public/logo.svg";
 import logoRings from "../../../public/logo-rings.svg";
 
@@ -176,6 +177,8 @@ export default function Navbar({
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
+  const { trigger } = useWebHaptics();
+
   useEffect(() => {
     if (!transparent) return;
     const onScroll = () => setScrolled(window.scrollY > scrollThreshold);
@@ -295,7 +298,10 @@ export default function Navbar({
             <button
               className="relative h-11 w-11 md:hidden"
               type="button"
-              onClick={() => setMenuOpen((o) => !o)}
+              onClick={() => {
+                setMenuOpen((o) => !o);
+                trigger();
+              }}
               aria-label="Toggle menu"
               aria-expanded={menuOpen}
             >

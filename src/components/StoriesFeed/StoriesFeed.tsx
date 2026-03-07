@@ -17,6 +17,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useWebHaptics } from "web-haptics/react";
 
 const StoryDrawer = dynamic(() => import("@tac/components/StoryDrawer"), {
   ssr: false,
@@ -130,7 +131,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
   const [activeDecade, setActiveDecade] = useState<Decade>("all");
   const [newestFirst, setNewestFirst] = useState(true);
   const [openStory, setOpenStory] = useState<Story | null>(null);
-
+  const { trigger } = useWebHaptics();
   const storiesById = useMemo(
     () => new Map(stories.map((s) => [s.id, s])),
     [stories],
@@ -145,10 +146,11 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
     (id: string) => {
       const story = storiesById.get(id);
       if (!story) return;
+      trigger([{ duration: 300 }], { intensity: 1 });
       setOpenStory(story);
       window.history.pushState(null, "", `${HASH_PREFIX}${id}`);
     },
-    [storiesById],
+    [storiesById, trigger],
   );
 
   const closeDrawer = useCallback(() => {

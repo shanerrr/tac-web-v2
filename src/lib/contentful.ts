@@ -66,6 +66,7 @@ export type MediaAsset = {
   url: string;
   type: "image" | "video";
   title: string;
+  sortIndex: number;
 };
 
 export async function getAssetsByTag(tag: string): Promise<MediaAsset[]> {
@@ -78,13 +79,17 @@ export async function getAssetsByTag(tag: string): Promise<MediaAsset[]> {
       const url = asset.fields.file?.url;
       const contentType = asset.fields.file?.contentType ?? "";
       if (!url) return null;
+      const sortIndex =
+        Number(asset.fields.title?.split("|")[1]) || Number.MAX_SAFE_INTEGER;
       return {
         url: `https:${url}`,
         type: contentType.startsWith("video/") ? "video" : "image",
         title: asset.fields.title ?? "",
+        sortIndex,
       } satisfies MediaAsset;
     })
-    .filter((a): a is MediaAsset => a !== null);
+    .filter((a): a is MediaAsset => a !== null)
+    .sort((a, b) => a.sortIndex - b.sortIndex);
 }
 
 export async function getFilms(): Promise<Film[]> {
