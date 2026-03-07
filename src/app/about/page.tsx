@@ -210,7 +210,7 @@ export default async function About() {
       <section className="heroTexture relative bg-tertiary pb-12 text-white md:pb-20">
         {/* Watermark */}
         <div
-          className="pointer-events-none absolute z-40 animate-spin-slow select-none"
+          className="pointer-events-none absolute animate-spin-slow select-none"
           aria-hidden="true"
           style={{
             width: "min(60vw, 60vh)",

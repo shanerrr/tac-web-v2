@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://theagecollective.ca";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://theagecollective.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

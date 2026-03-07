@@ -10,7 +10,7 @@ export default function Home() {
     <div className="relative flex h-dvh w-full flex-col overflow-hidden">
       <Navbar />
       <section className="flex flex-2 items-end justify-center text-center tracking-[-4px] md:flex-2 md:items-center">
-        <div className="font-serif text-5xl sm:text-6xl md:pt-10 md:text-6xl lg:text-7xl">
+        <div className="font-serif text-5xl sm:text-6xl md:pt-10 lg:text-7xl">
           <h1 className="flex flex-col">
             <span className="italic">We're all aging. </span>
             <span className="font-bold">Let's talk about it.</span>

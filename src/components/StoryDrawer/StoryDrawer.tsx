@@ -11,11 +11,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const richTextOptions = {
   renderText: (text: string) =>
-    text
-      .split("\n")
-      .flatMap((segment, i) =>
-        i === 0 ? [segment] : [<br key={`br-${i}`} />, segment],
-      ),
+    text.split("\n").flatMap((segment, i) =>
+      // biome-ignore lint/suspicious/noArrayIndexKey: stable text split, order never changes
+      i === 0 ? [segment] : [<br key={`br-${i}`} />, segment],
+    ),
   renderNode: {
     [BLOCKS.PARAGRAPH]: (_node: unknown, children: React.ReactNode) => (
       <p className="mb-5 font-sans text-base leading-relaxed selection:bg-primary selection:text-white md:text-lg">

@@ -139,7 +139,7 @@
 }
 
 body {
-    background-color: #fff;
+    background-color: var(--color-background);
     background-image: url("https://www.transparenttextures.com/patterns/white-wall-3.png");
-    color: var(--foreground);
+    color: var(--color-foreground);
 }

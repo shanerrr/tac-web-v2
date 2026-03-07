@@ -73,7 +73,7 @@ export default function Footer({ bgColor }: { bgColor: string }) {
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className="font-sans text-sm transition-colors duration-200 hover:text-white"
+                  className="font-sans text-sm text-white/70 transition-colors duration-200 hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -92,7 +92,7 @@ export default function Footer({ bgColor }: { bgColor: string }) {
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className="font-sans text-sm transition-colors duration-200 hover:text-white"
+                  className="font-sans text-sm text-white/70 transition-colors duration-200 hover:text-white"
                 >
                   {link.label}
                 </Link>

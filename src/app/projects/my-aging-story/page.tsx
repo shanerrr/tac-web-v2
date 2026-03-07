@@ -73,7 +73,8 @@ export default function MyAgingStory() {
         <div className="grid grid-cols-2 md:grid-cols-4">
           {Array.from({ length: 8 }, (_, i) => (
             <div
-              key={i}
+              // biome-ignore lint/suspicious/noArrayIndexKey: static placeholder grid
+              key={`exhibit-${i}`}
               className="relative aspect-square overflow-hidden bg-primary/[0.06]"
             >
               <div className="absolute inset-0 flex items-center justify-center font-sans text-primary/30 text-sm italic">
@@ -248,7 +249,8 @@ export default function MyAgingStory() {
         <div className="grid grid-cols-2 md:grid-cols-4">
           {Array.from({ length: 4 }, (_, i) => (
             <div
-              key={i}
+              // biome-ignore lint/suspicious/noArrayIndexKey: static placeholder grid
+              key={`bottom-${i}`}
               className="relative aspect-[4/3] overflow-hidden bg-primary/[0.06]"
             >
               <div className="absolute inset-0 flex items-center justify-center font-sans text-primary/30 text-sm italic">

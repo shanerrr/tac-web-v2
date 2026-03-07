@@ -146,6 +146,17 @@ function VideoCard({
     [seekFromEvent],
   );
 
+  const handleScrubKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const video = videoRef.current;
+    if (!video || !video.duration) return;
+    const step = 5;
+    if (e.key === "ArrowRight") {
+      video.currentTime = Math.min(video.duration, video.currentTime + step);
+    } else if (e.key === "ArrowLeft") {
+      video.currentTime = Math.max(0, video.currentTime - step);
+    }
+  }, []);
+
   return (
     <>
       <video
@@ -159,6 +170,8 @@ function VideoCard({
       />
 
       {/* Interaction zone — hover unmutes/remutes, click toggles mute on mobile */}
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: touch/mouse toggle for mute */}
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: overlay interaction zone */}
       <div
         onMouseEnter={() => {
           setHovered(true);
@@ -174,16 +187,14 @@ function VideoCard({
         className="absolute inset-0 z-10"
       >
         {/* Mute/unmute indicator */}
-        <button
-          type="button"
-          onClick={(e) => e.stopPropagation()}
-          aria-label={muted ? "Unmute video" : "Mute video"}
-          className={`absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-opacity duration-300 ${
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-opacity duration-300 ${
             hovered ? "opacity-100" : "opacity-0"
           }`}
         >
           {muted ? <VolumeOff size={14} /> : <Volume2 size={14} />}
-        </button>
+        </div>
       </div>
 
       {/* Scrubber */}
@@ -196,6 +207,7 @@ function VideoCard({
         aria-valuenow={Math.round(progress * 100)}
         tabIndex={0}
         onMouseDown={handleScrubDown}
+        onKeyDown={handleScrubKeyDown}
         className={`absolute right-0 bottom-0 left-0 z-20 h-3 cursor-pointer transition-opacity duration-300 ${
           hovered || isSeeking ? "opacity-100" : "opacity-0"
         }`}

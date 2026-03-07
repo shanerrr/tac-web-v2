@@ -3,7 +3,8 @@
 import { ChevronDown, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { memo, useCallback, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import { useWebHaptics } from "web-haptics/react";
 import logo from "../../../public/logo.svg";
 import logoRings from "../../../public/logo-rings.svg";
@@ -12,22 +13,25 @@ type AccentColor = "primary" | "secondary" | "tertiary";
 
 const accent: Record<
   AccentColor,
-  { text: string; dot: string; hover: string }
+  { text: string; dot: string; hover: string; border: string }
 > = {
   primary: {
     text: "text-primary",
     dot: "bg-primary",
-    hover: "hover:bg-primary/10",
+    hover: "hover:bg-primary/8",
+    border: "hover:border-l-primary",
   },
   secondary: {
     text: "text-secondary",
     dot: "bg-secondary",
-    hover: "hover:bg-secondary/10",
+    hover: "hover:bg-secondary/8",
+    border: "hover:border-l-secondary",
   },
   tertiary: {
     text: "text-tertiary",
     dot: "bg-tertiary",
-    hover: "hover:bg-tertiary/10",
+    hover: "hover:bg-tertiary/8",
+    border: "hover:border-l-tertiary",
   },
 };
 
@@ -107,11 +111,11 @@ const DropdownLink = memo(function DropdownLink({
   return (
     <Link
       href={child.href}
-      className={`flex flex-col gap-0.5 px-5 py-4 transition-colors duration-200 ${ac?.hover ?? ""}`}
+      className={`flex flex-col gap-1 border-l-2 border-l-transparent px-6 py-5 transition-all duration-200 ${ac?.hover ?? ""} ${ac?.border ?? ""}`}
     >
       {ac && (
         <span
-          className={`font-sans text-xs uppercase tracking-[0.25em] ${ac.text}`}
+          className={`font-sans text-[10px] uppercase tracking-[0.25em] ${ac.text}`}
         >
           {child.accentLabel}
         </span>
@@ -122,7 +126,7 @@ const DropdownLink = memo(function DropdownLink({
         {child.label}
       </p>
       {child.description && (
-        <p className="font-sans text-foreground/50 text-sm leading-snug">
+        <p className="font-sans text-foreground/45 text-sm leading-snug">
           {child.description}
         </p>
       )}
@@ -176,13 +180,14 @@ export default function Navbar({
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   const { trigger } = useWebHaptics();
 
   useEffect(() => {
     if (!transparent) return;
     const onScroll = () => setScrolled(window.scrollY > scrollThreshold);
-    onScroll(); // check on mount in case page loads mid-scroll
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [transparent, scrollThreshold]);
@@ -192,15 +197,8 @@ export default function Navbar({
     setOpenSubmenu(null);
   }, []);
 
-  // When scrolled, always use dark text so it reads on the solid background
   const activeTextColor =
     transparent && scrolled ? "text-foreground" : textColor;
-
-  // Hover box tint differs based on whether the nav sits on a dark or light bg
-  const hoverBoxClass =
-    transparent && !scrolled
-      ? "hover:bg-white/15 rounded-lg px-3 py-1"
-      : "hover:bg-foreground/8 rounded-lg px-3 py-1";
 
   return (
     <>
@@ -208,7 +206,7 @@ export default function Navbar({
         className={`sticky top-0 z-50 transition-[background-color,box-shadow] duration-300 ease-in-out ${
           transparent
             ? scrolled
-              ? `bg-white/95 ${menuOpen ? "" : "shadow-sm"} backdrop-blur-sm`
+              ? `bg-white/95 ${menuOpen ? "" : "shadow-[0_1px_12px_rgba(175,65,6,0.06)]"} backdrop-blur-sm`
               : "bg-transparent"
             : ""
         }`}
@@ -219,13 +217,13 @@ export default function Navbar({
           }`}
         >
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3">
+            <Link href="/" className="group/logo flex items-center gap-3">
               <Image
                 src={logo}
                 alt="The Age Collective logo"
                 width={64}
                 height={64}
-                className="h-11 w-11 shrink-0 rounded-full md:h-16 md:w-16"
+                className="h-11 w-11 shrink-0 rounded-full transition-transform duration-500 group-hover/logo:scale-105 md:h-16 md:w-16"
               />
               <div className="flex flex-col justify-center font-normal text-lg leading-none md:h-16 md:text-2xl">
                 <span>the age</span>
@@ -233,65 +231,127 @@ export default function Navbar({
               </div>
             </Link>
 
-            {/* Desktop nav — CSS group-hover, no JS state needed */}
-            <ol className="ml-8 hidden items-center gap-8 font-light text-lg md:flex lg:gap-12 lg:text-xl xl:text-2xl">
-              {navItems.map((item) =>
-                item.children ? (
-                  <li key={item.label} className="group relative">
-                    <button type="button" className="flex items-center gap-1">
-                      {item.label}
-                      <ChevronDown
-                        size={20}
-                        className="transition-transform duration-200 group-hover:rotate-180"
+            {/* ─── Desktop nav ─── */}
+            <ol className="ml-8 hidden items-center md:flex">
+              {navItems.map((item, idx) => {
+                const isActive = item.href
+                  ? pathname === item.href
+                  : (item.children?.some((c) =>
+                      pathname.startsWith(c.href),
+                    ) ?? false);
+
+                return (
+                  <Fragment key={item.label}>
+                    {/* Editorial dot separator */}
+                    {idx > 0 && (
+                      <li
+                        aria-hidden="true"
+                        className="mx-3 h-[3px] w-[3px] shrink-0 rounded-full bg-current opacity-15 lg:mx-5"
                       />
-                    </button>
-                    <div
-                      className={`pointer-events-none absolute top-full -translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${
-                        item.menuAlign === "right"
-                          ? "right-0"
-                          : "left-1/2 -translate-x-1/2"
-                      }`}
-                    >
-                      <div className="relative w-72 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/8">
-                        {/* Corner rings watermark */}
-                        <div
-                          className="pointer-events-none absolute"
-                          style={{
-                            bottom: "-80px",
-                            ...(item.logoCorner === "bottom-left"
-                              ? { left: "-80px" }
-                              : { right: "-80px" }),
-                          }}
+                    )}
+
+                    {item.children ? (
+                      <li className="group relative">
+                        <button
+                          type="button"
+                          className="relative flex items-center gap-1.5 pb-1 font-serif text-lg italic lg:text-xl xl:text-[1.35rem]"
                         >
-                          <Image
-                            src={logoRings}
-                            alt="tree rings"
-                            width={180}
-                            height={180}
-                            className="opacity-5"
-                            style={{ filter: "invert(1)" }}
+                          <span
+                            className={
+                              isActive
+                                ? ""
+                                : "opacity-75 transition-opacity duration-200 group-hover:opacity-100"
+                            }
+                          >
+                            {item.label}
+                          </span>
+                          <ChevronDown
+                            size={15}
+                            className="opacity-40 transition-transform duration-300 group-hover:rotate-180"
                           />
+                          {/* Animated underline — grows from center */}
+                          <span
+                            className={`pointer-events-none absolute -bottom-0.5 left-0 right-4 h-[1.5px] origin-center rounded-full bg-current transition-transform duration-300 ease-out ${
+                              isActive
+                                ? "scale-x-100 opacity-50"
+                                : "scale-x-0 opacity-30 group-hover:scale-x-100 group-hover:opacity-40"
+                            }`}
+                          />
+                        </button>
+
+                        {/* Dropdown panel */}
+                        <div
+                          className={`pointer-events-none absolute top-full -translate-y-2 pt-3 opacity-0 transition-all duration-250 ease-out group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${
+                            item.menuAlign === "right"
+                              ? "right-0"
+                              : "left-1/2 -translate-x-1/2"
+                          }`}
+                        >
+                          <div className="relative w-80 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/6">
+                            {/* Warm accent top edge */}
+                            <div className="h-[2px] bg-primary/25" />
+
+                            {/* Corner rings watermark */}
+                            <div
+                              className="pointer-events-none absolute"
+                              style={{
+                                bottom: "-80px",
+                                ...(item.logoCorner === "bottom-left"
+                                  ? { left: "-80px" }
+                                  : { right: "-80px" }),
+                              }}
+                            >
+                              <Image
+                                src={logoRings}
+                                alt=""
+                                width={180}
+                                height={180}
+                                className="opacity-5"
+                                style={{ filter: "invert(1)" }}
+                              />
+                            </div>
+
+                            {/* Dropdown items */}
+                            <div className="relative flex flex-col divide-y divide-black/5">
+                              {item.children.map((child) => (
+                                <DropdownLink
+                                  key={child.label}
+                                  child={child}
+                                />
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                        {/* Dropdown items */}
-                        <div className="relative flex flex-col divide-y divide-black/6">
-                          {item.children.map((child) => (
-                            <DropdownLink key={child.label} child={child} />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ) : (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href ?? "/"}
-                      className={`transition-[background-color] duration-200 ${hoverBoxClass}`}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ),
-              )}
+                      </li>
+                    ) : (
+                      <li>
+                        <Link
+                          href={item.href ?? "/"}
+                          className="group/link relative pb-1 font-serif text-lg italic lg:text-xl xl:text-[1.35rem]"
+                        >
+                          <span
+                            className={
+                              isActive
+                                ? ""
+                                : "opacity-75 transition-opacity duration-200 group-hover/link:opacity-100"
+                            }
+                          >
+                            {item.label}
+                          </span>
+                          {/* Animated underline — grows from center */}
+                          <span
+                            className={`pointer-events-none absolute -bottom-0.5 left-0 right-0 h-[1.5px] origin-center rounded-full bg-current transition-transform duration-300 ease-out ${
+                              isActive
+                                ? "scale-x-100 opacity-50"
+                                : "scale-x-0 opacity-30 group-hover/link:scale-x-100 group-hover/link:opacity-40"
+                            }`}
+                          />
+                        </Link>
+                      </li>
+                    )}
+                  </Fragment>
+                );
+              })}
             </ol>
 
             {/* Hamburger — mobile only */}
