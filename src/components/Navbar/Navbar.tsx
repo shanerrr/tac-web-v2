@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -134,36 +134,6 @@ const DropdownLink = memo(function DropdownLink({
   );
 });
 
-const HamburgerIcon = memo(function HamburgerIcon({
-  isOpen,
-  bgColor = "bg-primary/60",
-}: {
-  isOpen: boolean;
-  bgColor?: string;
-}) {
-  return (
-    <div
-      className={`flex h-11 w-11 flex-col items-end justify-around rounded-[10px] ${bgColor} p-[25%]`}
-    >
-      <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${
-          isOpen ? "w-0 opacity-0 delay-200" : "w-full opacity-100 delay-0"
-        }`}
-      />
-      <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${
-          isOpen ? "w-0 opacity-0 delay-100" : "w-4/5 opacity-100 delay-100"
-        }`}
-      />
-      <span
-        className={`block h-px bg-white transition-[width,opacity] duration-300 ease-in-out ${
-          isOpen ? "w-0 opacity-0 delay-0" : "w-2/5 opacity-100 delay-200"
-        }`}
-      />
-    </div>
-  );
-});
-
 // --- Main component ---
 
 export default function Navbar({
@@ -232,7 +202,7 @@ export default function Navbar({
             </Link>
 
             {/* ─── Desktop nav ─── */}
-            <ol className="ml-8 hidden items-center md:flex">
+            <ol className="ml-8 hidden items-baseline md:flex">
               {navItems.map((item, idx) => {
                 const isActive = item.href
                   ? pathname === item.href
@@ -242,7 +212,6 @@ export default function Navbar({
 
                 return (
                   <Fragment key={item.label}>
-                    {/* Editorial dot separator */}
                     {idx > 0 && (
                       <li
                         aria-hidden="true"
@@ -269,7 +238,6 @@ export default function Navbar({
                             size={15}
                             className="opacity-40 transition-transform duration-300 group-hover:rotate-180"
                           />
-                          {/* Animated underline — grows from center */}
                           <span
                             className={`pointer-events-none absolute -bottom-0.5 left-0 right-4 h-[1.5px] origin-center rounded-full bg-current transition-transform duration-300 ease-out ${
                               isActive
@@ -279,7 +247,6 @@ export default function Navbar({
                           />
                         </button>
 
-                        {/* Dropdown panel */}
                         <div
                           className={`pointer-events-none absolute top-full -translate-y-2 pt-3 opacity-0 transition-all duration-250 ease-out group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 ${
                             item.menuAlign === "right"
@@ -288,10 +255,7 @@ export default function Navbar({
                           }`}
                         >
                           <div className="relative w-80 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/6">
-                            {/* Warm accent top edge */}
                             <div className="h-[2px] bg-primary/25" />
-
-                            {/* Corner rings watermark */}
                             <div
                               className="pointer-events-none absolute"
                               style={{
@@ -310,8 +274,6 @@ export default function Navbar({
                                 style={{ filter: "invert(1)" }}
                               />
                             </div>
-
-                            {/* Dropdown items */}
                             <div className="relative flex flex-col divide-y divide-black/5">
                               {item.children.map((child) => (
                                 <DropdownLink
@@ -338,7 +300,6 @@ export default function Navbar({
                           >
                             {item.label}
                           </span>
-                          {/* Animated underline — grows from center */}
                           <span
                             className={`pointer-events-none absolute -bottom-0.5 left-0 right-0 h-[1.5px] origin-center rounded-full bg-current transition-transform duration-300 ease-out ${
                               isActive
@@ -354,7 +315,7 @@ export default function Navbar({
               })}
             </ol>
 
-            {/* Hamburger — mobile only */}
+            {/* ─── Hamburger — morphing lines ─── */}
             <button
               className="relative h-11 w-11 md:hidden"
               type="button"
@@ -366,27 +327,41 @@ export default function Navbar({
               aria-expanded={menuOpen}
             >
               <div
-                className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
-                  menuOpen ? "opacity-0" : "opacity-100"
-                }`}
+                className={`flex h-full w-full flex-col items-center justify-center rounded-full ${burgerBgColor}`}
               >
-                <HamburgerIcon isOpen={menuOpen} bgColor={burgerBgColor} />
-              </div>
-              <div
-                className={`absolute inset-0 flex items-center justify-center rounded-[10px] ${burgerBgColor} p-[25%] transition-[opacity,transform] duration-500 ease-in-out ${
-                  menuOpen
-                    ? "rotate-0 scale-100 opacity-100"
-                    : "-rotate-90 scale-75 opacity-0"
-                }`}
-              >
-                <X className="h-full w-full text-white" />
+                <div className="flex w-5 flex-col items-center gap-[5px]">
+                  {/* Top line → rotates to form one arm of X */}
+                  <span
+                    className={`block h-[1.5px] rounded-full bg-white transition-all duration-500 ease-[cubic-bezier(0.77,0,0.175,1)] ${
+                      menuOpen
+                        ? "w-[18px] translate-y-[6.5px] rotate-45 delay-100"
+                        : "w-full delay-0"
+                    }`}
+                  />
+                  {/* Middle line → fades out */}
+                  <span
+                    className={`block h-[1.5px] rounded-full bg-white transition-all duration-250 ${
+                      menuOpen
+                        ? "w-0 opacity-0 delay-0"
+                        : "w-3.5 opacity-100 delay-200"
+                    }`}
+                  />
+                  {/* Bottom line → rotates to form other arm of X */}
+                  <span
+                    className={`block h-[1.5px] rounded-full bg-white transition-all duration-500 ease-[cubic-bezier(0.77,0,0.175,1)] ${
+                      menuOpen
+                        ? "w-[18px] -translate-y-[6.5px] -rotate-45 delay-100"
+                        : "w-2 delay-[400ms]"
+                    }`}
+                  />
+                </div>
               </div>
             </button>
           </div>
         </nav>
       </header>
 
-      {/* Full-screen mobile menu */}
+      {/* ─── Full-screen mobile menu ─── */}
       <div
         className={`fixed inset-0 z-40 flex flex-col justify-center overflow-hidden bg-white transition-[opacity,transform] duration-500 ease-in-out md:hidden ${
           menuOpen
@@ -406,80 +381,130 @@ export default function Navbar({
         >
           <Image
             src={logoRings}
-            alt="tree rings"
+            alt=""
             fill
             className="object-contain opacity-[0.06]"
             style={{ filter: "invert(1)" }}
           />
         </div>
 
-        <ol className="container relative flex flex-col gap-10 font-serif text-4xl">
-          {navItems.map((item) =>
-            item.children ? (
-              <li key={item.label} className="flex flex-col">
-                <button
-                  type="button"
-                  className="flex items-center gap-2 self-start"
-                  onClick={() =>
-                    setOpenSubmenu((p) =>
-                      p === item.label ? null : item.label,
-                    )
-                  }
-                >
-                  {item.label}
-                  <ChevronDown
-                    size={28}
-                    className={`transition-transform duration-300 ${
-                      openSubmenu === item.label ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                <ul
-                  className={`flex flex-col gap-3 overflow-hidden font-light transition-[max-height,opacity] duration-300 ${
-                    openSubmenu === item.label
-                      ? "max-h-60 pt-4 opacity-100"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  {item.children.map((child) => {
-                    const ac = child.accent ? accent[child.accent] : null;
-                    return (
-                      <li key={child.label}>
-                        <Link
-                          href={child.href}
-                          onClick={closeMenu}
-                          className="flex items-center gap-4 text-3xl"
-                        >
-                          {ac && (
-                            <span
-                              className={`h-8 w-1 shrink-0 rounded-full ${ac.dot}`}
-                            />
-                          )}
-                          <span className="flex flex-col">
-                            {ac && (
-                              <span
-                                className={`font-sans text-[10px] uppercase tracking-[0.25em] ${ac.text}`}
-                              >
-                                {child.accentLabel}
+        {/* Nav items with staggered entrance */}
+        <ol className="container relative flex flex-col gap-8 font-serif text-4xl">
+          {navItems.map((item, idx) => {
+            const isActive = item.href
+              ? pathname === item.href
+              : (item.children?.some((c) =>
+                  pathname.startsWith(c.href),
+                ) ?? false);
+
+            return (
+              <li
+                key={item.label}
+                className={`transition-all duration-500 ease-out ${
+                  menuOpen
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-6 opacity-0"
+                } ${item.children ? "flex flex-col" : ""}`}
+                style={{
+                  transitionDelay: menuOpen ? `${idx * 70 + 100}ms` : "0ms",
+                }}
+              >
+                {item.children ? (
+                  <>
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 self-start"
+                      onClick={() =>
+                        setOpenSubmenu((p) =>
+                          p === item.label ? null : item.label,
+                        )
+                      }
+                    >
+                      <span className={isActive ? "text-primary" : ""}>
+                        {item.label}
+                      </span>
+                      <ChevronDown
+                        size={28}
+                        className={`transition-transform duration-300 ${
+                          openSubmenu === item.label ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    <ul
+                      className={`flex flex-col gap-3 overflow-hidden font-light transition-[max-height,opacity] duration-300 ${
+                        openSubmenu === item.label
+                          ? "max-h-60 pt-4 opacity-100"
+                          : "max-h-0 opacity-0"
+                      }`}
+                    >
+                      {item.children.map((child) => {
+                        const ac = child.accent ? accent[child.accent] : null;
+                        const isChildActive = pathname.startsWith(child.href);
+                        return (
+                          <li key={child.label}>
+                            <Link
+                              href={child.href}
+                              onClick={closeMenu}
+                              className="flex items-center gap-4 text-3xl"
+                            >
+                              {ac && (
+                                <span
+                                  className={`h-8 w-1 shrink-0 rounded-full transition-opacity duration-200 ${ac.dot} ${
+                                    isChildActive ? "opacity-100" : "opacity-35"
+                                  }`}
+                                />
+                              )}
+                              <span className="flex flex-col">
+                                {ac && (
+                                  <span
+                                    className={`font-sans text-[10px] uppercase tracking-[0.25em] ${ac.text}`}
+                                  >
+                                    {child.accentLabel}
+                                  </span>
+                                )}
+                                <span
+                                  className={
+                                    isChildActive
+                                      ? ""
+                                      : "text-foreground/65 transition-colors duration-200"
+                                  }
+                                >
+                                  {child.label}
+                                </span>
                               </span>
-                            )}
-                            {child.label}
-                          </span>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </>
+                ) : (
+                  <Link href={item.href ?? "/"} onClick={closeMenu}>
+                    <span className={isActive ? "text-primary" : ""}>
+                      {item.label}
+                    </span>
+                  </Link>
+                )}
               </li>
-            ) : (
-              <li key={item.label}>
-                <Link href={item.href ?? "/"} onClick={closeMenu}>
-                  {item.label}
-                </Link>
-              </li>
-            ),
-          )}
+            );
+          })}
         </ol>
+
+        {/* Tagline — enters last */}
+        <p
+          className={`absolute bottom-10 left-0 right-0 text-center font-serif text-foreground/20 text-sm italic transition-all duration-500 ease-out ${
+            menuOpen
+              ? "translate-y-0 opacity-100"
+              : "translate-y-4 opacity-0"
+          }`}
+          style={{
+            transitionDelay: menuOpen
+              ? `${navItems.length * 70 + 250}ms`
+              : "0ms",
+          }}
+        >
+          We&rsquo;re all aging. Let&rsquo;s talk about it.
+        </p>
       </div>
     </>
   );
