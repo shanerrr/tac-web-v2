@@ -11,82 +11,110 @@ import {
   useState,
 } from "react";
 
-export default function MediaCard({
+// Only one video should be unmuted at a time
+const unmutedVideo = { current: null as HTMLVideoElement | null };
+
+function VideoCard({
   asset,
-  sizes,
   className,
 }: {
   asset: MediaAsset;
-  sizes: string;
   className?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const scrubberRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number>(0);
-  const [playing, setPlaying] = useState(false);
+  const rafRef = useRef(0);
+  const dragListenersRef = useRef<{
+    onMove: (e: globalThis.MouseEvent) => void;
+    onUp: () => void;
+  } | null>(null);
+
   const [hovered, setHovered] = useState(false);
   const [muted, setMuted] = useState(true);
   const [progress, setProgress] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
 
-  const play = useCallback(() => {
+  // Sync muted state when changed externally (e.g. another card unmuted)
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.play();
-    setPlaying(true);
+    const onVolumeChange = () => setMuted(video.muted);
+    video.addEventListener("volumechange", onVolumeChange);
+    return () => video.removeEventListener("volumechange", onVolumeChange);
   }, []);
 
-  const pause = useCallback(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.pause();
-    setPlaying(false);
-  }, []);
-
-  const toggleMute = useCallback((e: MouseEvent) => {
-    e.stopPropagation();
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = !video.muted;
-    setMuted(video.muted);
-  }, []);
-
-  // Auto-play when mostly visible, pause when scrolled away
+  // Autoplay when visible, pause when scrolled away
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          play();
+          video.play();
         } else {
-          pause();
+          video.pause();
         }
       },
       { threshold: 0.5 },
     );
     observer.observe(video);
     return () => observer.disconnect();
-  }, [play, pause]);
+  }, []);
 
-  // Update progress via rAF while playing
+  // Update progress via rAF while video is playing
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const tick = () => {
-      if (video.duration) {
-        setProgress(video.currentTime / video.duration);
-      }
+    const onPlay = () => {
+      const tick = () => {
+        if (video.duration) {
+          setProgress(video.currentTime / video.duration);
+        }
+        rafRef.current = requestAnimationFrame(tick);
+      };
       rafRef.current = requestAnimationFrame(tick);
     };
 
-    if (playing) {
-      rafRef.current = requestAnimationFrame(tick);
-    }
+    const onPause = () => cancelAnimationFrame(rafRef.current);
 
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [playing]);
+    video.addEventListener("play", onPlay);
+    video.addEventListener("pause", onPause);
+
+    // If already playing (IO fired before this effect)
+    if (!video.paused) onPlay();
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      video.removeEventListener("play", onPlay);
+      video.removeEventListener("pause", onPause);
+    };
+  }, []);
+
+  // Clean up drag listeners on unmount
+  useEffect(() => {
+    return () => {
+      if (dragListenersRef.current) {
+        window.removeEventListener(
+          "mousemove",
+          dragListenersRef.current.onMove,
+        );
+        window.removeEventListener("mouseup", dragListenersRef.current.onUp);
+      }
+    };
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const willUnmute = video.muted;
+    if (willUnmute && unmutedVideo.current && unmutedVideo.current !== video) {
+      unmutedVideo.current.muted = true;
+    }
+    video.muted = !video.muted;
+    unmutedVideo.current = willUnmute ? video : null;
+    setMuted(video.muted);
+  }, []);
 
   const seekFromEvent = useCallback((clientX: number) => {
     const bar = scrubberRef.current;
@@ -107,26 +135,17 @@ export default function MediaCard({
       const onMove = (ev: globalThis.MouseEvent) => seekFromEvent(ev.clientX);
       const onUp = () => {
         setIsSeeking(false);
+        dragListenersRef.current = null;
         window.removeEventListener("mousemove", onMove);
         window.removeEventListener("mouseup", onUp);
       };
+
+      dragListenersRef.current = { onMove, onUp };
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseup", onUp);
     },
     [seekFromEvent],
   );
-
-  if (asset.type === "image") {
-    return (
-      <Image
-        src={asset.url}
-        alt={asset.title}
-        fill
-        sizes={sizes}
-        className={`object-cover ${className ?? ""}`}
-      />
-    );
-  }
 
   return (
     <>
@@ -137,29 +156,28 @@ export default function MediaCard({
         loop
         playsInline
         preload="metadata"
-        onEnded={() => setPlaying(false)}
-        className={`absolute inset-0 h-full w-full object-cover ${className ?? ""}`}
+        className={`absolute inset-0 h-full w-full object-cover outline-0 ${className ?? ""}`}
       />
 
-      {/* Hover/tap zone — shows controls on interaction */}
+      {/* Interaction zone — hover unmutes/remutes, click toggles mute on mobile */}
       <div
         onMouseEnter={() => {
           setHovered(true);
-          play();
+          const video = videoRef.current;
+          if (video?.muted) toggleMute();
         }}
         onMouseLeave={() => {
-          if (!isSeeking) {
-            setHovered(false);
-            pause();
-          }
+          if (!isSeeking) setHovered(false);
+          const video = videoRef.current;
+          if (video && !video.muted) toggleMute();
         }}
-        onClick={() => setHovered((h) => !h)}
+        onClick={toggleMute}
         className="absolute inset-0 z-10"
       >
-        {/* Mute/unmute button */}
+        {/* Mute/unmute indicator */}
         <button
           type="button"
-          onClick={toggleMute}
+          onClick={(e) => e.stopPropagation()}
           aria-label={muted ? "Unmute video" : "Mute video"}
           className={`absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-opacity duration-300 ${
             hovered ? "opacity-100" : "opacity-0"
@@ -169,7 +187,7 @@ export default function MediaCard({
         </button>
       </div>
 
-      {/* Scrubber — subtle progress bar at bottom */}
+      {/* Scrubber */}
       <div
         ref={scrubberRef}
         role="slider"
@@ -183,7 +201,6 @@ export default function MediaCard({
           hovered || isSeeking ? "opacity-100" : "opacity-0"
         }`}
       >
-        {/* Track */}
         <div className="absolute bottom-0 h-1 w-full bg-white/40">
           <div
             className="h-full bg-tertiary transition-[width] duration-75 ease-linear"
@@ -193,4 +210,28 @@ export default function MediaCard({
       </div>
     </>
   );
+}
+
+export default function MediaCard({
+  asset,
+  sizes,
+  className,
+}: {
+  asset: MediaAsset;
+  sizes: string;
+  className?: string;
+}) {
+  if (asset.type === "image") {
+    return (
+      <Image
+        src={asset.url}
+        alt={asset.title}
+        fill
+        sizes={sizes}
+        className={`object-cover ${className ?? ""}`}
+      />
+    );
+  }
+
+  return <VideoCard asset={asset} className={className} />;
 }
