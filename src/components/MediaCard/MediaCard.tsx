@@ -156,7 +156,7 @@ function VideoCard({
         loop
         playsInline
         preload="metadata"
-        className={`absolute inset-0 h-full w-full object-cover outline-0 ${className ?? ""}`}
+        className={`absolute inset-0 h-full w-full scale-[1.01] object-cover ${className ?? ""}`}
       />
 
       {/* Interaction zone — hover unmutes/remutes, click toggles mute on mobile */}
