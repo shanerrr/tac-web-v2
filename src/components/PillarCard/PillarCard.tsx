@@ -12,36 +12,42 @@ export default function PillarCard({
   description: string;
 }) {
   const [open, setOpen] = useState(false);
+  const spaceIdx = title.lastIndexOf(" ");
+  const titleStart = spaceIdx > 0 ? title.slice(0, spaceIdx) : title;
+  const titleEnd = spaceIdx > 0 ? title.slice(spaceIdx + 1) : "";
+
+  const showOverlay = open
+    ? "opacity-100"
+    : "pointer-events-none opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100";
+  const hideTitle = open ? "opacity-0" : "md:group-hover:opacity-0";
 
   return (
     <button
       type="button"
       onClick={() => setOpen((o) => !o)}
-      className="group relative flex min-h-80 flex-col items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] px-8 py-12 text-center backdrop-blur-sm transition-all duration-300 md:min-h-96 md:hover:bg-white/[0.12]"
+      className="group relative flex min-h-64 flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/6 px-4 py-8 text-center backdrop-blur-sm transition-all duration-300 sm:min-h-80 sm:px-6 sm:py-10 md:px-8 md:py-12 lg:min-h-96 md:hover:bg-white/12"
     >
       {/* Default state — number + title */}
-      <div
-        className={`transition-opacity duration-300 ${
-          open ? "opacity-0" : "md:group-hover:opacity-0"
-        }`}
-      >
-        <span className="font-sans text-[10px] text-white/30 uppercase tracking-[0.3em]">
+      <div className={`transition-opacity duration-300 ${hideTitle}`}>
+        <span className="font-sans text-md text-white/60 uppercase tracking-[0.3em]">
           0{index + 1}
         </span>
-        <h3 className="mt-3 font-serif text-2xl leading-tight md:text-3xl">
-          {title}
+        <h3 className="mt-3 font-sans text-2xl leading-tight md:text-3xl">
+          <span className="font-medium">{titleStart}</span>
+          {titleEnd && (
+            <>
+              {" "}
+              <span className="lowercase italic">{titleEnd}</span>
+            </>
+          )}
         </h3>
       </div>
 
       {/* Description overlay */}
       <div
-        className={`absolute inset-0 flex items-center justify-center rounded-2xl bg-white/[0.12] px-8 py-10 transition-opacity duration-300 ${
-          open
-            ? "opacity-100"
-            : "pointer-events-none opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100"
-        }`}
+        className={`absolute inset-0 flex items-center justify-center rounded-2xl bg-white/12 px-4 py-6 transition-opacity duration-300 sm:px-6 sm:py-8 md:px-8 md:py-10 ${showOverlay}`}
       >
-        <p className="font-sans text-sm text-white/80 leading-relaxed md:text-base">
+        <p className="font-sans text-xs text-white/80 leading-relaxed sm:text-sm md:text-base">
           {description}
         </p>
       </div>

@@ -64,7 +64,7 @@ export async function getStories(): Promise<Story[]> {
 
 export type MediaAsset = {
   url: string;
-  type: "image" | "video";
+  type: "video" | "quote";
   title: string;
   sortIndex: number;
 };
@@ -83,13 +83,14 @@ export async function getAssetsByTag(tag: string): Promise<MediaAsset[]> {
         Number(asset.fields.title?.split("|")[1]) || Number.MAX_SAFE_INTEGER;
       return {
         url: `https:${url}`,
-        type: contentType.startsWith("video/") ? "video" : "image",
+        type: (contentType.startsWith("video/")
+          ? "video"
+          : "image") as MediaAsset["type"],
         title: asset.fields.title ?? "",
         sortIndex,
-      } satisfies MediaAsset;
+      };
     })
-    .filter((a): a is MediaAsset => a !== null)
-    .sort((a, b) => a.sortIndex - b.sortIndex);
+    .filter((a): a is MediaAsset => a !== null);
 }
 
 export async function getFilms(): Promise<Film[]> {

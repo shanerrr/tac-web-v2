@@ -2,7 +2,6 @@
 
 import type { MediaAsset } from "@tac/lib/contentful";
 import { Volume2, VolumeOff } from "lucide-react";
-import Image from "next/image";
 import {
   type MouseEvent,
   useCallback,
@@ -201,7 +200,7 @@ function VideoCard({
           hovered || isSeeking ? "opacity-100" : "opacity-0"
         }`}
       >
-        <div className="absolute bottom-0 h-1 w-full bg-white/40">
+        <div className="absolute bottom-0 h-2 w-full bg-foreground/40">
           <div
             className="h-full bg-tertiary transition-[width] duration-75 ease-linear"
             style={{ width: `${progress * 100}%` }}
@@ -212,25 +211,47 @@ function VideoCard({
   );
 }
 
+function QuoteCard({ asset }: { asset: MediaAsset }) {
+  return (
+    <div className="absolute inset-0 flex flex-col justify-between bg-tertiary p-2.5 sm:p-4 md:p-6">
+      {/* Top — decorative quote mark */}
+      <span
+        className="select-none font-serif text-2xl text-white/25 leading-[0.8] sm:text-4xl md:text-5xl"
+        aria-hidden="true"
+      >
+        &ldquo;
+      </span>
+
+      {/* Middle — quote text */}
+      <blockquote className="my-auto font-serif text-[0.65rem] text-white/90 italic leading-snug sm:text-xs sm:leading-relaxed md:text-base">
+        {asset.title}
+      </blockquote>
+
+      {/* Bottom — attribution */}
+      <div className="flex items-end justify-between gap-1 sm:gap-2">
+        <p className="font-sans text-[0.5rem] text-white/50 uppercase leading-tight tracking-[0.1em] sm:text-[0.6rem] sm:tracking-[0.15em] md:text-[0.65rem]">
+          — {asset.url}
+        </p>
+        <span
+          className="shrink-0 select-none font-serif text-2xl text-white/25 leading-[0.6] sm:text-4xl md:text-5xl"
+          aria-hidden="true"
+        >
+          &rdquo;
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function MediaCard({
   asset,
-  sizes,
   className,
 }: {
   asset: MediaAsset;
-  sizes: string;
   className?: string;
 }) {
-  if (asset.type === "image") {
-    return (
-      <Image
-        src={asset.url}
-        alt={asset.title}
-        fill
-        sizes={sizes}
-        className={`object-cover ${className ?? ""}`}
-      />
-    );
+  if (asset.type === "quote") {
+    return <QuoteCard asset={asset} />;
   }
 
   return <VideoCard asset={asset} className={className} />;

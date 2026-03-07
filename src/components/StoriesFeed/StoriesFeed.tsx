@@ -83,6 +83,8 @@ const StoryCard = memo(function StoryCard({
             sizes="(min-width: 768px) 40vw, 100vw"
             className="object-cover"
             alt={`Portrait of ${story.name}`}
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8mckwDwAFRwHiBonBjAAAAABJRU5ErkJggg=="
             priority={priority}
           />
           <div className="absolute bottom-4 left-4 z-10 rounded-sm bg-primary px-3 py-1.5 font-sans text-white text-xs tracking-[0.25em]">

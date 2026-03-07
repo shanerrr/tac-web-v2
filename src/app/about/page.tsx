@@ -2,28 +2,44 @@ import MediaCard from "@tac/components/MediaCard";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import PillarCard from "@tac/components/PillarCard";
-import { getAssetsByTag } from "@tac/lib/contentful";
+import { getAssetsByTag, type MediaAsset } from "@tac/lib/contentful";
 import Image from "next/image";
 import logo from "../../../public/logo-rings.svg";
 
 const pillars = [
   {
-    title: "Community First",
+    title: "Community First.",
     description:
       "Our work centers on building inclusive, intergenerational communities where people feel seen, valued, and heard. We bring younger and older adults into the same conversation because aging affects all of us.",
   },
   {
-    title: "Aging is Living",
+    title: "Aging is Living.",
     description:
       "We embrace the full and complex reality of aging, including joy, loss, growth, change, and resilience. We also recognize that factors such as income, race, gender, ability, and access to care all shape how people experience growing older.",
   },
   {
-    title: "Conversation Creates Change",
+    title: "Conversation Creates Change.",
     description:
       "When people are invited to listen and be listened to, change emerges. Through stories, poetry, film, and art, we challenge ageist assumptions and create space for empathy, understanding, and connection.",
   },
 ];
 
+const quotes: MediaAsset[] = [
+  {
+    url: "Jamie, 24 yrs",
+    sortIndex: 2,
+    title:
+      "I had a professor that said that ageism is the last -ism that we’ve yet to see real change in. Racism, sexism, etc. - none of this is okay, but ageism is somehow still acceptable in a lot of different sectors.",
+    type: "quote",
+  },
+  {
+    url: "Jamie, 24 yrs",
+    sortIndex: 5,
+    title:
+      "I had a professor that said that ageism is the last -ism that we’ve yet to see real change in. Racism, sexism, etc. - none of this is okay, but ageism is somehow still acceptable in a lot of different sectors.",
+    type: "quote",
+  },
+];
 export const revalidate = 3600;
 
 export default async function About() {
@@ -33,8 +49,11 @@ export default async function About() {
     getAssetsByTag("aboutBottom"),
   ]);
 
+  const allCollageAssets = [...collageAssets, ...quotes].sort(
+    (a, b) => a.sortIndex - b.sortIndex,
+  );
   return (
-    <div className="min-h-dvh w-full">
+    <div className="min-h-dvh w-full overflow-x-clip">
       <Navbar
         transparent
         textColor="text-white"
@@ -91,23 +110,18 @@ export default async function About() {
       {collageAssets.length > 0 && (
         <section className="container pb-8">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
-            {collageAssets.map((asset, i) => (
+            {allCollageAssets.map((asset, i) => (
               <div
-                key={asset.url}
+                key={`${asset.url}-${asset.sortIndex}`}
                 className={`relative overflow-hidden rounded-2xl bg-tertiary/10 ${
                   i === 0
-                    ? "col-span-2 aspect-video md:col-span-1 md:row-span-2 md:aspect-auto"
-                    : "aspect-4/3"
+                    ? "row-span-2"
+                    : i > 2
+                      ? "hidden aspect-4/3 md:block"
+                      : "aspect-4/3"
                 }`}
               >
-                <MediaCard
-                  asset={asset}
-                  sizes={
-                    i === 0
-                      ? "(min-width: 768px) 33vw, 100vw"
-                      : "(min-width: 768px) 33vw, 50vw"
-                  }
-                />
+                <MediaCard asset={asset} />
               </div>
             ))}
           </div>
@@ -115,27 +129,7 @@ export default async function About() {
       )}
 
       {/* ─── Changing the Narrative ─── */}
-      <section className="relative overflow-hidden bg-tertiary/[0.07] py-24 md:py-32">
-        {/* Watermark */}
-        <div
-          className="pointer-events-none absolute animate-spin-slow select-none"
-          aria-hidden="true"
-          style={{
-            width: "min(80vw, 80vh)",
-            height: "min(80vw, 80vh)",
-            top: "calc(min(80vw, 80vh) / -3)",
-            right: "calc(min(80vw, 80vh) / -3)",
-          }}
-        >
-          <Image
-            src={logo}
-            alt=""
-            fill
-            className="object-contain opacity-[0.04]"
-            style={{ filter: "invert(1)" }}
-          />
-        </div>
-
+      <section className="relative bg-tertiary/[0.07] py-24 md:py-32">
         <div className="container relative">
           <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-20">
             <div>
@@ -161,105 +155,122 @@ export default async function About() {
               </p>
             </div>
 
-            {/* Side photo */}
-            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-tertiary/15 shadow-lg">
+            {/* Side photos — shuffling duo */}
+            <div className="relative mx-auto aspect-4/5 w-full max-w-md lg:max-w-none">
               {featureAssets[0] && (
-                <Image
-                  src={featureAssets[0].url}
-                  alt={featureAssets[0].title}
-                  fill
-                  sizes="(min-width: 1024px) 40vw, 100vw"
-                  className="object-cover"
-                />
+                <div className="absolute inset-[10%] animate-shuffle-a overflow-hidden rounded-2xl bg-tertiary/15 shadow-xl">
+                  <Image
+                    src={featureAssets[0].url}
+                    alt={featureAssets[0].title}
+                    fill
+                    sizes="(min-width: 1024px) 30vw, 60vw"
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              {featureAssets[1] && (
+                <div className="absolute inset-[10%] animate-shuffle-b overflow-hidden rounded-2xl bg-tertiary/15 shadow-xl">
+                  <Image
+                    src={featureAssets[1].url}
+                    alt={featureAssets[1].title}
+                    fill
+                    sizes="(min-width: 1024px) 30vw, 60vw"
+                    className="object-cover"
+                  />
+                </div>
               )}
             </div>
           </div>
         </div>
       </section>
 
+      {/* ─── Wave Divider Top + Watermark ─── */}
+      <div className="relative">
+        <svg
+          viewBox="0 0 1440 80"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          className="block h-12 w-full md:h-20"
+        >
+          {/* Upper half — matches the section above (tertiary/[0.07]) */}
+          <path
+            d="M0 0H1440V40C1200 0 960 80 720 40C480 0 240 80 0 40Z"
+            className="fill-tertiary"
+            fillOpacity="0.07"
+          />
+          {/* Lower half — matches the Values section */}
+          <path
+            d="M0 40C240 80 480 0 720 40C960 80 1200 0 1440 40V80H0Z"
+            className="fill-tertiary"
+          />
+        </svg>
+      </div>
+
       {/* ─── Values ─── */}
-      <section>
-        {/* Wavy top edge */}
-        <div className="text-tertiary">
-          <svg
-            viewBox="0 0 1440 80"
-            fill="none"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-            className="block h-12 w-full md:h-20"
-          >
-            <path
-              d="M0 80V40C240 80 480 0 720 40C960 80 1200 0 1440 40V80H0Z"
-              fill="currentColor"
-            />
-          </svg>
+      <section className="heroTexture relative bg-tertiary pb-12 text-white md:pb-20">
+        {/* Watermark */}
+        <div
+          className="pointer-events-none absolute z-40 animate-spin-slow select-none"
+          aria-hidden="true"
+          style={{
+            width: "min(60vw, 60vh)",
+            height: "min(60vw, 60vh)",
+            bottom: "calc(min(60vw, 60vh) / -3)",
+            left: "calc(min(60vw, 90vh) / -3)",
+          }}
+        >
+          <Image
+            src={logo}
+            alt=""
+            fill
+            className="object-contain opacity-[0.06]"
+          />
         </div>
 
-        <div className="heroTexture relative overflow-hidden bg-tertiary py-20 text-white md:py-28">
-          {/* Watermark */}
-          <div
-            className="pointer-events-none absolute animate-spin-slow select-none"
-            aria-hidden="true"
-            style={{
-              width: "min(60vw, 60vh)",
-              height: "min(60vw, 60vh)",
-              bottom: "calc(min(60vw, 60vh) / -3)",
-              left: "calc(min(60vw, 60vh) / -3)",
-            }}
-          >
-            <Image
-              src={logo}
-              alt=""
-              fill
-              className="object-contain opacity-[0.06]"
-            />
+        <div className="container relative pt-8 md:pt-14">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="mb-5 font-sans text-white/50 text-xs uppercase tracking-[0.4em]">
+              What We Believe
+            </p>
+            <h2 className="font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
+              These values shape how we{" "}
+              <span className="italic">engage, create, and advocate.</span>
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-white/20" />
           </div>
 
-          <div className="container relative">
-            <div className="mx-auto max-w-4xl text-center">
-              <p className="mb-5 font-sans text-white/50 text-xs uppercase tracking-[0.4em]">
-                What We Believe
-              </p>
-              <h2 className="font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
-                These values shape how we{" "}
-                <span className="italic">engage, create, and advocate.</span>
-              </h2>
-              <div className="mx-auto mt-2 h-px w-16 bg-white/20" />
-            </div>
-
-            <div className="mx-auto mt-16 grid max-w-5xl gap-6 sm:grid-cols-3 lg:gap-8">
-              {pillars.map((pillar, i) => (
-                <PillarCard
-                  key={pillar.title}
-                  index={i}
-                  title={pillar.title}
-                  description={pillar.description}
-                />
-              ))}
-            </div>
+          <div className="mx-auto mt-16 grid max-w-5xl gap-6 sm:grid-cols-3 lg:gap-8">
+            {pillars.map((pillar, i) => (
+              <PillarCard
+                key={pillar.title}
+                index={i}
+                title={pillar.title}
+                description={pillar.description}
+              />
+            ))}
           </div>
-        </div>
-
-        {/* Wavy bottom edge */}
-        <div className="text-tertiary">
-          <svg
-            viewBox="0 0 1440 80"
-            fill="none"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-            className="block h-12 w-full rotate-180 md:h-20"
-          >
-            <path
-              d="M0 80V40C240 80 480 0 720 40C960 80 1200 0 1440 40V80H0Z"
-              fill="currentColor"
-            />
-          </svg>
         </div>
       </section>
 
+      {/* ─── Wave Divider Bottom ─── */}
+      <div
+        aria-hidden="true"
+        className="heroTexture h-12 w-full bg-tertiary md:h-20"
+        style={{
+          clipPath: "url(#waveBottomClip)",
+        }}
+      />
+      <svg width="0" height="0" aria-hidden="true">
+        <defs>
+          <clipPath id="waveBottomClip" clipPathUnits="objectBoundingBox">
+            <path d="M0 0 H1 V0.5 C0.833 1,0.667 0,0.5 0.5 C0.333 1,0.167 0,0 0.5 Z" />
+          </clipPath>
+        </defs>
+      </svg>
+
       {/* ─── Why We Are ─── */}
       <section className="container py-24 md:py-32">
-        <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20">
+        <div className="mx-auto grid items-start gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20">
           <div className="lg:sticky lg:top-38">
             <p className="mb-4 font-sans text-tertiary text-xs uppercase tracking-[0.4em]">
               Origin
@@ -270,7 +281,22 @@ export default async function About() {
             <div className="mt-2 h-px w-16 bg-tertiary/30" />
           </div>
 
-          <div className="space-y-6 font-sans text-foreground/70 text-lg leading-relaxed">
+          <div className="space-y-8 font-sans text-foreground/70 text-lg leading-relaxed">
+            {/* Photo */}
+            {bottomAssets[0] && (
+              <div className="relative">
+                <div className="relative overflow-hidden rounded-2xl shadow-xl">
+                  <Image
+                    src={bottomAssets[0].url}
+                    alt={bottomAssets[0].title}
+                    width={1080}
+                    height={810}
+                    sizes="(min-width: 896px) 700px, 100vw"
+                    className="h-auto w-full"
+                  />
+                </div>
+              </div>
+            )}
             <p>
               The Age Collective was founded in 2021 by a sister duo who saw
               gaps that needed addressing. We watched our own parents navigate
@@ -313,57 +339,6 @@ export default async function About() {
           </div>
         </div>
       </section>
-
-      {/* ─── Bottom Photo ─── */}
-      {bottomAssets[0] && (
-        <section className="relative overflow-hidden py-24 md:py-32">
-          {/* Decorative background */}
-          <div className="absolute inset-0 bg-tertiary/[0.05]" />
-          <div
-            className="pointer-events-none absolute animate-spin-slow select-none"
-            aria-hidden="true"
-            style={{
-              width: "min(70vw, 70vh)",
-              height: "min(70vw, 70vh)",
-              bottom: "calc(min(70vw, 70vh) / -3)",
-              right: "calc(min(70vw, 70vh) / -3)",
-            }}
-          >
-            <Image
-              src={logo}
-              alt=""
-              fill
-              className="object-contain opacity-[0.04]"
-              style={{ filter: "invert(1)" }}
-            />
-          </div>
-
-          <div className="container relative">
-            <div className="mx-auto max-w-4xl">
-              {/* Rotated frame effect */}
-              <div className="relative">
-                <div className="absolute -inset-3 rotate-[1.5deg] rounded-3xl bg-tertiary/15 md:-inset-5" />
-                <div className="absolute -inset-3 -rotate-[1deg] rounded-3xl bg-primary/10 md:-inset-5" />
-                <div className="relative overflow-hidden rounded-2xl shadow-xl">
-                  <Image
-                    src={bottomAssets[0].url}
-                    alt={bottomAssets[0].title}
-                    width={1080}
-                    height={810}
-                    sizes="(min-width: 896px) 896px, 100vw"
-                    className="h-auto w-full"
-                  />
-                </div>
-              </div>
-
-              {/* Caption */}
-              <p className="mt-8 text-center font-serif text-foreground/40 italic md:text-lg">
-                The people behind the stories.
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* ─── CTA ─── */}
       <section className="relative overflow-hidden bg-tertiary/5 py-24 md:py-32">
