@@ -99,8 +99,6 @@ const navItems: NavItem[] = [
   },
 ];
 
-// --- Sub-components ---
-
 const DropdownLink = memo(function DropdownLink({
   child,
 }: {
@@ -111,30 +109,44 @@ const DropdownLink = memo(function DropdownLink({
   return (
     <Link
       href={child.href}
-      className={`flex flex-col gap-1 border-l-2 border-l-transparent px-6 py-5 transition-all duration-200 ${ac?.hover ?? ""} ${ac?.border ?? ""}`}
+      className={`group/drop flex items-start gap-4 px-5 py-5 transition-all duration-200 ${ac?.hover ?? ""}`}
     >
+      {/* Accent pip */}
       {ac && (
         <span
-          className={`font-sans text-[10px] uppercase tracking-[0.25em] ${ac.text}`}
+          className={`mt-2.5 h-6 w-0.75 shrink-0 rounded-full ${ac.dot} opacity-30 transition-all duration-200 group-hover/drop:h-8 group-hover/drop:opacity-70`}
+        />
+      )}
+
+      <div className="flex flex-1 flex-col gap-0.5">
+        {ac && (
+          <span
+            className={`font-sans text-[10px] uppercase tracking-[0.25em] ${ac.text} opacity-70`}
+          >
+            {child.accentLabel}
+          </span>
+        )}
+        <p
+          className={`font-bold font-serif text-lg capitalize transition-colors duration-200 ${ac?.text ?? "text-foreground"}`}
         >
-          {child.accentLabel}
-        </span>
-      )}
-      <p
-        className={`font-bold font-serif text-xl capitalize ${ac?.text ?? "text-foreground"}`}
-      >
-        {child.label}
-      </p>
-      {child.description && (
-        <p className="font-sans text-foreground/45 text-sm leading-snug">
-          {child.description}
+          {child.label}
         </p>
-      )}
+        {child.description && (
+          <p className="font-sans text-foreground/40 text-[13px] leading-snug transition-colors duration-200 group-hover/drop:text-foreground/55">
+            {child.description}
+          </p>
+        )}
+      </div>
+
+      {/* Arrow */}
+      <span
+        className={`mt-2.5 font-sans text-sm opacity-0 transition-all duration-200 group-hover/drop:translate-x-0.5 group-hover/drop:opacity-40 ${ac?.text ?? "text-foreground"}`}
+      >
+        &rsaquo;
+      </span>
     </Link>
   );
 });
-
-// --- Main component ---
 
 export default function Navbar({
   textColor = "text-black",
@@ -206,16 +218,15 @@ export default function Navbar({
               {navItems.map((item, idx) => {
                 const isActive = item.href
                   ? pathname === item.href
-                  : (item.children?.some((c) =>
-                      pathname.startsWith(c.href),
-                    ) ?? false);
+                  : (item.children?.some((c) => pathname.startsWith(c.href)) ??
+                    false);
 
                 return (
                   <Fragment key={item.label}>
                     {idx > 0 && (
                       <li
                         aria-hidden="true"
-                        className="mx-3 h-[3px] w-[3px] shrink-0 rounded-full bg-current opacity-15 lg:mx-5"
+                        className="self-center-safe mx-3 h-0.75 w-0.75 shrink-0 rounded-full bg-current opacity-15 lg:mx-5"
                       />
                     )}
 
@@ -223,7 +234,7 @@ export default function Navbar({
                       <li className="group relative">
                         <button
                           type="button"
-                          className="relative flex items-center gap-1.5 pb-1 font-serif text-lg italic lg:text-xl xl:text-[1.35rem]"
+                          className="relative flex items-center gap-1.5 pb-1 font-serif text-lg lg:text-xl xl:text-[1.35rem]"
                         >
                           <span
                             className={
@@ -254,8 +265,21 @@ export default function Navbar({
                               : "left-1/2 -translate-x-1/2"
                           }`}
                         >
-                          <div className="relative w-80 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/6">
-                            <div className="h-[2px] bg-primary/25" />
+                          {/* Connecting caret */}
+                          <div
+                            className={`h-2.5 w-2.5 rotate-45 border-primary/15 border-t border-l bg-white ${
+                              item.menuAlign === "right"
+                                ? "ml-auto mr-8"
+                                : "mx-auto"
+                            }`}
+                            style={{ marginBottom: "-6px" }}
+                          />
+
+                          <div className="relative w-88 overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/6">
+                            {/* Warm accent top edge */}
+                            <div className="h-0.5 bg-linear-to-r from-primary/30 via-primary/15 to-transparent" />
+
+                            {/* Corner rings watermark */}
                             <div
                               className="pointer-events-none absolute"
                               style={{
@@ -270,16 +294,15 @@ export default function Navbar({
                                 alt=""
                                 width={180}
                                 height={180}
-                                className="opacity-5"
+                                className="opacity-[0.04]"
                                 style={{ filter: "invert(1)" }}
                               />
                             </div>
-                            <div className="relative flex flex-col divide-y divide-black/5">
+
+                            {/* Dropdown items */}
+                            <div className="relative flex flex-col divide-y divide-primary/[0.06]">
                               {item.children.map((child) => (
-                                <DropdownLink
-                                  key={child.label}
-                                  child={child}
-                                />
+                                <DropdownLink key={child.label} child={child} />
                               ))}
                             </div>
                           </div>
@@ -289,7 +312,7 @@ export default function Navbar({
                       <li>
                         <Link
                           href={item.href ?? "/"}
-                          className="group/link relative pb-1 font-serif text-lg italic lg:text-xl xl:text-[1.35rem]"
+                          className="group/link relative pb-1 font-serif text-lg lg:text-xl xl:text-[1.35rem]"
                         >
                           <span
                             className={
@@ -393,9 +416,8 @@ export default function Navbar({
           {navItems.map((item, idx) => {
             const isActive = item.href
               ? pathname === item.href
-              : (item.children?.some((c) =>
-                  pathname.startsWith(c.href),
-                ) ?? false);
+              : (item.children?.some((c) => pathname.startsWith(c.href)) ??
+                false);
 
             return (
               <li
@@ -493,9 +515,7 @@ export default function Navbar({
         {/* Tagline — enters last */}
         <p
           className={`absolute bottom-10 left-0 right-0 text-center font-serif text-foreground/20 text-sm italic transition-all duration-500 ease-out ${
-            menuOpen
-              ? "translate-y-0 opacity-100"
-              : "translate-y-4 opacity-0"
+            menuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
           style={{
             transitionDelay: menuOpen

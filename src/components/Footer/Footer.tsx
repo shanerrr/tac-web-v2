@@ -21,7 +21,7 @@ const projectLinks = [
 ];
 
 const socialLinks = [
-  { label: "Email", href: "mailto:hello@theagecollective.ca", icon: EmailIcon },
+  { label: "Email", href: "mailto:info@theagecollective.com", icon: EmailIcon },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/the-age-collective",

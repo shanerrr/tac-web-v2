@@ -5,10 +5,11 @@ import type { ReactNode } from "react";
 export const metadata: Metadata = {
   title: "My Aging Story",
   description:
-    "An immersive, travelling exhibit that invites people of all ages to engage with aging through storytelling, reflection, and shared experience.",
+    "On February 21–22, 2025 in Edmonton, AB — 22 powerful stories challenging ageism and celebrating resilience through storytelling, reflection, and shared experience.",
   openGraph: {
     title: "My Aging Story | The Age Collective",
-    description: "An interactive exhibit exploring personal aging narratives.",
+    description:
+      "An immersive exhibit showcasing 22 stories from Edmontonians of all ages, challenging ageism and sparking conversations about growing older.",
   },
 };
 

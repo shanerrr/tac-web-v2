@@ -29,14 +29,14 @@ const quotes: MediaAsset[] = [
     url: "Jamie, 24 yrs",
     sortIndex: 2,
     title:
-      "I had a professor that said that ageism is the last -ism that we’ve yet to see real change in. Racism, sexism, etc. - none of this is okay, but ageism is somehow still acceptable in a lot of different sectors.",
+      "Racism, sexism, etc. - none of this is okay, but ageism is somehow still acceptable in a lot of different sectors.",
     type: "quote",
   },
   {
-    url: "Jamie, 24 yrs",
+    url: "Sushila, 72 yrs",
     sortIndex: 5,
     title:
-      "I had a professor that said that ageism is the last -ism that we’ve yet to see real change in. Racism, sexism, etc. - none of this is okay, but ageism is somehow still acceptable in a lot of different sectors.",
+      "Some seniors are being abused, even by their own families. Some are new immigrant seniors who don’t understand the system.",
     type: "quote",
   },
 ];
@@ -308,20 +308,22 @@ export default async function About() {
             <p>
               These experiences made it clear to us that aging is not just
               personal, but shaped by systems, power, and whose voices are taken
-              seriously.
-            </p>
-            <blockquote className="border-tertiary/50 border-l-2 pl-6 font-serif text-foreground/50 text-xl italic leading-relaxed md:text-2xl">
-              We also believe aging is not only an &ldquo;older adult
+              seriously. We also believe aging is not only an &ldquo;older adult
               issue.&rdquo; Younger people are aging too. Intergenerational
               relationships matter if we want greater understanding, solidarity,
               and collective action.
-            </blockquote>
+            </p>
+
             <p>
               What began as a small collection of written narratives has grown
               into a multi-platform initiative spanning films, exhibits, poetry,
-              and community dialogue. Every story we share is a step toward a
-              culture that embraces and normalizes aging rather than fearing it.
+              and community dialogue.
             </p>
+
+            <blockquote className="border-tertiary/50 border-l-2 pl-6 font-serif text-tertiary text-xl italic font-bold leading-relaxed md:text-2xl">
+              Every story we share is a step toward a culture that embraces and
+              normalizes aging.
+            </blockquote>
             <p>
               We&rsquo;re grateful that many of our participants have become
               ongoing collaborators (and more importantly, friends!) and these
