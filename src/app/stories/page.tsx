@@ -3,8 +3,6 @@ import PageHero from "@tac/components/PageHero";
 import StoriesFeed from "@tac/components/StoriesFeed";
 import { getStories } from "@tac/lib/contentful";
 
-export const revalidate = 3600;
-
 export default async function Stories() {
   const stories = await getStories();
 

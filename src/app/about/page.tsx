@@ -40,7 +40,6 @@ const quotes: MediaAsset[] = [
     type: "quote",
   },
 ];
-export const revalidate = 3600;
 
 export default async function About() {
   const [collageAssets, featureAssets, bottomAssets] = await Promise.all([
@@ -136,7 +135,7 @@ export default async function About() {
               return (
                 <div
                   key={`${asset.url}-${asset.sortIndex}`}
-                  className={`group/cell relative overflow-hidden rounded-2xl bg-tertiary/10 transition-all duration-500 ease-out hover:rotate-0! hover:translate-y-0! hover:scale-[1.03] hover:shadow-xl ${tilt} ${shadow} ${
+                  className={`group/cell relative overflow-hidden rounded-2xl bg-tertiary/10 transition-all duration-500 ease-out hover:translate-y-0! hover:rotate-0! hover:scale-[1.03] hover:shadow-xl ${tilt} ${shadow} ${
                     i === 0
                       ? "row-span-2"
                       : i > 2
@@ -350,7 +349,7 @@ export default async function About() {
               and community dialogue.
             </p>
 
-            <blockquote className="border-tertiary/50 border-l-2 pl-6 font-serif text-tertiary text-xl italic font-bold leading-relaxed md:text-2xl">
+            <blockquote className="border-tertiary/50 border-l-2 pl-6 font-bold font-serif text-tertiary text-xl italic leading-relaxed md:text-2xl">
               Every story we share is a step toward a culture that embraces and
               normalizes aging.
             </blockquote>

@@ -138,7 +138,7 @@ const DropdownLink = memo(function DropdownLink({
           {child.label}
         </p>
         {child.description && (
-          <p className="font-sans text-foreground/40 text-[13px] leading-snug transition-colors duration-200 group-hover/drop:text-foreground/55">
+          <p className="font-sans text-[13px] text-foreground/40 leading-snug transition-colors duration-200 group-hover/drop:text-foreground/55">
             {child.description}
           </p>
         )}
@@ -256,7 +256,7 @@ export default function Navbar({
                             className="opacity-40 transition-transform duration-300 group-hover:rotate-180"
                           />
                           <span
-                            className={`pointer-events-none absolute -bottom-0.5 left-0 right-4 h-[1.5px] origin-center rounded-full bg-current transition-transform duration-300 ease-out ${
+                            className={`pointer-events-none absolute right-4 -bottom-0.5 left-0 h-[1.5px] origin-center rounded-full bg-current transition-transform duration-300 ease-out ${
                               isActive
                                 ? "scale-x-100 opacity-50"
                                 : "scale-x-0 opacity-30 group-hover:scale-x-100 group-hover:opacity-40"
@@ -275,7 +275,7 @@ export default function Navbar({
                           <div
                             className={`h-2.5 w-2.5 rotate-45 border-primary/15 border-t border-l bg-white ${
                               item.menuAlign === "right"
-                                ? "ml-auto mr-8"
+                                ? "mr-8 ml-auto"
                                 : "mx-auto"
                             }`}
                             style={{ marginBottom: "-6px" }}
@@ -330,7 +330,7 @@ export default function Navbar({
                             {item.label}
                           </span>
                           <span
-                            className={`pointer-events-none absolute -bottom-0.5 left-0 right-0 h-[1.5px] origin-center rounded-full bg-current transition-transform duration-300 ease-out ${
+                            className={`pointer-events-none absolute right-0 -bottom-0.5 left-0 h-[1.5px] origin-center rounded-full bg-current transition-transform duration-300 ease-out ${
                               isActive
                                 ? "scale-x-100 opacity-50"
                                 : "scale-x-0 opacity-30 group-hover/link:scale-x-100 group-hover/link:opacity-40"
@@ -520,7 +520,7 @@ export default function Navbar({
 
         {/* Tagline — enters last */}
         <p
-          className={`absolute bottom-10 left-0 right-0 text-center font-serif text-foreground/20 text-sm italic transition-all duration-500 ease-out ${
+          className={`absolute right-0 bottom-10 left-0 text-center font-serif text-foreground/20 text-sm italic transition-all duration-500 ease-out ${
             menuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
           style={{

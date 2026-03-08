@@ -4,7 +4,6 @@ import { getAssetsByTag } from "@tac/lib/contentful";
 import Image from "next/image";
 import logo from "../../../../public/logo-rings.svg";
 
-export const revalidate = 3600;
 
 const highlights = [
   {
@@ -120,7 +119,7 @@ function PhotoPlaceholder({
 }) {
   return (
     <div
-      className={`relative overflow-hidden bg-gradient-to-br from-quaternary/[0.06] via-quaternary/[0.03] to-tertiary/[0.04] ${className ?? ""}`}
+      className={`relative overflow-hidden bg-linear-to-br from-quaternary/6 via-quaternary/3 to-tertiary/4 ${className ?? ""}`}
     >
       {label && (
         <div className="absolute inset-0 flex items-center justify-center font-sans text-quaternary/20 text-sm italic">
@@ -183,7 +182,7 @@ export default async function MyAgingStory() {
       </section>
 
       {/* ═══════════════════ Exhibit Stations ═══════════════════ */}
-      <section className="relative overflow-hidden bg-quaternary/[0.04] py-24 md:py-32">
+      <section className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -253,7 +252,7 @@ export default async function MyAgingStory() {
                 <span className="font-serif text-7xl text-quaternary leading-none tracking-tight md:text-8xl">
                   {stat.value}
                 </span>
-                <span className="mt-3 font-sans text-foreground text-sm font-medium uppercase tracking-[0.2em]">
+                <span className="mt-3 font-medium font-sans text-foreground text-sm uppercase tracking-[0.2em]">
                   {stat.label}
                 </span>
               </div>
@@ -343,7 +342,7 @@ export default async function MyAgingStory() {
       <section className="container py-24 md:py-32">
         <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl shadow-xl">
           {/* Gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-quaternary via-quaternary/90 to-quaternary/80" />
+          <div className="absolute inset-0 bg-linear-to-br from-quaternary via-quaternary/90 to-quaternary/80" />
           <div className="heroTexture absolute inset-0 opacity-40" />
 
           {/* Watermark */}
@@ -391,7 +390,7 @@ export default async function MyAgingStory() {
       </section>
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <section className="border-t border-quaternary/8 py-16 md:py-20">
+      <section className="border-quaternary/8 border-t py-16 md:py-20">
         <div className="container text-center">
           <p className="mb-10 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
             Acknowledgements
@@ -405,7 +404,7 @@ export default async function MyAgingStory() {
             {acknowledgements.map((name) => (
               <div
                 key={name}
-                className="flex h-14 items-center justify-center rounded-lg bg-quaternary/[0.04] px-6 font-sans text-foreground/35 text-sm tracking-wide transition-colors duration-200 hover:bg-quaternary/[0.07] hover:text-foreground/50"
+                className="flex h-14 items-center justify-center rounded-lg bg-quaternary/4 px-6 font-sans text-foreground/35 text-sm tracking-wide transition-colors duration-200 hover:bg-quaternary/[0.07] hover:text-foreground/50"
               >
                 {name}
               </div>

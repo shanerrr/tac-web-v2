@@ -3,9 +3,6 @@ import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import { getFilms } from "@tac/lib/contentful";
 
-// Revalidate the page at most once per hour
-export const revalidate = 3600;
-
 export default async function Films() {
   const films = await getFilms();
 
