@@ -225,27 +225,50 @@ function VideoCard({
 
 function QuoteCard({ asset }: { asset: MediaAsset }) {
   return (
-    <div className="absolute inset-0 flex flex-col justify-between bg-tertiary p-2.5 sm:p-4 md:p-6">
-      {/* Top — decorative quote mark */}
+    <div className="absolute inset-0 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-tertiary via-tertiary to-tertiary/80 p-3 sm:p-5 md:p-4 xl:p-7">
+      {/* Tree-ring watermark */}
+      <svg
+        viewBox="0 0 200 200"
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-[15%] -bottom-[15%] h-[60%] w-[60%] opacity-[0.06]"
+      >
+        {[90, 70, 50, 30].map((r) => (
+          <circle
+            key={r}
+            cx="100"
+            cy="100"
+            r={r}
+            fill="none"
+            stroke="white"
+            strokeWidth="2.5"
+          />
+        ))}
+      </svg>
+
+      {/* Top — oversized decorative quote mark */}
       <span
-        className="select-none font-serif text-2xl text-white/25 leading-[0.8] sm:text-4xl md:text-5xl"
+        className="select-none font-serif text-4xl text-white/20 leading-[0.7] sm:text-5xl md:text-5xl xl:text-7xl"
         aria-hidden="true"
       >
         &ldquo;
       </span>
 
       {/* Middle — quote text */}
-      <blockquote className="my-auto font-serif text-[0.65rem] text-white/90 italic leading-snug sm:text-xs sm:leading-relaxed md:text-base">
+      <blockquote className="relative my-auto pl-2 font-serif text-[0.7rem] text-white italic leading-snug sm:pl-3 sm:text-sm sm:leading-relaxed md:text-[0.8rem] md:leading-relaxed xl:text-lg">
+        <div className="absolute top-0 bottom-0 left-0 w-[2px] rounded-full bg-white/20" />
         {asset.title}
       </blockquote>
 
-      {/* Bottom — attribution */}
-      <div className="flex items-end justify-between gap-1 sm:gap-2">
-        <p className="font-sans text-[0.5rem] text-white/50 uppercase leading-tight tracking-[0.1em] sm:text-[0.6rem] sm:tracking-[0.15em] md:text-[0.65rem]">
-          — {asset.url}
-        </p>
+      {/* Bottom — attribution with accent line */}
+      <div className="flex items-end justify-between gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="h-px w-4 bg-white/30 sm:w-6" />
+          <p className="font-sans text-[0.55rem] text-white/60 uppercase leading-tight tracking-[0.15em] sm:text-[0.65rem] sm:tracking-[0.2em] md:text-[0.6rem] xl:text-xs">
+            {asset.url}
+          </p>
+        </div>
         <span
-          className="shrink-0 select-none font-serif text-2xl text-white/25 leading-[0.6] sm:text-4xl md:text-5xl"
+          className="shrink-0 select-none font-serif text-4xl text-white/20 leading-[0.5] sm:text-5xl md:text-5xl xl:text-7xl"
           aria-hidden="true"
         >
           &rdquo;

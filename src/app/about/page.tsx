@@ -109,21 +109,51 @@ export default async function About() {
       {/* ─── Photo Collage ─── */}
       {collageAssets.length > 0 && (
         <section className="container pb-8">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
-            {allCollageAssets.map((asset, i) => (
-              <div
-                key={`${asset.url}-${asset.sortIndex}`}
-                className={`relative overflow-hidden rounded-2xl bg-tertiary/10 ${
-                  i === 0
-                    ? "row-span-2"
-                    : i > 2
-                      ? "hidden aspect-4/3 md:block"
-                      : "aspect-4/3"
-                }`}
-              >
-                <MediaCard asset={asset} />
-              </div>
-            ))}
+          <p className="mb-6 text-center font-sans text-tertiary text-xs uppercase tracking-[0.4em] md:mb-8">
+            Voices &amp; Faces
+          </p>
+          <div className="grid grid-cols-2 gap-5 p-2 md:grid-cols-3 md:gap-7 md:p-4">
+            {allCollageAssets.map((asset, i) => {
+              // Alternating rotations + offsets for an organic, pinboard feel
+              const tilt = [
+                "rotate-[-1.5deg] translate-y-1",
+                "rotate-[2deg] -translate-y-1",
+                "rotate-[1deg] translate-y-2",
+                "rotate-[-2.5deg] -translate-y-0.5",
+                "rotate-[1.5deg] translate-y-1.5",
+                "rotate-[-1deg] -translate-y-1",
+              ][i % 6];
+
+              const shadow = [
+                "shadow-md",
+                "shadow-lg",
+                "shadow-md",
+                "shadow-sm",
+                "shadow-lg",
+                "shadow-md",
+              ][i % 6];
+
+              return (
+                <div
+                  key={`${asset.url}-${asset.sortIndex}`}
+                  className={`group/cell relative overflow-hidden rounded-2xl bg-tertiary/10 transition-all duration-500 ease-out hover:rotate-0! hover:translate-y-0! hover:scale-[1.03] hover:shadow-xl ${tilt} ${shadow} ${
+                    i === 0
+                      ? "row-span-2"
+                      : i > 2
+                        ? "hidden aspect-4/3 md:block"
+                        : "aspect-4/3"
+                  } ${asset.type !== "quote" ? "[&_video]:transition-transform [&_video]:duration-500 [&_video]:ease-out hover:[&_video]:scale-105" : ""}`}
+                >
+                  <MediaCard asset={asset} />
+                  {asset.type !== "quote" && (
+                    <div
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover/cell:opacity-100"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
         </section>
       )}

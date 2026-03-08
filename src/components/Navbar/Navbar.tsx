@@ -9,7 +9,7 @@ import { useWebHaptics } from "web-haptics/react";
 import logo from "../../../public/logo.svg";
 import logoRings from "../../../public/logo-rings.svg";
 
-type AccentColor = "primary" | "secondary" | "tertiary";
+type AccentColor = "primary" | "secondary" | "tertiary" | "quaternary";
 
 const accent: Record<
   AccentColor,
@@ -32,6 +32,12 @@ const accent: Record<
     dot: "bg-tertiary",
     hover: "hover:bg-tertiary/8",
     border: "hover:border-l-tertiary",
+  },
+  quaternary: {
+    text: "text-quaternary",
+    dot: "bg-quaternary",
+    hover: "hover:bg-quaternary/8",
+    border: "hover:border-l-quaternary",
   },
 };
 
@@ -84,7 +90,7 @@ const navItems: NavItem[] = [
         href: "/projects/my-aging-story",
         description:
           "An interactive exhibit exploring personal aging narratives",
-        accent: "tertiary",
+        accent: "quaternary",
         accentLabel: "Exhibit",
       },
       {

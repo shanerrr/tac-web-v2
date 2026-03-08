@@ -21,7 +21,7 @@ export default function MyAgingStoryLayout({
   return (
     <main>
       {children}
-      <Footer bgColor="bg-primary" />
+      <Footer bgColor="bg-quaternary" />
     </main>
   );
 }
