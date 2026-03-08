@@ -1,10 +1,8 @@
 import Navbar from "@tac/components/Navbar";
 import Image from "next/image";
-import ACSELLogo from "../../../../public/ACSEL.png";
 import anthology from "../../../../public/anthology.png";
-import CSCLogo from "../../../../public/CSC.png";
 import logo from "../../../../public/logo-rings.svg";
-import VALogo from "../../../../public/VA.png";
+import ProvinceMap from "./ProvinceMap";
 
 /* ────────────────────── Data ────────────────────── */
 
@@ -41,6 +39,13 @@ const themes = [
   },
 ];
 
+const ageGroups = [
+  { range: "55–64", percentage: 38 },
+  { range: "65–74", percentage: 35 },
+  { range: "75–84", percentage: 20 },
+  { range: "85–95", percentage: 7 },
+];
+
 const impact = [
   {
     value: 92,
@@ -50,11 +55,11 @@ const impact = [
   { value: 95, label: "would recommend the collection to others." },
 ];
 
-const supporters = [
-  { name: "ACSEL", logo: ACSELLogo },
-  { name: "Canada Service Corps", logo: CSCLogo },
-  { name: "Volunteer Alberta", logo: VALogo },
-];
+// const supporters = [
+//   { name: "ACSEL", logo: ACSELLogo },
+//   { name: "Canada Service Corps", logo: CSCLogo },
+//   { name: "Volunteer Alberta", logo: VALogo },
+// ];
 
 /* ────────────────────── StatRing ────────────────────── */
 
@@ -114,7 +119,7 @@ export default function Gold() {
       />
 
       {/* ═══════════════════ Hero ═══════════════════ */}
-      <div className="bg-[#0A0A0A] -mt-27 md:-mt-32">
+      <div className="-mt-27 bg-[#0A0A0A] md:-mt-32">
         <section className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden pt-27 pb-27 text-center md:pt-32 md:pb-32">
           {/* Warm radial glow */}
           <div
@@ -156,15 +161,14 @@ export default function Gold() {
 
           {/* Content */}
           <div className="relative z-10 flex flex-col items-center">
-            <p className="mb-6 font-sans text-sm text-gold/50 uppercase tracking-[0.5em]">
+            <p className="mb-6 font-sans text-gold/50 text-sm uppercase tracking-[0.5em]">
               Poetry Collection
             </p>
-            <h1 className="my-6 bg-gradient-to-b from-[#E8D07A] via-gold to-[#8A7230] bg-clip-text font-bold font-serif text-8xl leading-none tracking-tight text-transparent sm:text-9xl lg:text-[11rem]">
+            <h1 className="my-6 bg-gradient-to-b from-[#E8D07A] via-gold to-[#8A7230] bg-clip-text font-bold font-serif text-8xl text-transparent leading-none tracking-tight sm:text-9xl lg:text-[11rem]">
               GOLD
             </h1>
-            <p className="max-w-lg font-light font-sans text-xl text-white/50 sm:text-3xl">
-              Poems celebrating the golden threads
-              <br className="hidden sm:block" /> of a life well&#8209;lived.
+            <p className="max-w-lg font-light font-sans text-white/50 text-xl sm:text-3xl">
+              Poems celebrating the golden threads of a life well&#8209;lived.
             </p>
           </div>
 
@@ -229,7 +233,7 @@ export default function Gold() {
             <div className="relative items-center gap-12 p-8 md:flex md:p-12 lg:gap-16 lg:p-16">
               {/* Cover image */}
               <div className="mx-auto mb-10 w-52 shrink-0 md:mx-0 md:mb-0 md:w-56 lg:w-64">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-xl shadow-black/40 ring-1 ring-gold/15">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-black/40 shadow-xl ring-1 ring-gold/15">
                   <Image
                     src={anthology}
                     alt="GOLD anthology cover"
@@ -255,7 +259,7 @@ export default function Gold() {
                 </p>
                 <a
                   href="#"
-                  className="mt-8 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-sm text-gold uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-lg hover:shadow-gold/5"
+                  className="mt-8 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
                 >
                   Read the Anthology
                 </a>
@@ -290,11 +294,47 @@ export default function Gold() {
                 <span className="font-serif text-7xl text-gold leading-none tracking-tight md:text-8xl">
                   {stat.value}
                 </span>
-                <span className="mt-3 font-medium font-sans text-white/50 text-sm uppercase tracking-[0.2em]">
+                <span className="mt-3 font-medium font-sans text-sm text-white/50 uppercase tracking-[0.2em]">
                   {stat.label}
                 </span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ Reach & Demographics ═══════════════════ */}
+      <section className="relative overflow-hidden bg-[#0A0A0A] py-18 md:py-24">
+        <div className="container relative">
+          {/* Interactive province map */}
+          <ProvinceMap />
+
+          {/* Divider */}
+          <div className="mx-auto my-16 h-px w-16 bg-gold/15" />
+
+          {/* Age Distribution */}
+          <div className="mx-auto max-w-2xl">
+            <p className="mb-10 text-center font-sans text-gold/60 text-xs uppercase tracking-[0.4em]">
+              Age Distribution
+            </p>
+            <div className="space-y-6">
+              {ageGroups.map((group) => (
+                <div key={group.range} className="flex items-center gap-5">
+                  <span className="w-14 shrink-0 text-right font-sans text-sm text-white/50">
+                    {group.range}
+                  </span>
+                  <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-gold/8">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-gold/80 to-gold"
+                      style={{ width: `${group.percentage}%` }}
+                    />
+                  </div>
+                  <span className="w-12 shrink-0 font-serif text-gold text-lg">
+                    {group.percentage}%
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -337,7 +377,7 @@ export default function Gold() {
             {themes.map((theme) => (
               <div
                 key={theme.title}
-                className="group flex flex-col rounded-2xl border border-gold/10 bg-[#0A0A0A] px-6 py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5"
+                className="group flex flex-col rounded-2xl border border-gold/10 bg-[#0A0A0A] px-6 py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-gold/5 hover:shadow-lg"
               >
                 <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
                   {theme.number}
@@ -346,7 +386,7 @@ export default function Gold() {
                   {theme.title}
                 </h3>
                 <div className="mt-2 h-px w-8 bg-gold/20 transition-all duration-300 group-hover:w-12 group-hover:bg-gold/40" />
-                <p className="mt-4 font-sans text-white/40 text-sm leading-relaxed">
+                <p className="mt-4 font-sans text-sm text-white/40 leading-relaxed">
                   {theme.description}
                 </p>
               </div>
@@ -366,7 +406,7 @@ export default function Gold() {
             {/* Poem 1 */}
             <div className="relative rounded-2xl border border-gold/10 bg-[#0A0A0A] px-8 py-10 md:px-10 md:py-12">
               <span
-                className="pointer-events-none absolute top-4 left-6 font-serif text-[6rem] leading-none text-gold/10 select-none"
+                className="pointer-events-none absolute top-4 left-6 select-none font-serif text-[6rem] text-gold/10 leading-none"
                 aria-hidden="true"
               >
                 &ldquo;
@@ -385,7 +425,7 @@ export default function Gold() {
                 </p>
                 <footer className="mt-6 flex items-center gap-3">
                   <div className="h-px w-6 bg-gold/30" />
-                  <cite className="font-sans text-sm text-gold/50 not-italic uppercase tracking-[0.2em]">
+                  <cite className="font-sans text-gold/50 text-sm uppercase not-italic tracking-[0.2em]">
                     Excerpt I
                   </cite>
                 </footer>
@@ -395,7 +435,7 @@ export default function Gold() {
             {/* Poem 2 */}
             <div className="relative rounded-2xl border border-gold/10 bg-[#0A0A0A] px-8 py-10 md:px-10 md:py-12">
               <span
-                className="pointer-events-none absolute top-4 left-6 font-serif text-[6rem] leading-none text-gold/10 select-none"
+                className="pointer-events-none absolute top-4 left-6 select-none font-serif text-[6rem] text-gold/10 leading-none"
                 aria-hidden="true"
               >
                 &ldquo;
@@ -413,7 +453,7 @@ export default function Gold() {
                 </p>
                 <footer className="mt-6 flex items-center gap-3">
                   <div className="h-px w-6 bg-gold/30" />
-                  <cite className="font-sans text-sm text-gold/50 not-italic uppercase tracking-[0.2em]">
+                  <cite className="font-sans text-gold/50 text-sm uppercase not-italic tracking-[0.2em]">
                     Excerpt II
                   </cite>
                 </footer>
@@ -479,7 +519,7 @@ export default function Gold() {
                     <span className="text-2xl md:text-3xl">%</span>
                   </span>
                 </div>
-                <p className="mt-5 max-w-[16rem] font-sans text-white/45 text-sm leading-relaxed md:text-base">
+                <p className="mt-5 max-w-[16rem] font-sans text-sm text-white/45 leading-relaxed md:text-base">
                   {stat.label}
                 </p>
               </div>
@@ -559,7 +599,7 @@ export default function Gold() {
           </div>
 
           <div className="relative px-8 py-20 text-center text-white md:px-16 md:py-28">
-            <p className="font-sans text-sm text-gold/50 uppercase tracking-[0.4em]">
+            <p className="font-sans text-gold/50 text-sm uppercase tracking-[0.4em]">
               The Collection
             </p>
             <h2 className="mt-6 font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
@@ -575,7 +615,7 @@ export default function Gold() {
             </p>
             <a
               href="mailto:info@theagecollective.com"
-              className="mt-10 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-sm text-gold uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-lg hover:shadow-gold/5"
+              className="mt-10 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
             >
               Get in Touch
             </a>
@@ -634,22 +674,7 @@ export default function Gold() {
               Funded by Canada Service Corps and Volunteer Alberta through the
               Alberta Civil Society Emerging Leaders (ACSEL) Microgrant Program.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-10 md:gap-14">
-              {supporters.map((org) => (
-                <div
-                  key={org.name}
-                  className="flex h-16 items-center justify-center opacity-50 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
-                >
-                  <Image
-                    src={org.logo}
-                    alt={org.name}
-                    width={140}
-                    height={56}
-                    className="h-12 w-auto object-contain md:h-14"
-                  />
-                </div>
-              ))}
-            </div>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-10 md:gap-14"></div>
           </div>
         </div>
       </section>
