@@ -362,6 +362,63 @@ export default async function MyAgingStory() {
         </div>
       </section>
 
+      {/* ═══════════════════ Exhibit Video ═══════════════════ */}
+      <section className="relative overflow-hidden bg-quaternary/[0.04] py-24 md:py-32">
+        {/* Watermark */}
+        <div
+          className="pointer-events-none absolute animate-spin-slow select-none"
+          aria-hidden="true"
+          style={{
+            width: "min(60vw, 60vh)",
+            height: "min(60vw, 60vh)",
+            bottom: "calc(min(60vw, 60vh) / -3)",
+            right: "calc(min(60vw, 60vh) / -3)",
+          }}
+        >
+          <Image
+            src={logo}
+            alt=""
+            fill
+            className="object-contain opacity-[0.03]"
+            style={{ filter: "invert(1)" }}
+          />
+        </div>
+
+        <div className="container relative">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
+              The Experience
+            </p>
+            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
+              Two days of{" "}
+              <span className="text-quaternary italic">
+                stories&nbsp;&amp;&nbsp;connection.
+              </span>
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
+            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
+              A look inside the My Aging Story exhibit &mdash; the people, the
+              conversations, and the moments that made it meaningful.
+            </p>
+          </div>
+
+          {/* Video embed */}
+          <div className="mx-auto mt-12 max-w-4xl">
+            <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+              <div className="aspect-video">
+                <iframe
+                  src="https://www.youtube.com/embed/unh5yVYfwqE"
+                  title="My Aging Story exhibit video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="h-full w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
       <section className="border-quaternary/8 border-t py-24 md:py-32">
         <div className="container">
@@ -417,7 +474,7 @@ export default async function MyAgingStory() {
               {supporters.map((org) => (
                 <div
                   key={org.name}
-                  className="flex h-16 items-center justify-center grayscale opacity-50 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
+                  className="flex h-16 items-center justify-center opacity-50 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
                 >
                   <Image
                     src={org.logo}
