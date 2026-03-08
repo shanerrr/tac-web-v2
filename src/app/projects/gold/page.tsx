@@ -46,67 +46,82 @@ const ageGroups = [
   { range: "85–95", percentage: 7 },
 ];
 
-const impact = [
+const judges = [
   {
-    value: 92,
-    label: "felt a deeper connection to older adults' experiences.",
+    name: "Trevor Hughes",
+    title: "Poet & Writer",
+    bio: "Trevor\u2019s first encounter with live poetry readings was when, as a teenager, he heard Brian Patten, Roger McGough and Adrian Henri, the so-called Mersey Poets, performing in his native Liverpool in the late 1960s. Trevor has been hooked ever since. He particularly values the way people share thoughts, feelings and experiences, and reveal their vulnerabilities in the best words they can find. Trevor started to write poetry seriously in his forties, attending workshops with well-established writers, which helped him considerably. In 2017, he published a sequence of poems, \u2018belongings\u2019, in memory of his son, Peter, who died aged 25. Trevor\u2019s main feeling about aging is to try and stay as active and engaged with other people as possible, whatever increasing hardships one faces.",
   },
-  { value: 87, label: "said the poems shifted how they think about aging." },
-  { value: 95, label: "would recommend the collection to others." },
+  {
+    name: "Judge Name",
+    title: "Title / Affiliation",
+    bio: "Placeholder biography \u2014 replace with the real judge\u2019s background, their connection to poetry and aging, and what they bring to the GOLD selection process.",
+  },
+  {
+    name: "Judge Name",
+    title: "Title / Affiliation",
+    bio: "Placeholder biography \u2014 replace with the real judge\u2019s background, their connection to poetry and aging, and what they bring to the GOLD selection process.",
+  },
 ];
 
-// const supporters = [
-//   { name: "ACSEL", logo: ACSELLogo },
-//   { name: "Canada Service Corps", logo: CSCLogo },
-//   { name: "Volunteer Alberta", logo: VALogo },
-// ];
-
-/* ────────────────────── StatRing ────────────────────── */
-
-function StatRing({ value }: { value: number }) {
-  const r = 46;
-  const circumference = 2 * Math.PI * r;
-  const offset = circumference * (1 - value / 100);
-
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      className="h-36 w-36 -rotate-90 sm:h-40 sm:w-40 md:h-44 md:w-44"
-      aria-hidden="true"
-    >
-      <circle
-        cx="50"
-        cy="50"
-        r={r}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        className="text-gold/15"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r={r}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3.5"
-        className="text-gold"
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        strokeLinecap="round"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r={r - 8}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
-        className="text-gold/8"
-      />
-    </svg>
-  );
-}
+const poets = [
+  {
+    name: "Jannie Danies",
+    bio: "Jannie Danies is an emerging poet whose work explores the textures of memory, aging, and quiet resilience. Her poems draw from lived experience with tenderness and precision, giving voice to moments often overlooked.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+  {
+    name: "Poet Name",
+    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
+  },
+];
 
 export default function Gold() {
   return (
@@ -395,85 +410,17 @@ export default function Gold() {
         </div>
       </section>
 
-      {/* ═══════════════════ Featured Excerpt ═══════════════════ */}
-      <section className="container py-24 md:py-32">
-        <div className="mx-auto max-w-4xl">
-          <p className="mb-12 text-center font-sans text-gold text-xs uppercase tracking-[0.4em]">
-            From the Collection
-          </p>
-
-          <div className="grid gap-8 md:grid-cols-2">
-            {/* Poem 1 */}
-            <div className="relative rounded-2xl border border-gold/10 bg-[#0A0A0A] px-8 py-10 md:px-10 md:py-12">
-              <span
-                className="pointer-events-none absolute top-4 left-6 select-none font-serif text-[6rem] text-gold/10 leading-none"
-                aria-hidden="true"
-              >
-                &ldquo;
-              </span>
-              <blockquote className="relative z-10">
-                <p className="font-serif text-lg text-white/80 italic leading-relaxed md:text-xl">
-                  There is gold in the way she laughs &mdash;
-                  <br />
-                  not the polished kind, not the kept kind,
-                  <br />
-                  but the gold that lives in late&#8209;afternoon light,
-                  <br />
-                  in bread crusts, in the worn spine
-                  <br />
-                  of a book read forty times.
-                </p>
-                <footer className="mt-6 flex items-center gap-3">
-                  <div className="h-px w-6 bg-gold/30" />
-                  <cite className="font-sans text-gold/50 text-sm uppercase not-italic tracking-[0.2em]">
-                    Excerpt I
-                  </cite>
-                </footer>
-              </blockquote>
-            </div>
-
-            {/* Poem 2 */}
-            <div className="relative rounded-2xl border border-gold/10 bg-[#0A0A0A] px-8 py-10 md:px-10 md:py-12">
-              <span
-                className="pointer-events-none absolute top-4 left-6 select-none font-serif text-[6rem] text-gold/10 leading-none"
-                aria-hidden="true"
-              >
-                &ldquo;
-              </span>
-              <blockquote className="relative z-10">
-                <p className="font-serif text-lg text-white/80 italic leading-relaxed md:text-xl">
-                  I am not fading.
-                  <br />I am becoming
-                  <br />
-                  the colour of dusk &mdash;
-                  <br />
-                  deeper, softer,
-                  <br />
-                  almost ready to be sky.
-                </p>
-                <footer className="mt-6 flex items-center gap-3">
-                  <div className="h-px w-6 bg-gold/30" />
-                  <cite className="font-sans text-gold/50 text-sm uppercase not-italic tracking-[0.2em]">
-                    Excerpt II
-                  </cite>
-                </footer>
-              </blockquote>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ Impact Stats ═══════════════════ */}
+      {/* ═══════════════════ Meet the Judges ═══════════════════ */}
       <section className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
           aria-hidden="true"
           style={{
-            width: "min(70vw, 70vh)",
-            height: "min(70vw, 70vh)",
-            top: "calc(min(70vw, 70vh) / -3)",
-            right: "calc(min(70vw, 70vh) / -3)",
+            width: "min(60vw, 60vh)",
+            height: "min(60vw, 60vh)",
+            bottom: "calc(min(60vw, 60vh) / -3)",
+            left: "calc(min(60vw, 60vh) / -3)",
           }}
         >
           <Image
@@ -490,191 +437,125 @@ export default function Gold() {
           aria-hidden="true"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.04) 0%, transparent 55%)",
+              "radial-gradient(ellipse at 50% 30%, rgba(201,168,76,0.04) 0%, transparent 55%)",
           }}
         />
 
         <div className="container relative">
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="mx-auto mb-16 max-w-3xl text-center">
             <p className="mb-5 font-sans text-gold/60 text-xs uppercase tracking-[0.4em]">
-              Impact
+              The Panel
             </p>
             <h2 className="font-serif text-3xl text-white leading-tight md:text-4xl lg:text-5xl">
-              What readers{" "}
-              <span className="text-gold italic">told&nbsp;us.</span>
+              Meet the <span className="text-gold italic">judges.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-gold/20" />
           </div>
 
-          <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8">
-            {impact.map((stat) => (
+          <div className="mx-auto flex max-w-4xl flex-col gap-6">
+            {judges.map((judge, i) => (
               <div
-                key={stat.value}
-                className="flex flex-col items-center text-center"
+                key={judge.name + i}
+                className="group flex flex-col gap-6 rounded-2xl border border-gold/10 bg-[#141210] p-7 transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5 sm:flex-row sm:gap-8 sm:p-8"
               >
-                <div className="relative flex items-center justify-center">
-                  <StatRing value={stat.value} />
-                  <span className="absolute font-serif text-4xl text-gold leading-none tracking-tight sm:text-4xl md:text-5xl">
-                    {stat.value}
-                    <span className="text-2xl md:text-3xl">%</span>
-                  </span>
+                {/* Avatar placeholder */}
+                <div className="flex shrink-0 flex-col items-center sm:pt-1">
+                  <div className="flex h-28 w-28 items-center justify-center rounded-full bg-gold/8 ring-2 ring-gold/15 sm:h-36 sm:w-36">
+                    <span className="font-serif text-3xl text-gold/40 sm:text-4xl">
+                      {judge.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </span>
+                  </div>
                 </div>
-                <p className="mt-5 max-w-[16rem] font-sans text-sm text-white/45 leading-relaxed md:text-base">
-                  {stat.label}
-                </p>
+
+                {/* Text */}
+                <div className="text-center sm:text-left">
+                  <h3 className="font-serif text-xl text-white leading-tight md:text-2xl">
+                    {judge.name}
+                  </h3>
+                  <p className="mt-1 font-sans text-xs text-gold/50 uppercase tracking-[0.2em]">
+                    {judge.title}
+                  </p>
+                  <div className="mx-auto mt-3 h-px w-8 bg-gold/15 transition-all duration-300 group-hover:w-12 group-hover:bg-gold/30 sm:mx-0" />
+                  <p className="mt-4 font-sans text-sm text-white/45 leading-relaxed md:text-[15px]">
+                    {judge.bio}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════ Featured Reading ═══════════════════ */}
-      <section className="py-24 md:py-32">
-        <div className="container">
-          <div className="mx-auto max-w-3xl text-center">
+      {/* ═══════════════════ The GOLD Poets ═══════════════════ */}
+      <section className="relative overflow-hidden py-24 md:py-32">
+        {/* Watermark */}
+        <div
+          className="pointer-events-none absolute animate-spin-slow select-none"
+          aria-hidden="true"
+          style={{
+            width: "min(70vw, 70vh)",
+            height: "min(70vw, 70vh)",
+            top: "calc(min(70vw, 70vh) / -3)",
+            right: "calc(min(70vw, 70vh) / -3)",
+          }}
+        >
+          <Image
+            src={logo}
+            alt=""
+            fill
+            className="object-contain opacity-[0.03]"
+            style={{ filter: "invert(1)" }}
+          />
+        </div>
+
+        <div className="container relative">
+          <div className="mx-auto mb-16 max-w-3xl text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
-              Featured Reading
+              The Voices
             </p>
             <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
-              Hear the poems{" "}
-              <span className="text-gold italic">come alive.</span>
+              The GOLD <span className="text-gold italic">poets.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
             <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
-              A selection of poems from the collection, read aloud by the poets
-              and the people whose stories inspired them.
+              Fourteen poets whose words shape the anthology &mdash; each
+              bringing their own experience of aging into verse.
             </p>
           </div>
 
-          {/* Video embed */}
-          <div className="mx-auto mt-12 max-w-4xl">
-            <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/10">
-              <div className="aspect-video bg-[#0A0A0A]">
-                <iframe
-                  src="https://www.youtube.com/embed/unh5yVYfwqE"
-                  title="GOLD poetry collection — featured reading"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="h-full w-full"
-                />
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 lg:grid-cols-2">
+            {poets.map((poet, i) => (
+              <div
+                key={poet.name + i}
+                className="group flex gap-5 rounded-2xl border border-gold/8 bg-[#0A0A0A] p-5 transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5 sm:gap-6 sm:p-6"
+              >
+                {/* Avatar */}
+                <div className="shrink-0 pt-0.5">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold/8 ring-1 ring-gold/15 transition-all duration-300 group-hover:ring-gold/30 sm:h-20 sm:w-20">
+                    <span className="font-serif text-xl text-gold/35 transition-colors duration-300 group-hover:text-gold/60 sm:text-2xl">
+                      {poet.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Text */}
+                <div className="min-w-0">
+                  <h3 className="font-serif text-lg text-foreground leading-tight transition-colors duration-300 group-hover:text-gold md:text-xl">
+                    {poet.name}
+                  </h3>
+                  <div className="mt-2 h-px w-6 bg-gold/15 transition-all duration-300 group-hover:w-10 group-hover:bg-gold/30" />
+                  <p className="mt-3 font-sans text-sm text-foreground/50 leading-relaxed">
+                    {poet.bio}
+                  </p>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ CTA ═══════════════════ */}
-      <section className="container pb-24 md:pb-32">
-        <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl shadow-xl">
-          {/* Gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#12100A] to-[#1A160E]" />
-
-          {/* Subtle gold shimmer */}
-          <div
-            className="pointer-events-none absolute inset-0"
-            aria-hidden="true"
-            style={{
-              background:
-                "radial-gradient(ellipse at 30% 50%, rgba(201,168,76,0.08) 0%, transparent 50%)",
-            }}
-          />
-
-          {/* Watermark */}
-          <div
-            className="pointer-events-none absolute animate-spin-slow"
-            aria-hidden="true"
-            style={{
-              width: "min(50vw, 50vh)",
-              height: "min(50vw, 50vh)",
-              bottom: "calc(min(50vw, 50vh) / -2.5)",
-              right: "calc(min(50vw, 50vh) / -2.5)",
-            }}
-          >
-            <Image
-              src={logo}
-              alt=""
-              fill
-              className="object-contain opacity-[0.06]"
-            />
-          </div>
-
-          <div className="relative px-8 py-20 text-center text-white md:px-16 md:py-28">
-            <p className="font-sans text-gold/50 text-sm uppercase tracking-[0.4em]">
-              The Collection
-            </p>
-            <h2 className="mt-6 font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
-              Every life holds gold.
-              <br />
-              <span className="text-gold italic">
-                These poems find&nbsp;it.
-              </span>
-            </h2>
-            <p className="mx-auto mt-6 max-w-xl font-sans text-lg text-white/50 leading-relaxed">
-              Interested in reading the full collection, hosting a reading, or
-              collaborating on future poems? We&rsquo;d love to hear from you.
-            </p>
-            <a
-              href="mailto:info@theagecollective.com"
-              className="mt-10 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
-            >
-              Get in Touch
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <section className="border-gold/8 border-t py-24 md:py-32">
-        <div className="container">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
-              Acknowledgements
-            </p>
-            <h2 className="font-serif text-4xl text-foreground leading-tight md:text-5xl">
-              With <span className="text-gold italic">gratitude.</span>
-            </h2>
-            <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
-          </div>
-
-          {/* Thank-you messages */}
-          <div className="mx-auto mt-14 grid max-w-4xl gap-6 sm:grid-cols-2">
-            <div className="rounded-2xl border border-gold/8 bg-gold/[0.04] px-7 py-6">
-              <p className="mb-2 font-sans text-[12px] text-gold uppercase tracking-[0.3em]">
-                Storytellers
-              </p>
-              <p className="font-sans text-foreground/80 text-sm leading-relaxed">
-                To every person who opened their lives and shared their stories
-                &mdash; your words are the heart of this collection.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-gold/8 bg-gold/[0.04] px-7 py-6">
-              <p className="mb-2 font-sans text-[12px] text-gold uppercase tracking-[0.3em]">
-                Poets
-              </p>
-              <p className="font-sans text-foreground/80 text-sm leading-relaxed">
-                To the writers who listened deeply and transformed conversations
-                into verse &mdash; thank you for your care and craft.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-gold/8 bg-gold/[0.04] px-7 py-6 sm:col-span-2">
-              <p className="mb-2 font-sans text-[12px] text-gold uppercase tracking-[0.3em]">
-                Community
-              </p>
-              <p className="font-sans text-foreground/80 text-sm leading-relaxed">
-                Thank you to the communities across Canada who welcomed us,
-                connected us with elders, and helped make these poems possible.
-              </p>
-            </div>
-          </div>
-
-          {/* Funding acknowledgement + logos */}
-          <div className="mx-auto mt-12 max-w-3xl text-center">
-            <div className="mx-auto h-px w-12 bg-gold/15" />
-            <p className="mt-8 font-sans text-foreground/80 text-sm leading-relaxed">
-              Funded by Canada Service Corps and Volunteer Alberta through the
-              Alberta Civil Society Emerging Leaders (ACSEL) Microgrant Program.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-10 md:gap-14"></div>
+            ))}
           </div>
         </div>
       </section>
