@@ -209,15 +209,19 @@ export default async function MyAgingStory() {
       {/* ═══════════════════ Photo Gallery 1 ═══════════════════ */}
       <section className="py-6">
         <div className="container">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-            {(gallery.length >= 4
-              ? gallery.slice(0, 4)
-              : Array(4).fill(null)
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+            {(gallery.length >= 5
+              ? gallery.slice(0, 5)
+              : Array(5).fill(null)
             ).map((asset, i) => (
               <div
                 key={asset?.url ?? `placeholder-a-${i}`}
                 className={`relative overflow-hidden rounded-2xl ${
-                  i === 0 ? "col-span-2 aspect-[2.2/1]" : "aspect-[4/3]"
+                  i === 0
+                    ? "col-span-2 aspect-2/0"
+                    : i >= 5
+                      ? "hidden aspect-4/3 md:block"
+                      : "aspect-4/3"
                 }`}
               >
                 {asset ? (
@@ -228,8 +232,8 @@ export default async function MyAgingStory() {
                     className="object-cover"
                     sizes={
                       i === 0
-                        ? "(min-width: 768px) 50vw, 100vw"
-                        : "(min-width: 768px) 25vw, 50vw"
+                        ? "(min-width: 768px) 66vw, 100vw"
+                        : "(min-width: 768px) 33vw, 50vw"
                     }
                   />
                 ) : (
@@ -283,8 +287,8 @@ export default async function MyAgingStory() {
       <section className="py-2">
         <div className="container">
           <div className="grid grid-cols-3 gap-3 md:grid-cols-5 md:gap-4">
-            {(gallery.length >= 9
-              ? gallery.slice(4, 9)
+            {(gallery.length >= 11
+              ? gallery.slice(6, 11)
               : Array(5).fill(null)
             ).map((asset, i) => (
               <div
@@ -306,7 +310,7 @@ export default async function MyAgingStory() {
                 ) : (
                   <PhotoPlaceholder
                     className="h-full w-full"
-                    label={`Exhibit Photo ${i + 5}`}
+                    label={`Exhibit Photo ${i + 7}`}
                   />
                 )}
               </div>
