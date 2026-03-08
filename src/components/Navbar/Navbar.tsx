@@ -9,7 +9,7 @@ import { useWebHaptics } from "web-haptics/react";
 import logo from "../../../public/logo.svg";
 import logoRings from "../../../public/logo-rings.svg";
 
-type AccentColor = "primary" | "secondary" | "tertiary" | "quaternary";
+type AccentColor = "primary" | "secondary" | "tertiary" | "quaternary" | "gold";
 
 const accent: Record<
   AccentColor,
@@ -38,6 +38,12 @@ const accent: Record<
     dot: "bg-quaternary",
     hover: "hover:bg-quaternary/8",
     border: "hover:border-l-quaternary",
+  },
+  gold: {
+    text: "text-gold",
+    dot: "bg-gold",
+    hover: "hover:bg-gold/8",
+    border: "hover:border-l-gold",
   },
 };
 
@@ -98,7 +104,7 @@ const navItems: NavItem[] = [
         href: "/projects/gold",
         description:
           "Poems celebrating the golden threads of a life well-lived",
-        accent: "secondary",
+        accent: "gold",
         accentLabel: "Poetry",
       },
     ],
