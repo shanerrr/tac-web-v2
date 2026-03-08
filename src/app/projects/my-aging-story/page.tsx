@@ -182,8 +182,64 @@ export default async function MyAgingStory() {
         </div>
       </section>
 
+      {/* ═══════════════════ Exhibit Stations ═══════════════════ */}
+      <section className="relative overflow-hidden bg-quaternary/[0.04] py-24 md:py-32">
+        {/* Watermark */}
+        <div
+          className="pointer-events-none absolute animate-spin-slow select-none"
+          aria-hidden="true"
+          style={{
+            width: "min(70vw, 70vh)",
+            height: "min(70vw, 70vh)",
+            top: "calc(min(70vw, 70vh) / -3)",
+            left: "calc(min(70vw, 70vh) / -3)",
+          }}
+        >
+          <Image
+            src={logo}
+            alt=""
+            fill
+            className="object-contain opacity-[0.03]"
+            style={{ filter: "invert(1)" }}
+          />
+        </div>
+
+        <div className="container relative">
+          <div className="mb-16 text-center">
+            <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
+              Stations
+            </p>
+            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
+              Four ways to{" "}
+              <span className="text-quaternary italic">engage.</span>
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
+          </div>
+
+          <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {stations.map((station, i) => (
+              <div
+                key={station.title}
+                className="group flex flex-col rounded-2xl border border-quaternary/10 bg-white px-6 py-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                <span className="font-sans text-[10px] text-quaternary/35 uppercase tracking-[0.3em]">
+                  0{i + 1}
+                </span>
+                <h3 className="mt-2 font-serif text-foreground text-xl leading-tight md:text-2xl">
+                  {station.title}
+                </h3>
+                <div className="mt-2 h-px w-8 bg-quaternary/20 transition-all duration-300 group-hover:w-12 group-hover:bg-quaternary/40" />
+                <p className="mt-4 font-sans text-foreground/55 text-sm leading-relaxed">
+                  {station.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════════════ Highlights ═══════════════════ */}
-      <section className="bg-quaternary/[0.04] py-20 md:py-24">
+      <section className="py-20 md:py-24">
         <div className="container">
           <p className="mb-14 text-center font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
             Highlights
@@ -280,98 +336,6 @@ export default async function MyAgingStory() {
               </p>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ═══════════════════ Photo Gallery 2 ═══════════════════ */}
-      <section className="py-2">
-        <div className="container">
-          <div className="grid grid-cols-3 gap-3 md:grid-cols-5 md:gap-4">
-            {(gallery.length >= 11
-              ? gallery.slice(6, 11)
-              : Array(5).fill(null)
-            ).map((asset, i) => (
-              <div
-                key={asset?.url ?? `placeholder-b-${i}`}
-                className={`relative overflow-hidden rounded-2xl ${
-                  i === 2
-                    ? "col-span-1 row-span-2 hidden aspect-auto md:block"
-                    : "aspect-square"
-                } ${i >= 3 ? "hidden md:block" : ""}`}
-              >
-                {asset ? (
-                  <Image
-                    src={asset.url}
-                    alt={asset.title || "Exhibit photo"}
-                    fill
-                    className="object-cover"
-                    sizes="(min-width: 768px) 20vw, 33vw"
-                  />
-                ) : (
-                  <PhotoPlaceholder
-                    className="h-full w-full"
-                    label={`Exhibit Photo ${i + 7}`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ Exhibit Stations ═══════════════════ */}
-      <section className="relative overflow-hidden bg-quaternary/[0.04] py-24 md:py-32">
-        {/* Watermark */}
-        <div
-          className="pointer-events-none absolute animate-spin-slow select-none"
-          aria-hidden="true"
-          style={{
-            width: "min(70vw, 70vh)",
-            height: "min(70vw, 70vh)",
-            top: "calc(min(70vw, 70vh) / -3)",
-            left: "calc(min(70vw, 70vh) / -3)",
-          }}
-        >
-          <Image
-            src={logo}
-            alt=""
-            fill
-            className="object-contain opacity-[0.03]"
-            style={{ filter: "invert(1)" }}
-          />
-        </div>
-
-        <div className="container relative">
-          <div className="mb-16 text-center">
-            <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
-              Stations
-            </p>
-            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
-              Four ways to{" "}
-              <span className="text-quaternary italic">engage.</span>
-            </h2>
-            <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
-          </div>
-
-          <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {stations.map((station, i) => (
-              <div
-                key={station.title}
-                className="group flex flex-col rounded-2xl border border-quaternary/10 bg-white px-6 py-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <span className="font-sans text-[10px] text-quaternary/35 uppercase tracking-[0.3em]">
-                  0{i + 1}
-                </span>
-                <h3 className="mt-2 font-serif text-foreground text-xl leading-tight md:text-2xl">
-                  {station.title}
-                </h3>
-                <div className="mt-2 h-px w-8 bg-quaternary/20 transition-all duration-300 group-hover:w-12 group-hover:bg-quaternary/40" />
-                <p className="mt-4 font-sans text-foreground/55 text-sm leading-relaxed">
-                  {station.description}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
