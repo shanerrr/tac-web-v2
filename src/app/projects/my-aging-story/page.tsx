@@ -2,8 +2,10 @@ import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import { getAssetsByTag } from "@tac/lib/contentful";
 import Image from "next/image";
+import ACSELLogo from "../../../../public/ACSEL.png";
+import CSCLogo from "../../../../public/CSC.png";
 import logo from "../../../../public/logo-rings.svg";
-
+import VALogo from "../../../../public/VA.png";
 
 const highlights = [
   {
@@ -52,10 +54,13 @@ const stations = [
   },
 ];
 
-const acknowledgements = [
-  "City of Edmonton",
-  "Alberta Foundation for the Arts",
-  "CSE Consulting",
+const supporters = [
+  { name: "ACSEL", logo: ACSELLogo },
+  { name: "Canada Service Corps", logo: CSCLogo },
+  {
+    name: "Volunteer Alberta",
+    logo: VALogo,
+  },
 ];
 
 // --- Stat ring for impact section ---
@@ -105,28 +110,6 @@ function StatRing({ value }: { value: number }) {
         className="text-quaternary/8"
       />
     </svg>
-  );
-}
-
-// --- Photo placeholder ---
-
-function PhotoPlaceholder({
-  className,
-  label,
-}: {
-  className?: string;
-  label?: string;
-}) {
-  return (
-    <div
-      className={`relative overflow-hidden bg-linear-to-br from-quaternary/6 via-quaternary/3 to-tertiary/4 ${className ?? ""}`}
-    >
-      {label && (
-        <div className="absolute inset-0 flex items-center justify-center font-sans text-quaternary/20 text-sm italic">
-          {label}
-        </div>
-      )}
-    </div>
   );
 }
 
@@ -265,13 +248,10 @@ export default async function MyAgingStory() {
       <section className="py-6">
         <div className="container">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-            {(gallery.length >= 5
-              ? gallery.slice(0, 5)
-              : Array(5).fill(null)
-            ).map((asset, i) => (
+            {gallery.map((asset, i) => (
               <div
                 key={asset?.url ?? `placeholder-a-${i}`}
-                className={`relative overflow-hidden rounded-2xl ${
+                className={`relative overflow-hidden rounded-[10px] ${
                   i === 0
                     ? "col-span-2 aspect-2/0"
                     : i >= 5
@@ -279,24 +259,17 @@ export default async function MyAgingStory() {
                       : "aspect-4/3"
                 }`}
               >
-                {asset ? (
-                  <Image
-                    src={asset.url}
-                    alt={asset.title || "Exhibit photo"}
-                    fill
-                    className="object-cover"
-                    sizes={
-                      i === 0
-                        ? "(min-width: 768px) 66vw, 100vw"
-                        : "(min-width: 768px) 33vw, 50vw"
-                    }
-                  />
-                ) : (
-                  <PhotoPlaceholder
-                    className="h-full w-full"
-                    label={`Exhibit Photo ${i + 1}`}
-                  />
-                )}
+                <Image
+                  src={asset.url}
+                  alt={asset.title || "Exhibit photo"}
+                  fill
+                  className="object-cover"
+                  sizes={
+                    i === 0
+                      ? "(min-width: 768px) 66vw, 100vw"
+                      : "(min-width: 768px) 33vw, 50vw"
+                  }
+                />
               </div>
             ))}
           </div>
@@ -380,7 +353,7 @@ export default async function MyAgingStory() {
               grow old in.
             </p>
             <a
-              href="mailto:hello@theagecollective.ca"
+              href="mailto:info@theagecollective.com"
               className="mt-10 inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-8 py-4 font-sans text-sm text-white uppercase tracking-[0.2em] backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:shadow-lg"
             >
               Get in Touch
@@ -390,25 +363,72 @@ export default async function MyAgingStory() {
       </section>
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <section className="border-quaternary/8 border-t py-16 md:py-20">
-        <div className="container text-center">
-          <p className="mb-10 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
-            Acknowledgements
-          </p>
-          <p className="mx-auto mb-10 max-w-2xl font-sans text-foreground/50 text-sm leading-relaxed">
-            This exhibit was made possible through the generous support and
-            collaboration of our community partners. We are deeply grateful for
-            their belief in the power of storytelling.
-          </p>
-          <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-8 md:gap-12">
-            {acknowledgements.map((name) => (
-              <div
-                key={name}
-                className="flex h-14 items-center justify-center rounded-lg bg-quaternary/4 px-6 font-sans text-foreground/35 text-sm tracking-wide transition-colors duration-200 hover:bg-quaternary/[0.07] hover:text-foreground/50"
-              >
-                {name}
-              </div>
-            ))}
+      <section className="border-quaternary/8 border-t py-24 md:py-32">
+        <div className="container">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
+              Acknowledgements
+            </p>
+            <h2 className="font-serif text-4xl text-foreground leading-tight md:text-5xl">
+              With <span className="text-quaternary italic">gratitude.</span>
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
+          </div>
+
+          {/* Thank-you messages */}
+          <div className="mx-auto mt-14 grid max-w-4xl gap-6 sm:grid-cols-2">
+            <div className="rounded-2xl border border-quaternary/8 bg-quaternary/10 px-7 py-6">
+              <p className="mb-2 font-sans text-[12px] text-quaternary uppercase tracking-[0.3em]">
+                Participants
+              </p>
+              <p className="font-sans text-foreground/80 text-sm leading-relaxed">
+                To everyone who courageously shared their stories &mdash; this
+                exhibit would not be possible without you.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-quaternary/8 bg-quaternary/10 px-7 py-6">
+              <p className="mb-2 font-sans text-[12px] text-quaternary uppercase tracking-[0.3em]">
+                Volunteers
+              </p>
+              <p className="font-sans text-foreground/80 text-sm leading-relaxed">
+                To our incredible volunteers who dedicated their time to set-up,
+                take-down, and event coordination &mdash; thank you.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-quaternary/8 bg-quaternary/10 px-7 py-6 sm:col-span-2">
+              <p className="mb-2 font-sans text-[12px] text-quaternary uppercase tracking-[0.3em]">
+                Community
+              </p>
+              <p className="font-sans text-foreground/80 text-sm leading-relaxed">
+                Thank you to everyone who attended, engaged with the stories,
+                and began conversations about aging in their own communities.
+              </p>
+            </div>
+          </div>
+
+          {/* Funding acknowledgement + logos */}
+          <div className="mx-auto mt-12 max-w-3xl text-center">
+            <div className="mx-auto h-px w-12 bg-quaternary/15" />
+            <p className="mt-8 font-sans text-foreground/80 text-sm leading-relaxed">
+              Funded by Canada Service Corps and Volunteer Alberta through the
+              Alberta Civil Society Emerging Leaders (ACSEL) Microgrant Program.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-10 md:gap-14">
+              {supporters.map((org) => (
+                <div
+                  key={org.name}
+                  className="flex h-16 items-center justify-center grayscale opacity-50 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
+                >
+                  <Image
+                    src={org.logo}
+                    alt={org.name}
+                    width={140}
+                    height={56}
+                    className="h-12 w-auto object-contain md:h-14"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
