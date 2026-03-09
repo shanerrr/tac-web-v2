@@ -105,13 +105,12 @@ export const getAssetsByTag = cache(async (tag: string): Promise<MediaAsset[]> =
   return items
     .map((asset) => {
       const url = asset.fields.file?.url;
-      const contentType = asset.fields.file?.contentType ?? "";
-      if (!url || !contentType.startsWith("video/")) return null;
+      if (!url) return null;
       const sortIndex =
         Number(asset.fields.title?.split("|")[1]) || Number.MAX_SAFE_INTEGER;
       return {
         url: `https:${url}`,
-        type: "video" as const,
+        type: "video" as MediaAsset["type"],
         title: asset.fields.title ?? "",
         sortIndex,
       };

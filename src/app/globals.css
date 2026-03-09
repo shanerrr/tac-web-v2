@@ -18,7 +18,7 @@
 }
 
 .heroTexture {
-  background-image: url("https://www.transparenttextures.com/patterns/snow.png");
+  background-image: url("/textures/snow.png");
 }
 
 /* Layer A — normal direction: visible → fades out AFTER layer B appears */
@@ -154,6 +154,6 @@
 
 body {
   background-color: var(--color-background);
-  background-image: url("https://www.transparenttextures.com/patterns/white-wall-3.png");
+  background-image: url("/textures/white-wall-3.png");
   color: var(--color-foreground);
 }

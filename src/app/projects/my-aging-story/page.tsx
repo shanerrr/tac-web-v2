@@ -410,7 +410,7 @@ export default async function MyAgingStory() {
             <div className="relative overflow-hidden rounded-2xl shadow-2xl">
               <div className="aspect-video">
                 <iframe
-                  src="https://www.youtube.com/embed/unh5yVYfwqE"
+                  src="https://www.youtube-nocookie.com/embed/unh5yVYfwqE"
                   title="My Aging Story exhibit video"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
