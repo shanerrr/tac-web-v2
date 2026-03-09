@@ -54,7 +54,7 @@ export default function ProvinceMap() {
       <Image
         src={canadaMap}
         alt="Map of Canada"
-        className="mx-auto w-full opacity-[0.22]"
+        className="mx-auto w-full opacity-90"
         style={{
           filter:
             "invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(0.85)",

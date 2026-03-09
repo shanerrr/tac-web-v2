@@ -179,7 +179,14 @@ export default function Gold() {
             <p className="mb-6 font-sans text-gold/50 text-sm uppercase tracking-[0.5em]">
               Poetry Collection
             </p>
-            <h1 className="my-6 bg-gradient-to-b from-[#E8D07A] via-gold to-[#8A7230] bg-clip-text font-bold font-serif text-8xl text-transparent leading-none tracking-tight sm:text-9xl lg:text-[11rem]">
+            <h1
+              className="my-6 animate-shimmer bg-clip-text font-bold font-serif text-8xl text-transparent leading-none tracking-tight sm:text-9xl lg:text-[11rem]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(105deg, #8A7230 0%, #C9A84C 25%, #F5E6A3 45%, #FFFDE0 50%, #F5E6A3 55%, #C9A84C 75%, #8A7230 100%)",
+                backgroundSize: "200% 100%",
+              }}
+            >
               GOLD
             </h1>
             <p className="max-w-lg font-light font-sans text-white/50 text-xl sm:text-3xl">
@@ -456,7 +463,7 @@ export default function Gold() {
             {judges.map((judge, i) => (
               <div
                 key={judge.name + i}
-                className="group flex flex-col gap-6 rounded-2xl border border-gold/10 bg-[#141210] p-7 transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5 sm:flex-row sm:gap-8 sm:p-8"
+                className="group flex flex-col gap-6 rounded-2xl border border-gold/10 bg-[#141210] p-7 transition-all duration-300 hover:border-gold/20 hover:shadow-gold/5 hover:shadow-lg sm:flex-row sm:gap-8 sm:p-8"
               >
                 {/* Avatar placeholder */}
                 <div className="flex shrink-0 flex-col items-center sm:pt-1">
@@ -472,10 +479,10 @@ export default function Gold() {
 
                 {/* Text */}
                 <div className="text-center sm:text-left">
-                  <h3 className="font-serif text-xl text-white leading-tight md:text-2xl">
+                  <h3 className="font-serif text-white text-xl leading-tight md:text-2xl">
                     {judge.name}
                   </h3>
-                  <p className="mt-1 font-sans text-xs text-gold/50 uppercase tracking-[0.2em]">
+                  <p className="mt-1 font-sans text-gold/50 text-xs uppercase tracking-[0.2em]">
                     {judge.title}
                   </p>
                   <div className="mx-auto mt-3 h-px w-8 bg-gold/15 transition-all duration-300 group-hover:w-12 group-hover:bg-gold/30 sm:mx-0" />
@@ -530,12 +537,12 @@ export default function Gold() {
             {poets.map((poet, i) => (
               <div
                 key={poet.name + i}
-                className="group flex gap-5 rounded-2xl border border-gold/8 bg-[#0A0A0A] p-5 transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5 sm:gap-6 sm:p-6"
+                className="group flex gap-5 rounded-2xl border border-gold/8 bg-[#0A0A0A] p-5 transition-all duration-300 hover:border-gold/20 hover:shadow-gold/5 hover:shadow-lg sm:gap-6 sm:p-6"
               >
                 {/* Avatar */}
                 <div className="shrink-0 pt-0.5">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold/8 ring-1 ring-gold/15 transition-all duration-300 group-hover:ring-gold/30 sm:h-20 sm:w-20">
-                    <span className="font-serif text-xl text-gold/35 transition-colors duration-300 group-hover:text-gold/60 sm:text-2xl">
+                    <span className="font-serif text-gold/35 text-xl transition-colors duration-300 group-hover:text-gold/60 sm:text-2xl">
                       {poet.name
                         .split(" ")
                         .map((n) => n[0])
@@ -546,11 +553,11 @@ export default function Gold() {
 
                 {/* Text */}
                 <div className="min-w-0">
-                  <h3 className="font-serif text-lg text-foreground leading-tight transition-colors duration-300 group-hover:text-gold md:text-xl">
+                  <h3 className="font-serif text-foreground text-lg leading-tight transition-colors duration-300 group-hover:text-gold md:text-xl">
                     {poet.name}
                   </h3>
                   <div className="mt-2 h-px w-6 bg-gold/15 transition-all duration-300 group-hover:w-10 group-hover:bg-gold/30" />
-                  <p className="mt-3 font-sans text-sm text-foreground/50 leading-relaxed">
+                  <p className="mt-3 font-sans text-foreground/50 text-sm leading-relaxed">
                     {poet.bio}
                   </p>
                 </div>
