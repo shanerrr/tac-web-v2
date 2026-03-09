@@ -1,6 +1,7 @@
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import { getGoldJudes, getGoldPoets } from "@tac/lib/contentful";
+import { ExternalLink, Globe } from "lucide-react";
 import Image from "next/image";
 import anthology from "../../../../public/anthology.png";
 import glocalLogo from "../../../../public/glocal.png";
@@ -41,69 +42,10 @@ const themes = [
 ];
 
 const ageGroups = [
-  { range: "55–64", percentage: 38 },
-  { range: "65–74", percentage: 35 },
-  { range: "75–84", percentage: 20 },
-  { range: "85–95", percentage: 7 },
-];
-
-const poets = [
-  {
-    name: "Jannie Danies",
-    bio: "Jannie Danies is an emerging poet whose work explores the textures of memory, aging, and quiet resilience. Her poems draw from lived experience with tenderness and precision, giving voice to moments often overlooked.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
-  {
-    name: "Poet Name",
-    bio: "Placeholder biography — replace with the poet\u2019s background and their connection to the GOLD anthology.",
-  },
+  { range: "55–64", percentage: 28 },
+  { range: "65–74", percentage: 43 },
+  { range: "75–84", percentage: 23 },
+  { range: "85–95", percentage: 6 },
 ];
 
 export default async function Gold() {
@@ -111,8 +53,6 @@ export default async function Gold() {
     getGoldJudes(),
     getGoldPoets(),
   ]);
-
-  console.log(goldJudges, goldPoets);
 
   return (
     <div className="min-h-dvh w-full overflow-x-clip">
@@ -292,7 +232,7 @@ export default async function Gold() {
                   </span>
                   <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-gold/8">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-gold/80 to-gold"
+                      className="h-full rounded-full bg-linear-to-r from-gold/80 to-gold"
                       style={{ width: `${group.percentage}%` }}
                     />
                   </div>
@@ -433,7 +373,7 @@ export default async function Gold() {
                       </div>
                     )}
                     {/* Subtle bottom gradient */}
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" />
                   </div>
                 </div>
 
@@ -494,33 +434,86 @@ export default async function Gold() {
             </p>
           </div>
 
-          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 lg:grid-cols-2">
-            {poets.map((poet) => (
+          <div className="mx-auto flex max-w-5xl flex-col gap-14 md:gap-18">
+            {goldPoets.map((poet, i) => (
               <div
                 key={poet.name}
-                className="group flex gap-5 rounded-2xl border border-gold/8 bg-[#0A0A0A] p-5 transition-all duration-300 hover:border-gold/20 hover:shadow-gold/5 hover:shadow-lg sm:gap-6 sm:p-6"
+                className={`group relative flex flex-col items-center gap-6 sm:flex-row sm:gap-10 ${i % 2 !== 0 ? "sm:flex-row-reverse" : ""}`}
               >
-                {/* Avatar */}
-                <div className="shrink-0 pt-0.5">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold/8 ring-1 ring-gold/15 transition-all duration-300 group-hover:ring-gold/30 sm:h-20 sm:w-20">
-                    <span className="font-serif text-gold/35 text-xl transition-colors duration-300 group-hover:text-gold/60 sm:text-2xl">
-                      {poet.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </span>
+                {/* Photo */}
+                <div className="relative shrink-0">
+                  <div className="absolute -inset-3 rounded-2xl bg-gold/5 blur-xl transition-all duration-500 group-hover:bg-gold/9 group-hover:blur-2xl" />
+                  <div className="relative h-40 w-40 overflow-hidden rounded-xl shadow-black/40 shadow-xl ring-1 ring-gold/10 transition-all duration-500 group-hover:ring-gold/25 sm:h-48 sm:w-48 md:h-52 md:w-52">
+                    {poet.photo ? (
+                      <Image
+                        src={poet.photo}
+                        alt={`Portrait of ${poet.name}`}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-gold/8">
+                        <span className="font-serif text-4xl text-gold/25">
+                          {poet.name
+                            .split(" ")
+                            .map((n: string) => n[0])
+                            .join("")}
+                        </span>
+                      </div>
+                    )}
+                    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent" />
                   </div>
                 </div>
 
-                {/* Text */}
-                <div className="min-w-0">
-                  <h3 className="font-serif text-foreground text-lg leading-tight transition-colors duration-300 group-hover:text-gold md:text-xl">
+                {/* Info */}
+                <div
+                  className={`text-center ${i % 2 !== 0 ? "sm:text-right" : "sm:text-left"}`}
+                >
+                  <h3 className="font-serif text-2xl text-foreground leading-tight md:text-3xl">
                     {poet.name}
                   </h3>
-                  <div className="mt-2 h-px w-6 bg-gold/15 transition-all duration-300 group-hover:w-10 group-hover:bg-gold/30" />
-                  <p className="mt-3 font-sans text-foreground/50 text-sm leading-relaxed">
-                    {poet.bio}
+                  {poet.poemTitle && (
+                    <div className="mt-1.5 font-medium font-serif text-gold text-sm italic md:text-base">
+                      {poet.poemTitle.split(",").map((t) => (
+                        <p key={t.trim()}>&ldquo;{t.trim()}&rdquo;</p>
+                      ))}
+                    </div>
+                  )}
+                  <div
+                    className={`mx-auto mt-3 h-px w-8 bg-gold/15 transition-all duration-300 group-hover:w-14 group-hover:bg-gold/35 ${i % 2 !== 0 ? "sm:mr-0 sm:ml-auto" : "sm:mx-0"}`}
+                  />
+                  <p className="mt-4 max-w-md font-sans text-foreground/70 text-sm leading-relaxed md:text-base">
+                    {poet.description}
                   </p>
+
+                  {/* Social links */}
+                  {poet.socialMediaLinks &&
+                    Object.keys(poet.socialMediaLinks).length > 0 && (
+                      <div
+                        className={`mt-4 flex items-center gap-3 ${i % 2 !== 0 ? "justify-center sm:justify-end" : "justify-center sm:justify-start"}`}
+                      >
+                        {Object.entries(poet.socialMediaLinks)
+                          .slice(0, 2)
+                          .map(([label, url]) => {
+                            const Icon =
+                              label.toLowerCase() === "website"
+                                ? Globe
+                                : ExternalLink;
+                            return (
+                              <a
+                                key={label}
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group/link flex items-center gap-1.5 rounded-full border border-foreground/10 px-3.5 py-1.5 font-sans text-foreground/40 text-xs capitalize transition-all duration-200 hover:border-foreground/20 hover:text-foreground/70"
+                              >
+                                <Icon size={13} className="shrink-0" />
+                                {label}
+                              </a>
+                            );
+                          })}
+                      </div>
+                    )}
                 </div>
               </div>
             ))}

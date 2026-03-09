@@ -164,18 +164,25 @@ export async function getGoldPoets(): Promise<GoldPoet[]> {
     order: ["-sys.createdAt"],
   });
 
-  return items.map((item) => {
-    const f = item.fields;
-    const photo = f.photo as Asset | undefined;
-    const photoUrl = photo?.fields.file?.url;
+  return items
+    .map((item) => {
+      const f = item.fields;
+      const photo = f.photo as Asset | undefined;
+      const photoUrl = photo?.fields.file?.url;
 
-    return {
-      id: item.sys.id,
-      name: f.name,
-      poemTitle: f.poemTitle,
-      description: f.description,
-      photo: photo ? `https:${photoUrl}` : null,
-      socialMediaLinks: f.socialMediaLinks ?? null,
-    };
-  });
+      return {
+        id: item.sys.id,
+        name: f.name,
+        poemTitle: f.poemTitle,
+        description: f.description,
+        photo: photo ? `https:${photoUrl}` : null,
+        socialMediaLinks:
+          (f.socialMediaLinks as GoldPoet["socialMediaLinks"]) ?? null,
+      };
+    })
+    .sort((a, b) => {
+      const lastA = a.name.split(" ").at(-1) ?? "";
+      const lastB = b.name.split(" ").at(-1) ?? "";
+      return lastA.localeCompare(lastB);
+    });
 }

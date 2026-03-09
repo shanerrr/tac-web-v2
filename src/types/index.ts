@@ -40,5 +40,5 @@ export type GoldPoet = {
   poemTitle: string;
   photo: string | null;
   description: string;
-  socialMediaLinks: object | null;
+  socialMediaLinks: Record<string, string> | null;
 };

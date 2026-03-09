@@ -13,18 +13,17 @@ type Province = {
 
 const provinces: Province[] = [
   { name: "British Columbia", x: 220, y: 1120, count: 60 },
-  { name: "Alberta", x: 450, y: 1100, count: 58 },
-  { name: "Saskatchewan", x: 650, y: 1200, count: 15 },
-  { name: "Manitoba", x: 815, y: 1250, count: 22 },
-  { name: "Ontario", x: 1100, y: 1300, count: 45 },
-  { name: "Quebec", x: 1400, y: 1300, count: 34 },
+  { name: "Alberta", x: 450, y: 1100, count: 35 },
+  { name: "Saskatchewan", x: 650, y: 1200, count: 10 },
+  { name: "Manitoba", x: 815, y: 1250, count: 12 },
+  { name: "Ontario", x: 1100, y: 1300, count: 161 },
+  { name: "Quebec", x: 1400, y: 1300, count: 4 },
   { name: "New Brunswick", x: 1650, y: 1300, count: 5 },
-  { name: "Prince Edward Island", x: 1730, y: 1250, count: 6 },
-  { name: "Nova Scotia", x: 1750, y: 1360, count: 12 },
+  { name: "Prince Edward Island", x: 1730, y: 1250, count: 5 },
+  { name: "Nova Scotia", x: 1750, y: 1360, count: 15 },
   { name: "Newfoundland and Labrador", x: 1620, y: 1000, count: 5 },
-  { name: "Yukon", x: 200, y: 600, count: 60 },
-  { name: "Northwest Territories", x: 490, y: 740, count: 60 },
-  { name: "Nunavut", x: 850, y: 800, count: 60 },
+  { name: "Yukon", x: 200, y: 600, count: 4 },
+  { name: "Northwest Territories", x: 490, y: 740, count: 3 },
 ];
 
 const SVG_W = 2000;
