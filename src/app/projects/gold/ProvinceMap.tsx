@@ -51,16 +51,35 @@ export default function ProvinceMap() {
       className="relative mx-auto w-full max-w-5xl select-none"
       onMouseLeave={handleClear}
     >
-      <Image
-        src={canadaMap}
-        alt="Map of Canada"
-        className="mx-auto w-full opacity-90"
-        style={{
-          filter:
-            "invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(0.85)",
-        }}
-        draggable={false}
-      />
+      {/* Map image with shimmer on outlines */}
+      <div className="relative">
+        <Image
+          src={canadaMap}
+          alt="Map of Canada"
+          className="mx-auto w-full opacity-90"
+          style={{
+            filter:
+              "invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(0.85)",
+          }}
+          draggable={false}
+        />
+        {/* Shimmer masked to map shape */}
+        <div
+          className="pointer-events-none absolute inset-0 animate-shimmer"
+          aria-hidden="true"
+          style={{
+            backgroundImage:
+              "linear-gradient(105deg, transparent 30%, rgba(245,230,163,0.15) 44%, rgba(255,253,224,0.25) 50%, rgba(245,230,163,0.15) 56%, transparent 70%)",
+            backgroundSize: "200% 100%",
+            WebkitMaskImage: `url(${canadaMap.src})`,
+            maskImage: `url(${canadaMap.src})`,
+            WebkitMaskSize: "100% 100%",
+            maskSize: "100% 100%",
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+          }}
+        />
+      </div>
 
       {/* Dot overlay — same viewBox as the SVG map */}
       <svg

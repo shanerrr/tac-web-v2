@@ -217,7 +217,7 @@ export default async function Gold() {
             <div className="relative items-center gap-12 p-8 md:flex md:p-12 lg:gap-16 lg:p-16">
               {/* Cover image */}
               <div className="mx-auto mb-10 w-52 shrink-0 md:mx-0 md:mb-0 md:w-56 lg:w-64">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-black/40 shadow-xl ring-1 ring-gold/15">
+                <div className="relative aspect-3/4 overflow-hidden rounded-lg shadow-black/40 shadow-xl ring-1 ring-gold/15">
                   <Image
                     src={anthology}
                     alt="GOLD anthology cover"
@@ -421,35 +421,48 @@ export default async function Gold() {
             <div className="mx-auto mt-2 h-px w-16 bg-gold/20" />
           </div>
 
-          <div className="mx-auto flex max-w-4xl flex-col gap-6">
-            {judges.map((judge, i) => (
+          <div className="mx-auto flex max-w-5xl flex-col gap-20 md:gap-28">
+            {goldJudges.map((judge, i) => (
               <div
-                key={judge.name + i}
-                className="group flex flex-col gap-6 rounded-2xl border border-gold/10 bg-[#141210] p-7 transition-all duration-300 hover:border-gold/20 hover:shadow-gold/5 hover:shadow-lg sm:flex-row sm:gap-8 sm:p-8"
+                key={judge.name}
+                className={`group relative flex flex-col items-center gap-8 md:flex-row md:gap-14 ${i % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
               >
-                {/* Avatar placeholder */}
-                <div className="flex shrink-0 flex-col items-center sm:pt-1">
-                  <div className="flex h-28 w-28 items-center justify-center rounded-full bg-gold/8 ring-2 ring-gold/15 sm:h-36 sm:w-36">
-                    <span className="font-serif text-3xl text-gold/40 sm:text-4xl">
-                      {judge.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </span>
+                {/* Floating photo */}
+                <div className="relative shrink-0">
+                  {/* Ambient glow behind photo */}
+                  <div className="absolute -inset-4 rounded-3xl bg-gold/10 blur-2xl transition-all duration-500 group-hover:bg-gold/20 group-hover:blur-3xl" />
+                  <div className="relative h-56 w-56 overflow-hidden rounded-2xl shadow-2xl shadow-black/50 ring-1 ring-gold/15 transition-all duration-500 group-hover:ring-gold/30 sm:h-64 sm:w-64 md:h-72 md:w-72">
+                    {judge.photo ? (
+                      <Image
+                        src={judge.photo}
+                        alt={`Portrait of ${judge.name}`}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-gold/8">
+                        <span className="font-serif text-5xl text-gold/30">
+                          {judge.name.split(" ").map((n: string) => n[0]).join("")}
+                        </span>
+                      </div>
+                    )}
+                    {/* Subtle bottom gradient */}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                   </div>
                 </div>
 
-                {/* Text */}
-                <div className="text-center sm:text-left">
-                  <h3 className="font-serif text-white text-xl leading-tight md:text-2xl">
+                {/* Bio */}
+                <div
+                  className={`text-center ${i % 2 !== 0 ? "md:text-right" : "md:text-left"}`}
+                >
+                  <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
                     {judge.name}
                   </h3>
-                  <p className="mt-1 font-sans text-gold/50 text-xs uppercase tracking-[0.2em]">
-                    {judge.title}
-                  </p>
-                  <div className="mx-auto mt-3 h-px w-8 bg-gold/15 transition-all duration-300 group-hover:w-12 group-hover:bg-gold/30 sm:mx-0" />
-                  <p className="mt-4 font-sans text-sm text-white/45 leading-relaxed md:text-[15px]">
-                    {judge.bio}
+                  <div
+                    className={`mx-auto mt-3 h-px w-10 bg-gold/20 transition-all duration-300 group-hover:w-16 group-hover:bg-gold/40 ${i % 2 !== 0 ? "md:mr-0 md:ml-auto" : "md:mx-0"}`}
+                  />
+                  <p className="mt-5 max-w-lg font-sans text-[15px] text-white/50 leading-relaxed md:text-base">
+                    {judge.description}
                   </p>
                 </div>
               </div>
