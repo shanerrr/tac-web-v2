@@ -20,6 +20,11 @@ const projectLinks = [
   { label: "GOLD", href: "/projects/gold" },
 ];
 
+const policyLinks = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Use", href: "/terms" },
+];
+
 const socialLinks = [
   { label: "Email", href: "mailto:info@theagecollective.com", icon: EmailIcon },
   {
@@ -51,7 +56,7 @@ export default function Footer({
 }) {
   return (
     <footer className={`text-white ${bgColor} ${textureClass}`}>
-      <div className="container grid grid-cols-2 gap-x-6 gap-y-12 py-16 lg:grid-cols-[2fr_1fr_1fr_1fr]">
+      <div className="container grid grid-cols-2 gap-x-6 gap-y-12 py-16 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
         <div className="col-span-2 flex flex-col gap-2 lg:col-span-1">
           <Link href="/" className="flex flex-col justify-center gap-3">
             <Image
@@ -95,6 +100,25 @@ export default function Footer({
           </h3>
           <ul className="flex flex-col gap-3">
             {projectLinks.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className="font-sans text-sm text-white/70 transition-colors duration-200 hover:text-white"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Policies */}
+        <div>
+          <h3 className="mb-5 font-normal font-sans text-[0.6rem] text-white uppercase tracking-[0.25em]">
+            Policies
+          </h3>
+          <ul className="flex flex-col gap-3">
+            {policyLinks.map((link) => (
               <li key={link.label}>
                 <Link
                   href={link.href}
