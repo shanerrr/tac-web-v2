@@ -7,7 +7,7 @@
     --color-secondary: #d96900;
     --color-tertiary: #afa229;
     --color-quaternary: #bc8417;
-    --color-gold: #C9A84C;
+    --color-gold: #a67c00;
     --font-sans: var(--font-inter-sans);
     --font-serif: var(--font-old-standard-serif);
     --animate-people-a: people-a 12s ease-in-out infinite;
@@ -18,129 +18,131 @@
 }
 
 .heroTexture {
-  background-image: url("https://www.transparenttextures.com/patterns/snow.png");
+    background-image: url("https://www.transparenttextures.com/patterns/snow.png");
 }
 
 /* Layer A — normal direction: visible → fades out AFTER layer B appears */
 @keyframes people-a {
-  0% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 1;
+    }
 
-  40% {
-    opacity: 1;
-  }
+    40% {
+        opacity: 1;
+    }
 
-  /* B starts fading in at 40% */
-  52% {
-    opacity: 0;
-  }
+    /* B starts fading in at 40% */
+    52% {
+        opacity: 0;
+    }
 
-  /* A fully gone after B is visible */
-  88% {
-    opacity: 0;
-  }
+    /* A fully gone after B is visible */
+    88% {
+        opacity: 0;
+    }
 
-  100% {
-    opacity: 1;
-  }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Layer B — flipped direction: fades in while A still showing → fades out */
 @keyframes people-b {
-  0% {
-    opacity: 0;
-  }
+    0% {
+        opacity: 0;
+    }
 
-  40% {
-    opacity: 0;
-  }
+    40% {
+        opacity: 0;
+    }
 
-  /* starts fading in as A begins to fade */
-  52% {
-    opacity: 1;
-  }
+    /* starts fading in as A begins to fade */
+    52% {
+        opacity: 1;
+    }
 
-  /* fully visible, A now gone */
-  88% {
-    opacity: 1;
-  }
+    /* fully visible, A now gone */
+    88% {
+        opacity: 1;
+    }
 
-  100% {
-    opacity: 0;
-  }
+    100% {
+        opacity: 0;
+    }
 }
 
 /* Shuffle A — starts front-right, quick swap, long hold, quick swap back */
 @keyframes shuffle-a {
-  0%,
-  40% {
-    translate: 20% 0%;
-    rotate: 2deg;
-    z-index: 10;
-  }
 
-  48%,
-  88% {
-    translate: -20% 5%;
-    rotate: -3deg;
-    z-index: 0;
-  }
+    0%,
+    40% {
+        translate: 20% 0%;
+        rotate: 2deg;
+        z-index: 10;
+    }
 
-  96%,
-  100% {
-    translate: 20% 0%;
-    rotate: 2deg;
-    z-index: 10;
-  }
+    48%,
+    88% {
+        translate: -20% 5%;
+        rotate: -3deg;
+        z-index: 0;
+    }
+
+    96%,
+    100% {
+        translate: 20% 0%;
+        rotate: 2deg;
+        z-index: 10;
+    }
 }
 
 /* Shuffle B — starts back-left, quick swap, long hold, quick swap back */
 @keyframes shuffle-b {
-  0%,
-  40% {
-    translate: -20% 5%;
-    rotate: -3deg;
-    z-index: 0;
-  }
 
-  48%,
-  88% {
-    translate: 20% 0%;
-    rotate: 2deg;
-    z-index: 10;
-  }
+    0%,
+    40% {
+        translate: -20% 5%;
+        rotate: -3deg;
+        z-index: 0;
+    }
 
-  96%,
-  100% {
-    translate: -20% 5%;
-    rotate: -3deg;
-    z-index: 0;
-  }
+    48%,
+    88% {
+        translate: 20% 0%;
+        rotate: 2deg;
+        z-index: 10;
+    }
+
+    96%,
+    100% {
+        translate: -20% 5%;
+        rotate: -3deg;
+        z-index: 0;
+    }
 }
 
 @keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
 
-  to {
-    transform: rotate(360deg);
-  }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% center;
-  }
+    0% {
+        background-position: -200% center;
+    }
 
-  100% {
-    background-position: 200% center;
-  }
+    100% {
+        background-position: 200% center;
+    }
 }
 
 @utility animate-shimmer {
-  animation: shimmer 4s ease-in-out infinite;
+    animation: shimmer 4s ease-in-out infinite;
 }
 
 @utility container {
@@ -153,7 +155,7 @@
 }
 
 body {
-  background-color: var(--color-background);
-  background-image: url("https://www.transparenttextures.com/patterns/white-wall-3.png");
-  color: var(--color-foreground);
+    background-color: var(--color-background);
+    background-image: url("https://www.transparenttextures.com/patterns/white-wall-3.png");
+    color: var(--color-foreground);
 }

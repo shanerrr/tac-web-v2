@@ -1,4 +1,5 @@
 import Navbar from "@tac/components/Navbar";
+import PageHero from "@tac/components/PageHero";
 import Image from "next/image";
 import anthology from "../../../../public/anthology.png";
 import logo from "../../../../public/logo-rings.svg";
@@ -134,75 +135,30 @@ export default function Gold() {
       />
 
       {/* ═══════════════════ Hero ═══════════════════ */}
-      <div className="-mt-27 bg-[#0A0A0A] md:-mt-32">
-        <section className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden pt-27 pb-27 text-center md:pt-32 md:pb-32">
-          {/* Warm radial glow */}
-          <div
-            className="pointer-events-none absolute inset-0 select-none"
-            aria-hidden="true"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 55%)",
-            }}
-          />
-          {/* Subtle vignette */}
-          <div
-            className="pointer-events-none absolute inset-0 select-none"
-            aria-hidden="true"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)",
-            }}
-          />
-
-          {/* Watermark */}
-          <div
-            className="pointer-events-none absolute animate-spin-slow select-none"
-            aria-hidden="true"
-            style={{
-              width: "min(110vw, 110vh)",
-              height: "min(110vw, 110vh)",
-              bottom: "calc(min(110vw, 110vh) / -2)",
-              right: "calc(min(110vw, 110vh) / 6)",
-            }}
-          >
-            <Image
-              src={logo}
-              alt=""
-              fill
-              className="object-contain opacity-[0.04]"
-            />
-          </div>
-
-          {/* Content */}
-          <div className="relative z-10 flex flex-col items-center">
-            <p className="mb-6 font-sans text-gold/50 text-sm uppercase tracking-[0.5em]">
-              Poetry Collection
-            </p>
-            <h1
-              className="my-6 animate-shimmer bg-clip-text font-bold font-serif text-8xl text-transparent leading-none tracking-tight sm:text-9xl lg:text-[11rem]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(105deg, #8A7230 0%, #C9A84C 25%, #F5E6A3 45%, #FFFDE0 50%, #F5E6A3 55%, #C9A84C 75%, #8A7230 100%)",
-                backgroundSize: "200% 100%",
-              }}
-            >
-              GOLD
-            </h1>
-            <p className="max-w-lg font-light font-sans text-white/50 text-xl sm:text-3xl">
-              Poems celebrating the golden threads of a life well&#8209;lived.
-            </p>
-          </div>
-
-          {/* Scroll cue */}
-          <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
-            <span className="font-sans text-gold/40 text-xs uppercase tracking-[0.4em]">
-              scroll
-            </span>
-            <div className="h-5 w-px bg-gold/20" />
-          </div>
-        </section>
-      </div>
+      <PageHero
+        accentLabel="Poetry Collection"
+        title="GOLD"
+        subtitle={
+          <>Poems celebrating the golden threads of a life well&#8209;lived.</>
+        }
+        bgClass="bg-[#0A0A0A]"
+        noTexture
+        fullHeight
+        watermarkRight="calc(min(110vw, 110vh) / 6)"
+        watermarkOpacity="opacity-[0.04]"
+        glowOverlay="radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 55%)"
+        vignetteOverlay="radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)"
+        accentLabelClassName="text-gold/50"
+        titleClassName="animate-shimmer bg-clip-text text-transparent"
+        titleStyle={{
+          backgroundImage:
+            "linear-gradient(105deg, #8A7230 0%, #C9A84C 25%, #F5E6A3 45%, #FFFDE0 50%, #F5E6A3 55%, #C9A84C 75%, #8A7230 100%)",
+          backgroundSize: "200% 100%",
+        }}
+        subtitleClassName="max-w-lg text-white/50 text-xl sm:text-3xl"
+        scrollCueClassName="text-gold/40"
+        scrollLineClassName="bg-gold/20"
+      />
 
       {/* ═══════════════════ About the Collection ═══════════════════ */}
       <section className="container py-24 md:py-32">

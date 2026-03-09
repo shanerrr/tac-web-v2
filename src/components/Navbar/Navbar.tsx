@@ -211,13 +211,13 @@ export default function Navbar({
           }`}
         >
           <div className="flex items-center justify-between">
-            <Link href="/" className="group/logo flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3">
               <Image
                 src={logo}
                 alt="The Age Collective logo"
                 width={64}
                 height={64}
-                className="h-11 w-11 shrink-0 rounded-full transition-transform duration-500 group-hover/logo:scale-105 md:h-16 md:w-16"
+                className="h-11 w-11 shrink-0 rounded-full md:h-16 md:w-16"
               />
               <div className="flex flex-col justify-center font-normal text-lg leading-none md:h-16 md:text-2xl">
                 <span>the age</span>

@@ -132,6 +132,9 @@ export default async function MyAgingStory() {
         subtitle="An interactive exhibit exploring personal aging narratives"
         bgClass="bg-quaternary"
         watermarkRight="calc(min(110vw, 110vh) / 4)"
+        glowOverlay="radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 55%)"
+        vignetteOverlay="radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)"
+        fullHeight
       />
 
       {/* ═══════════════════ About the Exhibit ═══════════════════ */}
