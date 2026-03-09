@@ -3,6 +3,7 @@ import PageHero from "@tac/components/PageHero";
 import { getGoldJudes, getGoldPoets } from "@tac/lib/contentful";
 import Image from "next/image";
 import anthology from "../../../../public/anthology.png";
+import glocalLogo from "../../../../public/glocal.png";
 import logo from "../../../../public/logo-rings.svg";
 import ProvinceMap from "./ProvinceMap";
 
@@ -44,24 +45,6 @@ const ageGroups = [
   { range: "65–74", percentage: 35 },
   { range: "75–84", percentage: 20 },
   { range: "85–95", percentage: 7 },
-];
-
-const judges = [
-  {
-    name: "Trevor Hughes",
-    title: "Poet & Writer",
-    bio: "Trevor\u2019s first encounter with live poetry readings was when, as a teenager, he heard Brian Patten, Roger McGough and Adrian Henri, the so-called Mersey Poets, performing in his native Liverpool in the late 1960s. Trevor has been hooked ever since. He particularly values the way people share thoughts, feelings and experiences, and reveal their vulnerabilities in the best words they can find. Trevor started to write poetry seriously in his forties, attending workshops with well-established writers, which helped him considerably. In 2017, he published a sequence of poems, \u2018belongings\u2019, in memory of his son, Peter, who died aged 25. Trevor\u2019s main feeling about aging is to try and stay as active and engaged with other people as possible, whatever increasing hardships one faces.",
-  },
-  {
-    name: "Judge Name",
-    title: "Title / Affiliation",
-    bio: "Placeholder biography \u2014 replace with the real judge\u2019s background, their connection to poetry and aging, and what they bring to the GOLD selection process.",
-  },
-  {
-    name: "Judge Name",
-    title: "Title / Affiliation",
-    bio: "Placeholder biography \u2014 replace with the real judge\u2019s background, their connection to poetry and aging, and what they bring to the GOLD selection process.",
-  },
 ];
 
 const poets = [
@@ -288,7 +271,7 @@ export default async function Gold() {
       </section>
 
       {/* ═══════════════════ Reach & Demographics ═══════════════════ */}
-      <section className="relative overflow-hidden bg-[#0A0A0A] py-18 md:py-24">
+      <section className="relative overflow-hidden bg-[#0A0A0A] pb-18 md:pb-24">
         <div className="container relative">
           {/* Interactive province map */}
           <ProvinceMap />
@@ -442,7 +425,10 @@ export default async function Gold() {
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-gold/8">
                         <span className="font-serif text-5xl text-gold/30">
-                          {judge.name.split(" ").map((n: string) => n[0]).join("")}
+                          {judge.name
+                            .split(" ")
+                            .map((n: string) => n[0])
+                            .join("")}
                         </span>
                       </div>
                     )}
@@ -509,9 +495,9 @@ export default async function Gold() {
           </div>
 
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 lg:grid-cols-2">
-            {poets.map((poet, i) => (
+            {poets.map((poet) => (
               <div
-                key={poet.name + i}
+                key={poet.name}
                 className="group flex gap-5 rounded-2xl border border-gold/8 bg-[#0A0A0A] p-5 transition-all duration-300 hover:border-gold/20 hover:shadow-gold/5 hover:shadow-lg sm:gap-6 sm:p-6"
               >
                 {/* Avatar */}
@@ -538,6 +524,203 @@ export default async function Gold() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ Acknowledgements ═══════════════════ */}
+      <section className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
+        {/* Watermark */}
+        <div
+          className="pointer-events-none absolute animate-spin-slow select-none"
+          aria-hidden="true"
+          style={{
+            width: "min(50vw, 50vh)",
+            height: "min(50vw, 50vh)",
+            bottom: "calc(min(50vw, 50vh) / -3)",
+            right: "calc(min(50vw, 50vh) / -4)",
+          }}
+        >
+          <Image
+            src={logo}
+            alt=""
+            fill
+            className="object-contain opacity-[0.03]"
+          />
+        </div>
+
+        {/* Ambient glow */}
+        <div
+          className="pointer-events-none absolute inset-0 select-none"
+          aria-hidden="true"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 20%, rgba(201,168,76,0.04) 0%, transparent 55%)",
+          }}
+        />
+
+        <div className="container relative">
+          {/* Section header */}
+          <div className="mx-auto mb-20 max-w-3xl text-center">
+            <p className="mb-5 font-sans text-gold/60 text-xs uppercase tracking-[0.4em]">
+              Thank You
+            </p>
+            <h2 className="font-serif text-3xl text-white leading-tight md:text-4xl lg:text-5xl">
+              Acknow&shy;ledgements
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-gold/20" />
+            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-white/45 leading-relaxed md:text-lg">
+              We are grateful for the collective effort that made the GOLD
+              Poetry Project possible.
+            </p>
+          </div>
+
+          {/* Acknowledgement blocks */}
+          <div className="mx-auto max-w-4xl space-y-16 md:space-y-20">
+            {/* Poets */}
+            <div className="group">
+              <div className="flex items-baseline gap-4">
+                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                  03
+                </span>
+                <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
+                  Our GOLD <span className="text-gold italic">Poets</span>
+                </h3>
+              </div>
+              <div className="mt-2 ml-8 h-px w-10 bg-gold/15" />
+              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-white/45 leading-relaxed md:text-base">
+                Thank you for sharing your words, your stories, and your
+                honesty. Your work reflects the many ways aging is lived and
+                understood, and this project exists because of you. Whether or
+                not your poem appears in this anthology, your enthusiasm to
+                reflect, create, and contribute is what made this project
+                meaningful.
+              </p>
+            </div>
+
+            {/* Judges */}
+            <div className="group">
+              <div className="flex items-baseline gap-4">
+                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                  02
+                </span>
+                <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
+                  Our GOLD <span className="text-gold italic">Judges</span>
+                </h3>
+              </div>
+              <div className="mt-2 ml-8 h-px w-10 bg-gold/15" />
+              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-white/45 leading-relaxed md:text-base">
+                Thank you for the care, time, and thoughtfulness you brought to
+                reviewing and selecting the poems for this anthology.
+              </p>
+            </div>
+
+            {/* Community */}
+            <div className="group">
+              <div className="flex items-baseline gap-4">
+                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                  04
+                </span>
+                <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
+                  Our GOLD <span className="text-gold italic">Community</span>
+                </h3>
+              </div>
+              <div className="mt-2 ml-8 h-px w-10 bg-gold/15" />
+              <div className="mt-5 ml-8 max-w-3xl space-y-5 font-sans text-[15px] text-white/45 leading-relaxed md:text-base">
+                <p>
+                  Thank you to the organizations, groups, collectives, and
+                  individuals who shared our poetry calls, amplified the voices
+                  of older adults, and helped this project reach across
+                  communities, disciplines, provinces, and territories across
+                  Canada.
+                </p>
+                <p>
+                  We are especially grateful to organizations committed to arts,
+                  storytelling, justice, aging, and community-building, whose
+                  values align with the spirit of the GOLD Poetry Project. Your
+                  support affirmed that poetry is not only an art form, but a
+                  method of connection, resistance, remembrance, and care.
+                </p>
+              </div>
+
+              {/* Organization grid */}
+              <div className="mt-10 ml-8 grid max-w-3xl grid-cols-1 gap-x-12 gap-y-3 sm:grid-cols-2">
+                {[
+                  "The League of Canadian Poets",
+                  "Darthmouth Seniors' Services Centre",
+                  "Mill Woods Seniors Association",
+                  "SageWell Association",
+                  "Entente Education Canada (formerly RTOERO)",
+                  "New Hope",
+                  "Edmonton Seniors Coordinating Council",
+                  "Ontario Poetry Society",
+                  "Healthy Aging CORE BC",
+                  "Caregivers Nova Scotia",
+                  "Canadian Coalition for Seniors' Mental Health (CCSMH)",
+                  "Aging Together As Community - Haliburton Highlands",
+                  "Canadian Coalition Against Ageism (CCAA)",
+                  "Tower Poetry Society",
+                  "National Institute on Ageing",
+                  "St Albert Library",
+                  "Canadian Network for the Prevention of Elder Abuse (CNPEA)",
+                  "Aldershot News",
+                  "Abuse (CNPEA)",
+                  "Brokenhead Writer's Circle",
+                  "ElderActive",
+                  "Seniors Take Action Coalition of Richmond County",
+                  "St. Elias Seniors and Elders Society (SESES)",
+                  "Writers Guild of Alberta",
+                  "Age Friendly Saskatchewan",
+                  "Sooke Writers Collective",
+                  "Superannuated Teachers of Saskatchewan",
+                  "Stroll of Poets",
+                  "Manitoba Possible",
+                  "Saskatchewan Writer’s Guild",
+                  "Intergenerational Longevity Centre Canada",
+                  "Comox Valley Writers Society",
+                  "Aging Well Nova Scotia",
+                  "Burnaby Writers Society",
+                  "Ukrainian-Canadian Cultural Society of Vancouver Island",
+                  "Sudbury Writers' Guild",
+                  "NorthWords NWT",
+                  "Yukon Words Society",
+                  "Inter-Cultural Association of Greater Victoria",
+                ].map((org) => (
+                  <p
+                    key={org}
+                    className="font-sans text-sm text-white/35 leading-relaxed transition-colors duration-200 hover:text-gold/60"
+                  >
+                    {org}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            {/* Funders */}
+            <div className="group">
+              <div className="flex items-baseline gap-4">
+                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                  01
+                </span>
+                <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
+                  Our GOLD <span className="text-gold italic">Funders</span>
+                </h3>
+              </div>
+              <div className="mt-2 ml-8 h-px w-10 bg-gold/15" />
+              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-white/45 leading-relaxed md:text-base">
+                We are grateful to the GLOCAL Foundation for supporting this
+                work through the CANCONNECT Grant and for believing in the power
+                of connection, storytelling, and community.
+              </p>
+              <div className="mt-8 ml-8">
+                <Image
+                  src={glocalLogo}
+                  alt="Glocal logo"
+                  width={140}
+                  height={50}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
