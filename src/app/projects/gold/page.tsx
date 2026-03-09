@@ -1,3 +1,4 @@
+import CountUp from "@tac/components/CountUp";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import ProvinceMap from "@tac/components/ProvinceMap";
@@ -194,14 +195,16 @@ export default async function Gold() {
             Highlights
           </p>
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-gold/10">
-            {highlights.map((stat) => (
+            {highlights.map((stat, i) => (
               <div
                 key={stat.label}
                 className="flex flex-col items-center text-center"
               >
-                <span className="font-serif text-7xl text-gold leading-none tracking-tight md:text-8xl">
-                  {stat.value}
-                </span>
+                <CountUp
+                  value={Number(stat.value)}
+                  className="font-serif text-7xl text-gold leading-none tracking-tight md:text-8xl"
+                  delay={i * 150}
+                />
                 <span className="mt-3 font-medium font-sans text-sm text-white/50 uppercase tracking-[0.2em]">
                   {stat.label}
                 </span>

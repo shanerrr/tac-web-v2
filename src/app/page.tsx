@@ -1,6 +1,7 @@
 import Navbar from "@tac/components/Navbar";
 import { MoveRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import heroImage from "../../public/landingHero.png";
 import people from "../../public/landingHeroPeople.png";
 import peopleLayer from "../../public/landingHeroPeopleLayer.png";
@@ -15,10 +16,13 @@ export default function Home() {
             <span className="italic">We're all aging. </span>
             <span className="font-bold">Let's talk about it.</span>
           </h1>
-          <p className="flex items-center justify-center gap-3 pt-4 font-extralight font-sans text-primary text-xl italic tracking-[-2px] sm:text-2xl md:text-3xl lg:text-4xl">
+          <Link
+            href="/about"
+            className="group inline-flex items-center justify-center gap-3 pt-4 font-extralight font-sans text-primary text-xl italic tracking-[-2px] transition-colors duration-300 hover:text-foreground sm:text-2xl md:text-3xl lg:text-4xl"
+          >
             Click to learn more.
-            <MoveRight className="h-6 w-6 sm:h-8.5 sm:w-8.5" />
-          </p>
+            <MoveRight className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 sm:h-8.5 sm:w-8.5" />
+          </Link>
         </div>
       </section>
       <section className="relative flex-4 md:flex-3">

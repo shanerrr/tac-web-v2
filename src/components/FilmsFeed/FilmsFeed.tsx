@@ -67,6 +67,8 @@ const FilmCard = memo(function FilmCard({
                     sizes="(min-width: 896px) 896px, 90vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     alt={`Thumbnail for ${film.title}`}
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8mckwDwAFRwHiBonBjAAAAABJRU5ErkJggg=="
                     priority={priority}
                   />
                 )}
