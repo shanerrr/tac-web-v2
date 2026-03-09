@@ -2,7 +2,7 @@ import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import ProvinceMap from "@tac/components/ProvinceMap";
 import { getGoldJudges, getGoldPoets } from "@tac/lib/contentful";
-import { ExternalLink, Globe } from "lucide-react";
+import { ExternalLink, Globe, Mail } from "lucide-react";
 import Image from "next/image";
 import anthology from "../../../../public/anthology.png";
 import glocalLogo from "../../../../public/glocal.png";
@@ -145,6 +145,7 @@ export default async function Gold() {
                     src={anthology}
                     alt="GOLD anthology cover"
                     fill
+                    sizes="(min-width: 1024px) 256px, (min-width: 768px) 224px, 208px"
                     className="object-cover"
                   />
                 </div>
@@ -360,6 +361,7 @@ export default async function Gold() {
                         src={judge.photo}
                         alt={`Portrait of ${judge.name}`}
                         fill
+                        sizes="(min-width: 768px) 288px, (min-width: 640px) 256px, 224px"
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     ) : (
@@ -399,26 +401,6 @@ export default async function Gold() {
 
       {/* ═══════════════════ The GOLD Poets ═══════════════════ */}
       <section className="relative overflow-hidden py-24 md:py-32">
-        {/* Watermark */}
-        <div
-          className="pointer-events-none absolute animate-spin-slow select-none"
-          aria-hidden="true"
-          style={{
-            width: "min(70vw, 70vh)",
-            height: "min(70vw, 70vh)",
-            top: "calc(min(70vw, 70vh) / -3)",
-            right: "calc(min(70vw, 70vh) / -3)",
-          }}
-        >
-          <Image
-            src={logo}
-            alt=""
-            fill
-            className="object-contain opacity-[0.03]"
-            style={{ filter: "invert(1)" }}
-          />
-        </div>
-
         <div className="container relative">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
@@ -449,6 +431,7 @@ export default async function Gold() {
                         src={poet.photo}
                         alt={`Portrait of ${poet.name}`}
                         fill
+                        sizes="(min-width: 768px) 208px, (min-width: 640px) 192px, 160px"
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     ) : (
@@ -495,16 +478,26 @@ export default async function Gold() {
                         {Object.entries(poet.socialMediaLinks)
                           .slice(0, 2)
                           .map(([label, url]) => {
-                            const Icon =
-                              label.toLowerCase() === "website"
+                            const key = label.toLowerCase();
+                            const isEmail =
+                              key === "email" || url.startsWith("mailto:");
+                            const Icon = isEmail
+                              ? Mail
+                              : key === "website"
                                 ? Globe
                                 : ExternalLink;
+                            const href =
+                              isEmail && !url.startsWith("mailto:")
+                                ? `mailto:${url}`
+                                : url;
                             return (
                               <a
                                 key={label}
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href={href}
+                                {...(!isEmail && {
+                                  target: "_blank",
+                                  rel: "noopener noreferrer",
+                                })}
                                 className="group/link flex items-center gap-1.5 rounded-full border border-foreground/10 px-3.5 py-1.5 font-sans text-foreground/40 text-xs capitalize transition-all duration-200 hover:border-foreground/20 hover:text-foreground/70"
                               >
                                 <Icon size={13} className="shrink-0" />
@@ -523,25 +516,6 @@ export default async function Gold() {
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
       <section className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
-        {/* Watermark */}
-        <div
-          className="pointer-events-none absolute animate-spin-slow select-none"
-          aria-hidden="true"
-          style={{
-            width: "min(50vw, 50vh)",
-            height: "min(50vw, 50vh)",
-            bottom: "calc(min(50vw, 50vh) / -3)",
-            right: "calc(min(50vw, 50vh) / -4)",
-          }}
-        >
-          <Image
-            src={logo}
-            alt=""
-            fill
-            className="object-contain opacity-[0.03]"
-          />
-        </div>
-
         {/* Ambient glow */}
         <div
           className="pointer-events-none absolute inset-0 select-none"

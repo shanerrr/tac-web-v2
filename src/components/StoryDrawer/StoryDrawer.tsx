@@ -184,7 +184,7 @@ export default function StoryDrawer({
                     <Image
                       src={story.portrait}
                       fill
-                      sizes="320px"
+                      sizes="400px"
                       className="object-cover"
                       alt={`Portrait of ${story.name}`}
                     />

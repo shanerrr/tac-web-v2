@@ -19,7 +19,7 @@ export default function GoldLayout({ children }: { children: ReactNode }) {
   return (
     <main>
       {children}
-      <Footer bgColor="bg-[#0A0A0A]" />
+      <Footer bgColor="bg-[#0A0A0A]" textureClass="" />
     </main>
   );
 }
