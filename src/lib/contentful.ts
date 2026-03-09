@@ -1,5 +1,5 @@
 import { formatDate } from "@tac/lib/utils";
-import type { Film, Story } from "@tac/types";
+import type { Film, GoldJudge, GoldPoet, Story } from "@tac/types";
 import type { Asset, EntryFieldTypes, EntrySkeletonType } from "contentful";
 import { createClient } from "contentful";
 
@@ -34,6 +34,26 @@ interface FilmSkeleton extends EntrySkeletonType {
     slug: EntryFieldTypes.Text;
     banner: EntryFieldTypes.AssetLink;
     youtubeUrl: EntryFieldTypes.Text;
+  };
+}
+
+interface GoldJudgesSkeleton extends EntrySkeletonType {
+  contentTypeId: "goldJudges";
+  fields: {
+    name: EntryFieldTypes.Text;
+    description: EntryFieldTypes.Text;
+    photo: EntryFieldTypes.AssetLink;
+  };
+}
+
+interface GoldPoetsSkeleton extends EntrySkeletonType {
+  contentTypeId: "goldPoets";
+  fields: {
+    name: EntryFieldTypes.Text;
+    description: EntryFieldTypes.Text;
+    photo: EntryFieldTypes.AssetLink;
+    poemTitle: EntryFieldTypes.Text;
+    socialMediaLinks: EntryFieldTypes.Object;
   };
 }
 
@@ -114,6 +134,48 @@ export async function getFilms(): Promise<Film[]> {
       slug: f.slug ?? item.sys.id,
       banner: bannerUrl ? `https:${bannerUrl}` : null,
       youtubeUrl: f.youtubeUrl,
+    };
+  });
+}
+
+export async function getGoldJudes(): Promise<GoldJudge[]> {
+  const { items } = await client.getEntries<GoldJudgesSkeleton>({
+    content_type: "goldJudges",
+    order: ["-sys.createdAt"],
+  });
+
+  return items.map((item) => {
+    const f = item.fields;
+    const photo = f.photo as Asset | undefined;
+    const photoUrl = photo?.fields.file?.url;
+
+    return {
+      id: item.sys.id,
+      name: f.name,
+      description: f.description,
+      photo: photo ? `https:${photoUrl}` : null,
+    };
+  });
+}
+
+export async function getGoldPoets(): Promise<GoldPoet[]> {
+  const { items } = await client.getEntries<GoldPoetsSkeleton>({
+    content_type: "goldPoets",
+    order: ["-sys.createdAt"],
+  });
+
+  return items.map((item) => {
+    const f = item.fields;
+    const photo = f.photo as Asset | undefined;
+    const photoUrl = photo?.fields.file?.url;
+
+    return {
+      id: item.sys.id,
+      name: f.name,
+      poemTitle: f.poemTitle,
+      description: f.description,
+      photo: photo ? `https:${photoUrl}` : null,
+      socialMediaLinks: f.socialMediaLinks ?? null,
     };
   });
 }

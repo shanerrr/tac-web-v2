@@ -26,3 +26,19 @@ export type Film = {
   banner: string | null;
   youtubeUrl?: string | null;
 };
+
+export type GoldJudge = {
+  id: string;
+  name: string;
+  photo: string | null;
+  description: string;
+};
+
+export type GoldPoet = {
+  id: string;
+  name: string;
+  poemTitle: string;
+  photo: string | null;
+  description: string;
+  socialMediaLinks: object | null;
+};

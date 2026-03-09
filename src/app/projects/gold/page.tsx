@@ -1,11 +1,10 @@
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
+import { getGoldJudes, getGoldPoets } from "@tac/lib/contentful";
 import Image from "next/image";
 import anthology from "../../../../public/anthology.png";
 import logo from "../../../../public/logo-rings.svg";
 import ProvinceMap from "./ProvinceMap";
-
-/* ────────────────────── Data ────────────────────── */
 
 const highlights = [
   { value: "319", label: "Poems Submitted" },
@@ -124,7 +123,14 @@ const poets = [
   },
 ];
 
-export default function Gold() {
+export default async function Gold() {
+  const [goldJudges, goldPoets] = await Promise.all([
+    getGoldJudes(),
+    getGoldPoets(),
+  ]);
+
+  console.log(goldJudges, goldPoets);
+
   return (
     <div className="min-h-dvh w-full overflow-x-clip">
       <Navbar
