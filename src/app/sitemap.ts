@@ -1,9 +1,7 @@
+import { SITE_URL } from "@tac/lib/constants";
 import type { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://theagecollective.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -33,6 +31,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${SITE_URL}/projects/my-aging-story`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/projects/gold`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,

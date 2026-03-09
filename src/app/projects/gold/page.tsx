@@ -1,12 +1,12 @@
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
-import { getGoldJudes, getGoldPoets } from "@tac/lib/contentful";
+import ProvinceMap from "@tac/components/ProvinceMap";
+import { getGoldJudges, getGoldPoets } from "@tac/lib/contentful";
 import { ExternalLink, Globe } from "lucide-react";
 import Image from "next/image";
 import anthology from "../../../../public/anthology.png";
 import glocalLogo from "../../../../public/glocal.png";
 import logo from "../../../../public/logo-rings.svg";
-import ProvinceMap from "./ProvinceMap";
 
 const highlights = [
   { value: "319", label: "Poems Submitted" },
@@ -50,7 +50,7 @@ const ageGroups = [
 
 export default async function Gold() {
   const [goldJudges, goldPoets] = await Promise.all([
-    getGoldJudes(),
+    getGoldJudges(),
     getGoldPoets(),
   ]);
 
@@ -574,7 +574,7 @@ export default async function Gold() {
             <div className="group">
               <div className="flex items-baseline gap-4">
                 <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
-                  03
+                  01
                 </span>
                 <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
                   Our GOLD <span className="text-gold italic">Poets</span>
@@ -612,7 +612,7 @@ export default async function Gold() {
             <div className="group">
               <div className="flex items-baseline gap-4">
                 <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
-                  04
+                  03
                 </span>
                 <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
                   Our GOLD <span className="text-gold italic">Community</span>
@@ -693,7 +693,7 @@ export default async function Gold() {
             <div className="group">
               <div className="flex items-baseline gap-4">
                 <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
-                  01
+                  04
                 </span>
                 <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
                   Our GOLD <span className="text-gold italic">Funders</span>

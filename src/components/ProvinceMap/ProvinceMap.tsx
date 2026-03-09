@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useState } from "react";
-import canadaMap from "../../../../public/canada.svg";
+import canadaMap from "../../../public/canada.svg";
 
 type Province = {
   name: string;

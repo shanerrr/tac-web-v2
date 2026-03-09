@@ -295,7 +295,7 @@ export default async function MyAgingStory() {
         <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8">
           {impact.map((stat) => (
             <div
-              key={stat.value}
+              key={stat.label}
               className="flex flex-col items-center text-center"
             >
               {/* Ring + number */}
@@ -414,6 +414,7 @@ export default async function MyAgingStory() {
                   title="My Aging Story exhibit video"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
+                  loading="lazy"
                   className="h-full w-full"
                 />
               </div>

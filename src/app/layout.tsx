@@ -1,3 +1,4 @@
+import { SITE_URL } from "@tac/lib/constants";
 import type { Metadata, Viewport } from "next";
 import { Inter, Old_Standard_TT } from "next/font/google";
 import type { ReactNode } from "react";
@@ -14,9 +15,6 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter-sans",
 });
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://theagecollective.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
