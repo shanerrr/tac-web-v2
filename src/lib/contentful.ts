@@ -97,26 +97,28 @@ export type MediaAsset = {
   sortIndex: number;
 };
 
-export const getAssetsByTag = cache(async (tag: string): Promise<MediaAsset[]> => {
-  const { items } = await client.getAssets({
-    "metadata.tags.sys.id[in]": [tag],
-  });
+export const getAssetsByTag = cache(
+  async (tag: string): Promise<MediaAsset[]> => {
+    const { items } = await client.getAssets({
+      "metadata.tags.sys.id[in]": [tag],
+    });
 
-  return items
-    .map((asset) => {
-      const url = asset.fields.file?.url;
-      if (!url) return null;
-      const sortIndex =
-        Number(asset.fields.title?.split("|")[1]) || Number.MAX_SAFE_INTEGER;
-      return {
-        url: `https:${url}`,
-        type: "video" as MediaAsset["type"],
-        title: asset.fields.title ?? "",
-        sortIndex,
-      };
-    })
-    .filter((a) => a !== null);
-});
+    return items
+      .map((asset) => {
+        const url = asset.fields.file?.url;
+        if (!url) return null;
+        const sortIndex =
+          Number(asset.fields.title?.split("|")[1]) || Number.MAX_SAFE_INTEGER;
+        return {
+          url: `https:${url}`,
+          type: "video" as MediaAsset["type"],
+          title: asset.fields.title ?? "",
+          sortIndex,
+        };
+      })
+      .filter((a) => a !== null);
+  },
+);
 
 export const getFilms = cache(async (): Promise<Film[]> => {
   const { items } = await client.getEntries<FilmSkeleton>({

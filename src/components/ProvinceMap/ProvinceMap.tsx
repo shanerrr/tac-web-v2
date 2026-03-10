@@ -55,20 +55,17 @@ export default function ProvinceMap() {
         <Image
           src={canadaMap}
           alt="Map of Canada"
-          className="mx-auto w-full opacity-90"
+          className="mx-auto w-full"
           style={{
-            filter:
-              "invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(0.85)",
+            filter: "brightness(0.15)",
           }}
           draggable={false}
         />
         {/* Shimmer masked to map shape */}
         <div
-          className="pointer-events-none absolute inset-0 animate-shimmer"
+          className="pointer-events-none absolute inset-0"
           aria-hidden="true"
           style={{
-            backgroundImage:
-              "linear-gradient(105deg, transparent 30%, rgba(245,230,163,0.15) 44%, rgba(255,253,224,0.25) 50%, rgba(245,230,163,0.15) 56%, transparent 70%)",
             backgroundSize: "200% 100%",
             WebkitMaskImage: `url(${canadaMap.src})`,
             maskImage: `url(${canadaMap.src})`,
@@ -103,10 +100,10 @@ export default function ProvinceMap() {
                 cx={prov.x}
                 cy={prov.y}
                 r={r * 2.2}
-                fill="rgba(201,168,76,0.06)"
+                fill="rgba(201,168,76,0.1)"
                 className="transition-all duration-300"
                 style={{
-                  opacity: isActive ? 1 : 0.5,
+                  opacity: isActive ? 1 : 0.6,
                   transform: isActive ? "scale(1.15)" : "scale(1)",
                   transformOrigin: `${prov.x}px ${prov.y}px`,
                 }}
@@ -119,26 +116,11 @@ export default function ProvinceMap() {
                 fill="#C9A84C"
                 className="transition-all duration-200"
                 style={{
-                  opacity: isActive ? 1 : 0.7,
+                  opacity: isActive ? 1 : 0.9,
                   transform: isActive ? "scale(1.12)" : "scale(1)",
                   transformOrigin: `${prov.x}px ${prov.y}px`,
                 }}
               />
-              {/* Count inside dot */}
-              {r > 22 && (
-                <text
-                  x={prov.x}
-                  y={prov.y + 8}
-                  textAnchor="middle"
-                  fill="#0A0A0A"
-                  fontFamily="'Old Standard TT', serif"
-                  fontWeight="bold"
-                  fontSize="22"
-                  className="pointer-events-none"
-                >
-                  {prov.count}
-                </text>
-              )}
             </g>
           );
         })}

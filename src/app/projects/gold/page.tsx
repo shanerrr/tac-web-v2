@@ -66,7 +66,7 @@ export default async function Gold() {
 
       {/* ═══════════════════ Hero ═══════════════════ */}
       <PageHero
-        accentLabel="Poetry Collection"
+        accentLabel="Poetry Anthology"
         title="GOLD"
         subtitle={
           <>Poems celebrating the golden threads of a life well&#8209;lived.</>
@@ -90,11 +90,11 @@ export default async function Gold() {
         scrollLineClassName="bg-gold/20"
       />
 
-      {/* ═══════════════════ About the Collection ═══════════════════ */}
+      {/* ═══════════════════ About the Anthology ═══════════════════ */}
       <section className="container py-24 md:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-6 font-sans text-gold text-xs uppercase tracking-[0.4em]">
-            About the Collection
+            About the Anthology
           </p>
           <h2 className="font-serif text-4xl text-foreground leading-[1.15] md:text-5xl lg:text-6xl">
             Centering older voices{" "}
@@ -121,137 +121,8 @@ export default async function Gold() {
         </div>
       </section>
 
-      {/* ═══════════════════ Read the Anthology ═══════════════════ */}
-      <section className="relative pb-8 md:pb-10">
-        {/* Dark bottom half bridges into Highlights */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[#0A0A0A]" />
-
-        <div className="container relative z-10">
-          <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl bg-[#141210] shadow-2xl shadow-gold/8 ring-1 ring-gold/10">
-            {/* Ambient glow inside card */}
-            <div
-              className="pointer-events-none absolute inset-0 rounded-3xl"
-              aria-hidden="true"
-              style={{
-                background:
-                  "radial-gradient(ellipse at 30% 50%, rgba(201,168,76,0.06) 0%, transparent 55%)",
-              }}
-            />
-
-            <div className="relative items-center gap-12 p-8 md:flex md:p-12 lg:gap-16 lg:p-16">
-              {/* Cover image */}
-              <div className="mx-auto mb-10 w-52 shrink-0 md:mx-0 md:mb-0 md:w-56 lg:w-64">
-                <div className="relative aspect-3/4 overflow-hidden rounded-lg shadow-black/40 shadow-xl ring-1 ring-gold/15">
-                  <Image
-                    src={anthology}
-                    alt="GOLD anthology cover"
-                    fill
-                    sizes="(min-width: 1024px) 256px, (min-width: 768px) 224px, 208px"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-
-              {/* Text + CTA */}
-              <div className="text-center md:text-left">
-                <p className="mb-5 font-sans text-gold/60 text-xs uppercase tracking-[0.4em]">
-                  The Anthology
-                </p>
-                <h2 className="font-serif text-3xl text-white leading-tight md:text-4xl lg:text-5xl">
-                  Read the <span className="text-gold italic">collection.</span>
-                </h2>
-                <div className="mx-auto mt-2 h-px w-16 bg-gold/20 md:mx-0" />
-                <p className="mt-6 font-sans text-base text-white/55 leading-relaxed md:text-lg">
-                  The GOLD anthology reflects a wide range of experiences that
-                  resist singular narratives of aging and instead reveal its
-                  complexity, contradiction, strength, and vulnerability.
-                </p>
-                <a
-                  href="#"
-                  className="mt-8 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
-                >
-                  Read the Anthology
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ Highlights ═══════════════════ */}
-      <section className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-28">
-        {/* Ambient glow */}
-        <div
-          className="pointer-events-none absolute inset-0 select-none"
-          aria-hidden="true"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 60%)",
-          }}
-        />
-
-        <div className="container relative">
-          <p className="mb-14 text-center font-sans text-gold/60 text-xs uppercase tracking-[0.4em]">
-            Highlights
-          </p>
-          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-gold/10">
-            {highlights.map((stat, i) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center text-center"
-              >
-                <CountUp
-                  value={Number(stat.value)}
-                  className="font-serif text-7xl text-gold leading-none tracking-tight md:text-8xl"
-                  delay={i * 150}
-                />
-                <span className="mt-3 font-medium font-sans text-sm text-white/50 uppercase tracking-[0.2em]">
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ Reach & Demographics ═══════════════════ */}
-      <section className="relative overflow-hidden bg-[#0A0A0A] pb-18 md:pb-24">
-        <div className="container relative">
-          {/* Interactive province map */}
-          <ProvinceMap />
-
-          {/* Divider */}
-          <div className="mx-auto my-16 h-px w-16 bg-gold/15" />
-
-          {/* Age Distribution */}
-          <div className="mx-auto max-w-2xl">
-            <p className="mb-10 text-center font-sans text-gold/60 text-xs uppercase tracking-[0.4em]">
-              Age Distribution
-            </p>
-            <div className="space-y-6">
-              {ageGroups.map((group) => (
-                <div key={group.range} className="flex items-center gap-5">
-                  <span className="w-14 shrink-0 text-right font-sans text-sm text-white/50">
-                    {group.range}
-                  </span>
-                  <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-gold/8">
-                    <div
-                      className="h-full rounded-full bg-linear-to-r from-gold/80 to-gold"
-                      style={{ width: `${group.percentage}%` }}
-                    />
-                  </div>
-                  <span className="w-12 shrink-0 font-serif text-gold text-lg">
-                    {group.percentage}%
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ Themes ═══════════════════ */}
-      <section className="relative overflow-hidden py-24 md:py-32">
+      {/* ═══════════════════ The Four Calls ═══════════════════ */}
+      <section className="relative overflow-hidden bg-gold/[0.06] py-24 md:py-32">
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -260,14 +131,14 @@ export default async function Gold() {
             width: "min(70vw, 70vh)",
             height: "min(70vw, 70vh)",
             top: "calc(min(70vw, 70vh) / -3)",
-            left: "calc(min(70vw, 70vh) / -3)",
+            right: "calc(min(70vw, 70vh) / -3)",
           }}
         >
           <Image
             src={logo}
             alt=""
             fill
-            className="object-contain opacity-[0.03]"
+            className="object-contain opacity-[0.04]"
             style={{ filter: "invert(1)" }}
           />
         </div>
@@ -277,10 +148,10 @@ export default async function Gold() {
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
               The Four Calls
             </p>
-            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
+            <h3 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
               Four dimensions of{" "}
               <span className="text-gold italic">the aging experience.</span>
-            </h2>
+            </h3>
             <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
           </div>
 
@@ -288,20 +159,164 @@ export default async function Gold() {
             {themes.map((theme) => (
               <div
                 key={theme.title}
-                className="group flex flex-col rounded-2xl border border-gold/10 bg-[#0A0A0A] px-6 py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-gold/5 hover:shadow-lg"
+                className="group flex flex-col rounded-2xl border border-gold/10 bg-[#0A0A0A] px-6 py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-gold/8 hover:shadow-lg"
               >
-                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                <span className="font-sans text-[10px] text-gold/40 uppercase tracking-[0.3em]">
                   {theme.number}
                 </span>
-                <h3 className="mt-2 font-serif text-white text-xl leading-tight md:text-2xl">
+                <h4 className="mt-2 font-serif text-white text-xl leading-tight md:text-2xl">
                   {theme.title}
-                </h3>
+                </h4>
                 <div className="mt-2 h-px w-8 bg-gold/20 transition-all duration-300 group-hover:w-12 group-hover:bg-gold/40" />
-                <p className="mt-4 font-sans text-sm text-white/40 leading-relaxed">
+                <p className="mt-4 font-sans text-sm text-white/45 leading-relaxed">
                   {theme.description}
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ Read the Anthology ═══════════════════ */}
+      <section className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
+        {/* Ambient glow */}
+        <div
+          className="pointer-events-none absolute inset-0 select-none"
+          aria-hidden="true"
+          style={{
+            background:
+              "radial-gradient(ellipse at 30% 50%, rgba(201,168,76,0.06) 0%, transparent 55%)",
+          }}
+        />
+
+        <div className="container relative">
+          <div className="mx-auto max-w-5xl items-center gap-16 md:flex lg:gap-24">
+            {/* Cover image — overflows with tilt for emphasis */}
+            <div className="relative mx-auto mb-10 w-56 shrink-0 md:mx-0 md:mb-0 md:-ml-4 md:w-64 lg:w-72">
+              {/* Ambient glow behind book */}
+              <div className="absolute -inset-6 rounded-3xl bg-gold/10 blur-3xl" />
+              <div
+                className="relative aspect-3/4 overflow-hidden rounded-xl shadow-2xl shadow-black/60 ring-1 ring-gold/20 transition-transform duration-500 hover:rotate-0 hover:scale-105"
+                style={{ transform: "rotate(-3deg)" }}
+              >
+                <Image
+                  src={anthology}
+                  alt="GOLD anthology cover"
+                  fill
+                  sizes="(min-width: 1024px) 288px, (min-width: 768px) 256px, 224px"
+                  className="object-cover"
+                />
+                {/* Subtle sheen overlay */}
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  aria-hidden="true"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%)",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Text + CTA */}
+            <div className="text-center md:text-left">
+              <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
+                The Anthology
+              </p>
+              <h2 className="font-serif text-3xl text-white leading-tight md:text-4xl lg:text-5xl">
+                Read the <span className="text-gold italic">collection.</span>
+              </h2>
+              <div className="mx-auto mt-2 h-px w-16 bg-gold/20 md:mx-0" />
+              <p className="mt-6 font-sans text-base text-white/55 leading-relaxed md:text-lg">
+                The GOLD anthology reflects a wide range of experiences that
+                resist singular narratives of aging and instead reveal its
+                complexity, contradiction, strength, and vulnerability.
+              </p>
+              <a
+                href="#"
+                className="mt-8 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
+              >
+                Read the Anthology
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ Reach & Impact ═══════════════════ */}
+      <section className="py-24 md:py-32">
+        <div className="container">
+          <div className="mx-auto mb-16 max-w-3xl text-center">
+            <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
+              Our Reach
+            </p>
+            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
+              A national <span className="text-gold italic">movement.</span>
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
+            <p className="mx-auto mt-6 max-w-md text-center font-sans text-foreground/70 text-md leading-relaxed">
+              Poems were received from all provinces and two territories.
+            </p>
+          </div>
+
+          {/* Reach Section */}
+          <div className="overflow-hidden">
+            {/* Stats strip */}
+            <div className="grid grid-cols-1 divide-y divide-gold/15 border-gold/15 border-b sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              {highlights.map((stat, i) => (
+                <div
+                  key={stat.label}
+                  className="flex flex-col items-center px-6 py-8 text-center"
+                >
+                  <CountUp
+                    value={Number(stat.value)}
+                    className="font-serif text-5xl text-gold leading-none tracking-tight md:text-6xl"
+                    delay={i * 150}
+                  />
+                  <span className="mt-2 font-medium font-sans text-foreground/70 text-sm uppercase tracking-[0.2em]">
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Map + Age Distribution side by side */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px]">
+              {/* Map area */}
+              <div className="relative px-4 pt-8 pb-6 md:px-8 md:pt-10 md:pb-8">
+                <ProvinceMap />
+              </div>
+
+              {/* Age distribution sidebar */}
+              <div className="border-gold/15 border-t px-8 py-8 lg:border-t-0 lg:border-l">
+                <p className="mb-2 font-sans text-gold text-sm uppercase tracking-[0.3em]">
+                  Age Distribution
+                </p>
+                <p className="mb-8 font-sans text-foreground/70 text-sm leading-relaxed">
+                  Poems were submitted by older adults from 55 to 95 years old.
+                </p>
+                <div className="space-y-5">
+                  {ageGroups.map((group) => (
+                    <div key={group.range}>
+                      <div className="mb-1.5 flex items-baseline justify-between">
+                        <span className="font-sans text-foreground/70 text-md">
+                          {group.range}
+                        </span>
+                        <span className="font-bold font-serif text-gold text-lg">
+                          {group.percentage}%
+                        </span>
+                      </div>
+                      <div className="relative h-2 overflow-hidden rounded-full bg-gold/10">
+                        <div
+                          className="h-full rounded-full bg-linear-to-r from-gold/70 to-gold"
+                          style={{ width: `${group.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -410,12 +425,12 @@ export default async function Gold() {
               The Voices
             </p>
             <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
-              The GOLD <span className="text-gold italic">poets.</span>
+              Meet the GOLD <span className="text-gold italic">poets.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
             <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
-              Fourteen poets whose words shape the anthology &mdash; each
-              bringing their own experience of aging into verse.
+              Poets whose words shape the anthology — each bringing their own
+              experience of aging into verse.
             </p>
           </div>
 
@@ -459,7 +474,7 @@ export default async function Gold() {
                     {poet.name}
                   </h3>
                   {poet.poemTitle && (
-                    <div className="mt-1.5 font-medium font-serif text-gold text-sm italic md:text-base">
+                    <div className="mt-1.5 font-bold font-serif text-gold text-sm md:text-base">
                       {poet.poemTitle.split(",").map((t) => (
                         <p key={t.trim()}>&ldquo;{t.trim()}&rdquo;</p>
                       ))}

@@ -59,7 +59,7 @@ type NavItem = {
   label: string;
   href?: string;
   children?: NavChild[];
-  logoCorner?: "bottom-left" | "bottom-right";
+  logoCorner?: "top-right" | "bottom-right";
   menuAlign?: "center" | "right";
 };
 
@@ -88,7 +88,7 @@ const navItems: NavItem[] = [
   { label: "resources", href: "/resources" },
   {
     label: "projects",
-    logoCorner: "bottom-left",
+    logoCorner: "top-right",
     menuAlign: "right",
     children: [
       {
@@ -295,10 +295,9 @@ export default function Navbar({
                             <div
                               className="pointer-events-none absolute"
                               style={{
-                                bottom: "-80px",
-                                ...(item.logoCorner === "bottom-left"
-                                  ? { left: "-80px" }
-                                  : { right: "-80px" }),
+                                ...(item.logoCorner === "top-right"
+                                  ? { top: "-80px", right: "-80px" }
+                                  : { bottom: "-80px", right: "-80px" }),
                               }}
                             >
                               <Image
@@ -312,7 +311,7 @@ export default function Navbar({
                             </div>
 
                             {/* Dropdown items */}
-                            <div className="relative flex flex-col divide-y divide-primary/[0.06]">
+                            <div className="relative flex flex-col divide-y divide-primary/6">
                               {item.children.map((child) => (
                                 <DropdownLink key={child.label} child={child} />
                               ))}
