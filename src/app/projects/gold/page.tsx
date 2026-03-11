@@ -11,7 +11,7 @@ import logo from "../../../../public/logo-rings.svg";
 
 const highlights = [
   { value: "319", label: "Poems Submitted" },
-  { value: "319", label: "Older Adults Reached" },
+  { value: "260", label: "Older Adults Reached" },
   { value: "91", label: "Organizations Reached" },
 ];
 
@@ -254,15 +254,12 @@ export default async function Gold() {
               A national <span className="text-gold italic">movement.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
-            <p className="mx-auto mt-6 max-w-md text-center font-sans text-foreground/70 text-md leading-relaxed">
-              Poems were received from all provinces and two territories.
-            </p>
           </div>
 
           {/* Reach Section */}
           <div className="overflow-hidden">
             {/* Stats strip */}
-            <div className="grid grid-cols-1 divide-y divide-gold/15 border-gold/15 border-b sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            <div className="grid grid-cols-1 divide-y divide-gold/30 border-gold/30 border-b sm:grid-cols-3 sm:divide-x sm:divide-y-0">
               {highlights.map((stat, i) => (
                 <div
                   key={stat.label}
@@ -270,7 +267,7 @@ export default async function Gold() {
                 >
                   <CountUp
                     value={Number(stat.value)}
-                    className="font-serif text-5xl text-gold leading-none tracking-tight md:text-6xl"
+                    className="font-serif text-6xl text-gold leading-none tracking-tight md:text-7xl"
                     delay={i * 150}
                   />
                   <span className="mt-2 font-medium font-sans text-foreground/70 text-sm uppercase tracking-[0.2em]">
@@ -281,18 +278,24 @@ export default async function Gold() {
             </div>
 
             {/* Map + Age Distribution side by side */}
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px]">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_492px]">
               {/* Map area */}
-              <div className="relative px-4 pt-8 pb-6 md:px-8 md:pt-10 md:pb-8">
+              <div className="relative px-4 pt-8 pb-6 text-center md:px-8 md:pt-10 md:pb-8 md:text-start">
+                <p className="mb-2 font-sans text-gold text-sm uppercase tracking-[0.3em]">
+                  Geographical Distribution
+                </p>
+                <p className="mx-auto mb-8 font-sans text-foreground/70 text-sm leading-relaxed">
+                  Poems were received from all provinces and two territories.
+                </p>
                 <ProvinceMap />
               </div>
 
               {/* Age distribution sidebar */}
-              <div className="border-gold/15 border-t px-8 py-8 lg:border-t-0 lg:border-l">
-                <p className="mb-2 font-sans text-gold text-sm uppercase tracking-[0.3em]">
+              <div className="border-gold/30 border-t px-8 py-8 lg:border-t-0 lg:border-l">
+                <p className="mb-2 text-center font-sans text-gold text-sm uppercase tracking-[0.3em] md:text-start">
                   Age Distribution
                 </p>
-                <p className="mb-8 font-sans text-foreground/70 text-sm leading-relaxed">
+                <p className="mb-8 text-center font-sans text-foreground/70 text-sm leading-relaxed md:text-start">
                   Poems were submitted by older adults from 55 to 95 years old.
                 </p>
                 <div className="space-y-5">
@@ -475,7 +478,7 @@ export default async function Gold() {
                   </h3>
                   {poet.poemTitle && (
                     <div className="mt-1.5 font-bold font-serif text-gold text-sm md:text-base">
-                      {poet.poemTitle.split(",").map((t) => (
+                      {poet.poemTitle.split("|").map((t) => (
                         <p key={t.trim()}>&ldquo;{t.trim()}&rdquo;</p>
                       ))}
                     </div>
@@ -645,7 +648,7 @@ export default async function Gold() {
                   "Aging Together As Community - Haliburton Highlands",
                   "Canadian Coalition Against Ageism (CCAA)",
                   "Tower Poetry Society",
-                  "National Institute on Ageing",
+                  "National Institute on Ageing (NIA)",
                   "St Albert Library",
                   "Canadian Network for the Prevention of Elder Abuse (CNPEA)",
                   "Aldershot News",

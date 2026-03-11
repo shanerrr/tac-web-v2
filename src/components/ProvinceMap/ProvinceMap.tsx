@@ -63,7 +63,7 @@ export default function ProvinceMap() {
         />
         {/* Shimmer masked to map shape */}
         <div
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute inset-0 animate-shimmer-long"
           aria-hidden="true"
           style={{
             backgroundSize: "200% 100%",
