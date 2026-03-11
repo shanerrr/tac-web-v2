@@ -2,10 +2,13 @@ import CountUp from "@tac/components/CountUp";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import ProvinceMap from "@tac/components/ProvinceMap";
-import { getGoldJudges, getGoldPoets } from "@tac/lib/contentful";
+import {
+  getAssetsByTag,
+  getGoldJudges,
+  getGoldPoets,
+} from "@tac/lib/contentful";
 import { ExternalLink, Globe, Mail } from "lucide-react";
 import Image from "next/image";
-import anthology from "../../../../public/anthology.png";
 import glocalLogo from "../../../../public/glocal.png";
 import logo from "../../../../public/logo-rings.svg";
 
@@ -50,11 +53,11 @@ const ageGroups = [
 ];
 
 export default async function Gold() {
-  const [goldJudges, goldPoets] = await Promise.all([
+  const [cover, goldJudges, goldPoets] = await Promise.all([
+    getAssetsByTag("goldCover"),
     getGoldJudges(),
     getGoldPoets(),
   ]);
-
   return (
     <div className="min-h-dvh w-full overflow-x-clip">
       <Navbar
@@ -79,7 +82,7 @@ export default async function Gold() {
         glowOverlay="radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 55%)"
         vignetteOverlay="radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)"
         accentLabelClassName="text-gold/50"
-        titleClassName="animate-shimmer bg-clip-text text-transparent"
+        titleClassName="animate-shimmer bg-clip-text text-transparent tracking-widest"
         titleStyle={{
           backgroundImage:
             "linear-gradient(105deg, #8A7230 0%, #C9A84C 25%, #F5E6A3 45%, #FFFDE0 50%, #F5E6A3 55%, #C9A84C 75%, #8A7230 100%)",
@@ -122,7 +125,7 @@ export default async function Gold() {
       </section>
 
       {/* ═══════════════════ The Four Calls ═══════════════════ */}
-      <section className="relative overflow-hidden bg-gold/[0.06] py-24 md:py-32">
+      <section className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -200,7 +203,7 @@ export default async function Gold() {
                 style={{ transform: "rotate(-3deg)" }}
               >
                 <Image
-                  src={anthology}
+                  src={cover[0].url}
                   alt="GOLD anthology cover"
                   fill
                   sizes="(min-width: 1024px) 288px, (min-width: 768px) 256px, 224px"
@@ -536,28 +539,18 @@ export default async function Gold() {
       </section>
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <section className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
-        {/* Ambient glow */}
-        <div
-          className="pointer-events-none absolute inset-0 select-none"
-          aria-hidden="true"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 20%, rgba(201,168,76,0.04) 0%, transparent 55%)",
-          }}
-        />
-
+      <section className="relative overflow-hidden bg-gold/[0.06] py-24 md:py-32">
         <div className="container relative">
           {/* Section header */}
           <div className="mx-auto mb-20 max-w-3xl text-center">
-            <p className="mb-5 font-sans text-gold/60 text-xs uppercase tracking-[0.4em]">
+            <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
               Thank You
             </p>
-            <h2 className="font-serif text-3xl text-white leading-tight md:text-4xl lg:text-5xl">
+            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
               Acknow&shy;ledgements
             </h2>
-            <div className="mx-auto mt-2 h-px w-16 bg-gold/20" />
-            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-white/45 leading-relaxed md:text-lg">
+            <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
+            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
               We are grateful for the collective effort that made the GOLD
               Poetry Project possible.
             </p>
@@ -568,15 +561,15 @@ export default async function Gold() {
             {/* Poets */}
             <div className="group">
               <div className="flex items-baseline gap-4">
-                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                <span className="font-sans text-[10px] text-gold/50 uppercase tracking-[0.3em]">
                   01
                 </span>
-                <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
+                <h3 className="font-serif text-2xl text-foreground leading-tight md:text-3xl">
                   Our GOLD <span className="text-gold italic">Poets</span>
                 </h3>
               </div>
-              <div className="mt-2 ml-8 h-px w-10 bg-gold/15" />
-              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-white/45 leading-relaxed md:text-base">
+              <div className="mt-2 ml-8 h-px w-10 bg-gold/20" />
+              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-foreground/60 leading-relaxed md:text-base">
                 Thank you for sharing your words, your stories, and your
                 honesty. Your work reflects the many ways aging is lived and
                 understood, and this project exists because of you. Whether or
@@ -589,15 +582,15 @@ export default async function Gold() {
             {/* Judges */}
             <div className="group">
               <div className="flex items-baseline gap-4">
-                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                <span className="font-sans text-[10px] text-gold/50 uppercase tracking-[0.3em]">
                   02
                 </span>
-                <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
+                <h3 className="font-serif text-2xl text-foreground leading-tight md:text-3xl">
                   Our GOLD <span className="text-gold italic">Judges</span>
                 </h3>
               </div>
-              <div className="mt-2 ml-8 h-px w-10 bg-gold/15" />
-              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-white/45 leading-relaxed md:text-base">
+              <div className="mt-2 ml-8 h-px w-10 bg-gold/20" />
+              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-foreground/60 leading-relaxed md:text-base">
                 Thank you for the care, time, and thoughtfulness you brought to
                 reviewing and selecting the poems for this anthology.
               </p>
@@ -606,15 +599,15 @@ export default async function Gold() {
             {/* Community */}
             <div className="group">
               <div className="flex items-baseline gap-4">
-                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                <span className="font-sans text-[10px] text-gold/50 uppercase tracking-[0.3em]">
                   03
                 </span>
-                <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
+                <h3 className="font-serif text-2xl text-foreground leading-tight md:text-3xl">
                   Our GOLD <span className="text-gold italic">Community</span>
                 </h3>
               </div>
-              <div className="mt-2 ml-8 h-px w-10 bg-gold/15" />
-              <div className="mt-5 ml-8 max-w-3xl space-y-5 font-sans text-[15px] text-white/45 leading-relaxed md:text-base">
+              <div className="mt-2 ml-8 h-px w-10 bg-gold/20" />
+              <div className="mt-5 ml-8 max-w-3xl space-y-5 font-sans text-[15px] text-foreground/60 leading-relaxed md:text-base">
                 <p>
                   Thank you to the organizations, groups, collectives, and
                   individuals who shared our poetry calls, amplified the voices
@@ -676,7 +669,7 @@ export default async function Gold() {
                 ].map((org) => (
                   <p
                     key={org}
-                    className="font-sans text-sm text-white/35 leading-relaxed transition-colors duration-200 hover:text-gold/60"
+                    className="font-sans text-sm text-foreground/40 leading-relaxed transition-colors duration-200 hover:text-gold"
                   >
                     {org}
                   </p>
@@ -687,15 +680,15 @@ export default async function Gold() {
             {/* Funders */}
             <div className="group">
               <div className="flex items-baseline gap-4">
-                <span className="font-sans text-[10px] text-gold/30 uppercase tracking-[0.3em]">
+                <span className="font-sans text-[10px] text-gold uppercase tracking-[0.3em]">
                   04
                 </span>
-                <h3 className="font-serif text-2xl text-white leading-tight md:text-3xl">
+                <h3 className="font-serif text-2xl text-foreground leading-tight md:text-3xl">
                   Our GOLD <span className="text-gold italic">Funders</span>
                 </h3>
               </div>
-              <div className="mt-2 ml-8 h-px w-10 bg-gold/15" />
-              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-white/45 leading-relaxed md:text-base">
+              <div className="mt-2 ml-8 h-px w-10 bg-gold/20" />
+              <p className="mt-5 ml-8 max-w-2xl font-sans text-[15px] text-foreground/60 leading-relaxed md:text-base">
                 We are grateful to the GLOCAL Foundation for supporting this
                 work through the CANCONNECT Grant and for believing in the power
                 of connection, storytelling, and community.

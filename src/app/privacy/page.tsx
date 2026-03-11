@@ -203,7 +203,7 @@ const sections = [
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-dvh w-full">
-      <Navbar />
+      <Navbar transparent scrollThreshold={200} />
 
       <main className="container pt-40 pb-24 md:pt-48">
         <div className="mx-auto max-w-3xl">
