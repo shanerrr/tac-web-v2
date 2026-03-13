@@ -1,7 +1,9 @@
 import type { Document } from "@contentful/rich-text-types";
 
 export type Story = {
+  _type?: "story";
   id: string;
+  show?: boolean;
   name: string;
   age: number;
   decade: string;
@@ -10,11 +12,13 @@ export type Story = {
   quote: string;
   pronoun: string;
   slug: string;
+  related: Array<Story | Film>;
   portrait: string;
   body: Document | null;
 };
 
 export type Film = {
+  _type?: "film";
   id: string;
   title: string;
   name: string;
@@ -26,6 +30,14 @@ export type Film = {
   banner: string | null;
   youtubeUrl?: string | null;
 };
+
+export function isFilm(item: Story | Film): item is Film {
+  return item._type === "film";
+}
+
+export function isStory(item: Story | Film): item is Story {
+  return !isFilm(item);
+}
 
 export type GoldJudge = {
   id: string;

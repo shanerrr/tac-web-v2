@@ -3,10 +3,12 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Block, Inline } from "@contentful/rich-text-types";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
+import { STORIES_BLUR_DATA_URL } from "@tac/lib/constants";
 import { formatDate } from "@tac/lib/utils";
-import type { Story } from "@tac/types";
-import { X } from "lucide-react";
+import { type Film, isFilm, isStory, type Story } from "@tac/types";
+import { Play, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const richTextOptions = {
@@ -85,9 +87,11 @@ function StoryMeta({ story, className }: { story: Story; className?: string }) {
 export default function StoryDrawer({
   story,
   onClose,
+  onOpenStory,
 }: {
   story: Story | null;
   onClose: () => void;
+  onOpenStory?: (story: Story) => void;
 }) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const metaRef = useRef<HTMLDivElement>(null);
@@ -187,6 +191,8 @@ export default function StoryDrawer({
                       sizes="400px"
                       className="object-cover"
                       alt={`Portrait of ${story.name}`}
+                      placeholder="blur"
+                      blurDataURL={STORIES_BLUR_DATA_URL}
                     />
                   </div>
                   <StoryMeta
@@ -212,6 +218,8 @@ export default function StoryDrawer({
                       sizes="112px"
                       className="object-cover"
                       alt={`Portrait of ${story.name}`}
+                      placeholder="blur"
+                      blurDataURL={STORIES_BLUR_DATA_URL}
                     />
                   </div>
                   <StoryMeta story={story} />
@@ -228,6 +236,104 @@ export default function StoryDrawer({
                     </p>
                   )}
                 </div>
+
+                {/* Film section */}
+                {story.related.filter((r) => r._type === "film").length > 0 && (
+                  <div className="mt-12 border-t border-primary/10 pt-10">
+                    <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.3em]">
+                      Watch
+                    </p>
+                    <div className="space-y-6">
+                      {story.related
+                        .filter((r): r is Film => r._type === "film")
+                        .map((film) => (
+                          <div key={film.id}>
+                            <h3 className="mb-3 font-serif text-xl text-foreground md:text-2xl">
+                              &ldquo;{film.title}&rdquo;
+                            </h3>
+                          <Link
+                            key={film.id}
+                            href={`/films#${film.id}`}
+                            className="group relative block overflow-hidden rounded-2xl shadow-lg ring-1 ring-primary/10 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:ring-primary/20"
+                          >
+                            <div className="relative aspect-video w-full">
+                              {film.banner ? (
+                                <Image
+                                  src={film.banner}
+                                  fill
+                                  sizes="(min-width: 768px) 600px, 100vw"
+                                  className="object-cover"
+                                  alt={`${film.title} film`}
+                                  placeholder="blur"
+                                  blurDataURL={STORIES_BLUR_DATA_URL}
+                                />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center bg-foreground/5" />
+                              )}
+                              {/* Play button overlay */}
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-300 group-hover:bg-black/30">
+                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110 md:h-16 md:w-16">
+                                  <Play className="ml-0.5 h-6 w-6 fill-primary text-primary md:h-7 md:w-7" />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="bg-primary/[0.03] px-5 py-4">
+                              <p className="font-sans text-primary text-xs uppercase tracking-[0.2em]">
+                                Watch on the films page
+                              </p>
+                            </div>
+                          </Link>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Additional stories */}
+                {story.related.filter((r) => r._type !== "film").length > 0 && (
+                  <div className="mt-12 border-t border-primary/10 pt-10">
+                    <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.3em]">
+                      Keep reading
+                    </p>
+                    <h3 className="mb-8 font-serif text-2xl text-foreground md:text-3xl">
+                      More from {story.name}
+                    </h3>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      {story.related
+                        .filter((r): r is Story => r._type !== "film")
+                        .map((related) => (
+                          <button
+                            key={related.id}
+                            type="button"
+                            onClick={() => onOpenStory?.(related)}
+                            className="group flex cursor-pointer items-center gap-4 rounded-2xl border border-primary/10 bg-primary/[0.02] p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/5"
+                          >
+                            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl shadow-sm ring-1 ring-primary/10 transition-all duration-300 group-hover:ring-primary/25">
+                              <Image
+                                src={related.portrait}
+                                fill
+                                sizes="64px"
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                alt={`Portrait of ${related.name}`}
+                                placeholder="blur"
+                                blurDataURL={STORIES_BLUR_DATA_URL}
+                              />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="font-serif text-lg text-foreground leading-tight">
+                                {related.name}
+                              </p>
+                              <div className="mt-1 flex items-center gap-2">
+                                <span className="font-serif text-primary text-sm italic">
+                                  {related.age} years old
+                                </span>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </>

@@ -151,6 +151,7 @@ export default function FilmsFeed({ films }: { films: Film[] }) {
               </div>
             )}
             <div
+              id={film.id}
               ref={index === 0 ? setItemRef : undefined}
               data-item-id={film.id}
             >

@@ -4,8 +4,9 @@ import TreeRingDivider, {
   goldenRotation,
 } from "@tac/components/TreeRingDivider";
 import { useScrollReveal } from "@tac/hooks/useScrollReveal";
+import { STORIES_BLUR_DATA_URL } from "@tac/lib/constants";
 import { formatDate } from "@tac/lib/utils";
-import type { Story } from "@tac/types";
+import { isStory, type Story } from "@tac/types";
 import { ArrowRight, ArrowUpDown } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -84,7 +85,7 @@ const StoryCard = memo(function StoryCard({
             className="object-cover"
             alt={`Portrait of ${story.name}`}
             placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8mckwDwAFRwHiBonBjAAAAABJRU5ErkJggg=="
+            blurDataURL={STORIES_BLUR_DATA_URL}
             priority={priority}
           />
           <div className="absolute bottom-4 left-4 z-10 rounded-sm bg-primary px-3 py-1.5 font-sans text-white text-xs tracking-[0.25em]">
@@ -134,10 +135,16 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
   const [newestFirst, setNewestFirst] = useState(true);
   const [openStory, setOpenStory] = useState<Story | null>(null);
   const { trigger } = useWebHaptics();
-  const storiesById = useMemo(
-    () => new Map(stories.map((s) => [s.id, s])),
-    [stories],
-  );
+  const storiesById = useMemo(() => {
+    const map = new Map<string, Story>();
+    for (const s of stories) {
+      map.set(s.id, s);
+      for (const nested of s.related) {
+        if (isStory(nested)) map.set(nested.id, nested);
+      }
+    }
+    return map;
+  }, [stories]);
 
   const syncFromHash = useCallback(() => {
     const id = getStoryIdFromHash();
@@ -276,7 +283,15 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
         )}
       </div>
 
-      <StoryDrawer story={openStory} onClose={closeDrawer} />
+      <StoryDrawer
+        story={openStory}
+        onClose={closeDrawer}
+        onOpenStory={(related) => {
+          trigger([{ duration: 300 }], { intensity: 1 });
+          setOpenStory(related);
+          window.history.pushState(null, "", `${HASH_PREFIX}${related.id}`);
+        }}
+      />
     </div>
   );
 }

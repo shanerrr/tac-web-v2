@@ -2,6 +2,7 @@ import { formatDate } from "@tac/lib/utils";
 import type { Film, GoldJudge, GoldPoet, Story } from "@tac/types";
 import type { Asset, EntryFieldTypes, EntrySkeletonType } from "contentful";
 import { createClient } from "contentful";
+import { link } from "fs";
 import { cacheTag } from "next/cache";
 
 if (!process.env.CONTENTFUL_SPACE_ID || !process.env.CONTENTFUL_ACCESS_TOKEN) {
@@ -18,6 +19,7 @@ const client = createClient({
 interface StorySkeleton extends EntrySkeletonType {
   contentTypeId: "stories";
   fields: {
+    show: EntryFieldTypes.Boolean;
     name: EntryFieldTypes.Text;
     age: EntryFieldTypes.Integer;
     published: EntryFieldTypes.Text;
@@ -25,6 +27,9 @@ interface StorySkeleton extends EntrySkeletonType {
     quote: EntryFieldTypes.Text;
     pronoun: EntryFieldTypes.Text;
     portrait: EntryFieldTypes.AssetLink;
+    related: EntryFieldTypes.Array<
+      EntryFieldTypes.EntryLink<StorySkeleton | FilmSkeleton>
+    >;
     body: EntryFieldTypes.RichText;
   };
 }
@@ -73,11 +78,43 @@ export const getStories = async (): Promise<Story[]> => {
     order: ["-sys.createdAt"],
     include: 1,
   });
-  return items.map((item) => {
+  // biome-ignore lint/suspicious/noExplicitAny: contentful resolved entries have varying shapes
+  const mapRelated = (entry: any): Story | Film | null => {
+    if (!entry || !("fields" in entry) || !("sys" in entry)) return null;
+    const contentType = entry.sys.contentType?.sys?.id;
+
+    if (contentType === "films") {
+      const f = entry.fields;
+      const banner = f.banner as Asset | undefined;
+      const bannerUrl = banner?.fields.file?.url;
+      return {
+        _type: "film" as const,
+        id: entry.sys.id,
+        title: f.title,
+        name: f.name,
+        age: f.age,
+        date: formatDate(f.date ?? entry.sys.createdAt),
+        location: f.location,
+        duration: f.duration,
+        slug: f.slug ?? entry.sys.id,
+        banner: bannerUrl ? `https:${bannerUrl}` : null,
+        youtubeUrl: f.youtubeUrl,
+      } as Film;
+    }
+
+    return mapStory(entry);
+  };
+
+  const mapStory = (item: (typeof items)[number]): Story => {
     const f = item.fields;
     const portrait = f.portrait as Asset;
+    const linked = (f.related ?? [])
+      .map(mapRelated)
+      .filter((r): r is Story | Film => r !== null);
     return {
+      _type: "story" as const,
       id: item.sys.id,
+      show: f.show,
       name: f.name,
       age: f.age,
       decade: String(Math.floor(f.age / 10) * 10),
@@ -87,8 +124,14 @@ export const getStories = async (): Promise<Story[]> => {
       pronoun: f.pronoun,
       slug: item.sys.id,
       portrait: `https:${portrait.fields.file?.url}`,
+      related: linked,
       body: f.body ?? null,
     };
+  };
+
+  return items.flatMap((item) => {
+    if (!item.fields.show) return [];
+    return [mapStory(item)];
   });
 };
 
