@@ -164,7 +164,7 @@ export default function Footer({
           {LAND_ACKNOWLEDGEMENT}
         </p>
         <p className="shrink-0 font-sans text-[0.6rem]">
-          &copy; {new Date().getFullYear()} The Age Collective
+          &copy; 2026 The Age Collective
         </p>
       </div>
     </footer>

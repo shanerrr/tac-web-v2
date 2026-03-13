@@ -2,7 +2,7 @@ import { formatDate } from "@tac/lib/utils";
 import type { Film, GoldJudge, GoldPoet, Story } from "@tac/types";
 import type { Asset, EntryFieldTypes, EntrySkeletonType } from "contentful";
 import { createClient } from "contentful";
-import { cache } from "react";
+import { cacheTag } from "next/cache";
 
 if (!process.env.CONTENTFUL_SPACE_ID || !process.env.CONTENTFUL_ACCESS_TOKEN) {
   throw new Error(
@@ -64,13 +64,15 @@ interface GoldPoetsSkeleton extends EntrySkeletonType {
   };
 }
 
-export const getStories = cache(async (): Promise<Story[]> => {
+export const getStories = async (): Promise<Story[]> => {
+  "use cache";
+  cacheTag("stories");
+
   const { items } = await client.getEntries<StorySkeleton>({
     content_type: "stories",
     order: ["-sys.createdAt"],
     include: 1,
   });
-
   return items.map((item) => {
     const f = item.fields;
     const portrait = f.portrait as Asset;
@@ -88,7 +90,7 @@ export const getStories = cache(async (): Promise<Story[]> => {
       body: f.body ?? null,
     };
   });
-});
+};
 
 export type MediaAsset = {
   url: string;
@@ -97,30 +99,34 @@ export type MediaAsset = {
   sortIndex: number;
 };
 
-export const getAssetsByTag = cache(
-  async (tag: string): Promise<MediaAsset[]> => {
-    const { items } = await client.getAssets({
-      "metadata.tags.sys.id[in]": [tag],
-    });
+export const getAssetsByTag = async (tag: string): Promise<MediaAsset[]> => {
+  "use cache";
+  cacheTag(tag);
 
-    return items
-      .map((asset) => {
-        const url = asset.fields.file?.url;
-        if (!url) return null;
-        const sortIndex =
-          Number(asset.fields.title?.split("|")[1]) || Number.MAX_SAFE_INTEGER;
-        return {
-          url: `https:${url}`,
-          type: "video" as MediaAsset["type"],
-          title: asset.fields.title ?? "",
-          sortIndex,
-        };
-      })
-      .filter((a) => a !== null);
-  },
-);
+  const { items } = await client.getAssets({
+    "metadata.tags.sys.id[in]": [tag],
+  });
 
-export const getFilms = cache(async (): Promise<Film[]> => {
+  return items
+    .map((asset) => {
+      const url = asset.fields.file?.url;
+      if (!url) return null;
+      const sortIndex =
+        Number(asset.fields.title?.split("|")[1]) || Number.MAX_SAFE_INTEGER;
+      return {
+        url: `https:${url}`,
+        type: "video" as MediaAsset["type"],
+        title: asset.fields.title ?? "",
+        sortIndex,
+      };
+    })
+    .filter((a) => a !== null);
+};
+
+export const getFilms = async (): Promise<Film[]> => {
+  "use cache";
+  cacheTag("films");
+
   const { items } = await client.getEntries<FilmSkeleton>({
     content_type: "films",
     order: ["-sys.createdAt"],
@@ -144,9 +150,12 @@ export const getFilms = cache(async (): Promise<Film[]> => {
       youtubeUrl: f.youtubeUrl,
     };
   });
-});
+};
 
-export const getGoldJudges = cache(async (): Promise<GoldJudge[]> => {
+export const getGoldJudges = async (): Promise<GoldJudge[]> => {
+  "use cache";
+  cacheTag("goldJudges");
+
   const { items } = await client.getEntries<GoldJudgesSkeleton>({
     content_type: "goldJudges",
     order: ["-sys.createdAt"],
@@ -165,9 +174,12 @@ export const getGoldJudges = cache(async (): Promise<GoldJudge[]> => {
       photo: photo ? `https:${photoUrl}` : null,
     };
   });
-});
+};
 
-export const getGoldPoets = cache(async (): Promise<GoldPoet[]> => {
+export const getGoldPoets = async (): Promise<GoldPoet[]> => {
+  "use cache";
+  cacheTag("goldPoets");
+
   const { items } = await client.getEntries<GoldPoetsSkeleton>({
     content_type: "goldPoets",
     order: ["-sys.createdAt"],
@@ -195,4 +207,4 @@ export const getGoldPoets = cache(async (): Promise<GoldPoet[]> => {
       const lastB = b.name.split(" ").at(-1) ?? "";
       return lastA.localeCompare(lastB);
     });
-});
+};

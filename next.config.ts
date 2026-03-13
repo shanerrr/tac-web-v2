@@ -17,6 +17,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // output: "export",
   reactCompiler: true,
+  cacheComponents: true,
   images: {
     // unoptimized: true,
     minimumCacheTTL: 86400,
