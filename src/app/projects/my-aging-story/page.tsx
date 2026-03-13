@@ -276,34 +276,58 @@ export default async function MyAgingStory() {
         </div>
       </section>
 
-      {/* ═══════════════════ Photo Gallery 1 ═══════════════════ */}
+      {/* ═══════════════════ Photo Gallery ═══════════════════ */}
       <section className="py-6">
         <div className="container">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-            {gallery.map((asset, i) => (
-              <div
-                key={asset?.url ?? `placeholder-a-${i}`}
-                className={`relative overflow-hidden rounded-[10px] ${
-                  i === 0
-                    ? "col-span-2 aspect-2/0"
-                    : i >= 5
-                      ? "hidden aspect-4/3 md:block"
-                      : "aspect-4/3"
-                }`}
-              >
-                <Image
-                  src={asset.url}
-                  alt={asset.title || "Exhibit photo"}
-                  fill
-                  className="object-cover"
-                  sizes={
+          <div className="grid grid-cols-2 gap-5 p-2 md:grid-cols-3 md:gap-7 md:p-4">
+            {gallery.map((asset, i) => {
+              const tilt = [
+                "rotate-[-1.5deg] translate-y-1",
+                "rotate-[2deg] -translate-y-1",
+                "rotate-[1deg] translate-y-2",
+                "rotate-[-2.5deg] -translate-y-0.5",
+                "rotate-[1.5deg] translate-y-1.5",
+                "rotate-[-1deg] -translate-y-1",
+              ][i % 6];
+
+              const shadow = [
+                "shadow-md",
+                "shadow-lg",
+                "shadow-md",
+                "shadow-sm",
+                "shadow-lg",
+                "shadow-md",
+              ][i % 6];
+
+              return (
+                <div
+                  key={asset?.url ?? `placeholder-a-${i}`}
+                  className={`group relative overflow-hidden rounded-2xl bg-quaternary/10 transition-all duration-500 ease-out hover:translate-y-0! hover:rotate-0! hover:scale-[1.03] hover:shadow-xl [&_img]:transition-transform [&_img]:duration-500 [&_img]:ease-out hover:[&_img]:scale-105 ${tilt} ${shadow} ${
                     i === 0
-                      ? "(min-width: 768px) 66vw, 100vw"
-                      : "(min-width: 768px) 33vw, 50vw"
-                  }
-                />
-              </div>
-            ))}
+                      ? "col-span-2 aspect-2/0"
+                      : i >= 5
+                        ? "hidden aspect-4/3 md:block"
+                        : "aspect-4/3"
+                  }`}
+                >
+                  <Image
+                    src={asset.url}
+                    alt={asset.title || "Exhibit photo"}
+                    fill
+                    className="object-cover"
+                    sizes={
+                      i === 0
+                        ? "(min-width: 768px) 66vw, 100vw"
+                        : "(min-width: 768px) 33vw, 50vw"
+                    }
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/15 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
