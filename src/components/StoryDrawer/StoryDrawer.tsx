@@ -239,7 +239,7 @@ export default function StoryDrawer({
 
                 {/* Film section */}
                 {story.related.filter((r) => r._type === "film").length > 0 && (
-                  <div className="mt-12 border-t border-primary/10 pt-10">
+                  <div className="mt-12 border-primary/10 border-t pt-10">
                     <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.3em]">
                       Watch
                     </p>
@@ -248,41 +248,41 @@ export default function StoryDrawer({
                         .filter((r): r is Film => r._type === "film")
                         .map((film) => (
                           <div key={film.id}>
-                            <h3 className="mb-3 font-serif text-xl text-foreground md:text-2xl">
+                            <h3 className="mb-3 font-serif text-foreground text-xl md:text-2xl">
                               &ldquo;{film.title}&rdquo;
                             </h3>
-                          <Link
-                            key={film.id}
-                            href={`/films#${film.id}`}
-                            className="group relative block overflow-hidden rounded-2xl shadow-lg ring-1 ring-primary/10 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:ring-primary/20"
-                          >
-                            <div className="relative aspect-video w-full">
-                              {film.banner ? (
-                                <Image
-                                  src={film.banner}
-                                  fill
-                                  sizes="(min-width: 768px) 600px, 100vw"
-                                  className="object-cover"
-                                  alt={`${film.title} film`}
-                                  placeholder="blur"
-                                  blurDataURL={STORIES_BLUR_DATA_URL}
-                                />
-                              ) : (
-                                <div className="flex h-full w-full items-center justify-center bg-foreground/5" />
-                              )}
-                              {/* Play button overlay */}
-                              <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-300 group-hover:bg-black/30">
-                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110 md:h-16 md:w-16">
-                                  <Play className="ml-0.5 h-6 w-6 fill-primary text-primary md:h-7 md:w-7" />
+                            <Link
+                              key={film.id}
+                              href={`/films#${film.id}`}
+                              className="group relative block overflow-hidden rounded-2xl shadow-lg ring-1 ring-primary/10 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:ring-primary/20"
+                            >
+                              <div className="relative aspect-video w-full">
+                                {film.banner ? (
+                                  <Image
+                                    src={film.banner}
+                                    fill
+                                    sizes="(min-width: 768px) 600px, 100vw"
+                                    className="object-cover"
+                                    alt={`${film.title} film`}
+                                    placeholder="blur"
+                                    blurDataURL={STORIES_BLUR_DATA_URL}
+                                  />
+                                ) : (
+                                  <div className="flex h-full w-full items-center justify-center bg-foreground/5" />
+                                )}
+                                {/* Play button overlay */}
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-300 group-hover:bg-black/30">
+                                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg transition-transform duration-300 group-hover:scale-110 md:h-16 md:w-16">
+                                    <Play className="ml-0.5 h-6 w-6 fill-primary text-primary md:h-7 md:w-7" />
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="bg-primary/[0.03] px-5 py-4">
-                              <p className="font-sans text-primary text-xs uppercase tracking-[0.2em]">
-                                Watch on the films page
-                              </p>
-                            </div>
-                          </Link>
+                              <div className="bg-primary/[0.03] px-5 py-4">
+                                <p className="font-sans text-primary text-xs uppercase tracking-[0.2em]">
+                                  Watch on the films page
+                                </p>
+                              </div>
+                            </Link>
                           </div>
                         ))}
                     </div>
@@ -291,7 +291,7 @@ export default function StoryDrawer({
 
                 {/* Additional stories */}
                 {story.related.filter((r) => r._type !== "film").length > 0 && (
-                  <div className="mt-12 border-t border-primary/10 pt-10">
+                  <div className="mt-12 border-primary/10 border-t pt-10">
                     <p className="mb-2 font-sans text-secondary text-xs uppercase tracking-[0.3em]">
                       Keep reading
                     </p>
@@ -320,7 +320,7 @@ export default function StoryDrawer({
                               />
                             </div>
                             <div className="min-w-0 flex-1">
-                              <p className="font-serif text-lg text-foreground leading-tight">
+                              <p className="font-serif text-foreground text-lg leading-tight">
                                 {related.name}
                               </p>
                               <div className="mt-1 flex items-center gap-2">

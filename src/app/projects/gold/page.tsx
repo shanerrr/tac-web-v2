@@ -669,7 +669,7 @@ export default async function Gold() {
                 ].map((org) => (
                   <p
                     key={org}
-                    className="font-sans text-sm text-foreground/40 leading-relaxed transition-colors duration-200 hover:text-gold"
+                    className="font-sans text-foreground/40 text-sm leading-relaxed transition-colors duration-200 hover:text-gold"
                   >
                     {org}
                   </p>

@@ -1,6 +1,7 @@
 import CountUp from "@tac/components/CountUp";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
+import ReflectionsCarousel from "@tac/components/ReflectionsCarousel";
 import { getAssetsByTag } from "@tac/lib/contentful";
 import Image from "next/image";
 import ACSELLogo from "../../../../public/ACSEL.png";
@@ -53,6 +54,31 @@ const stations = [
     description:
       "Open conversations sparked by the stories on display, creating space for visitors of all ages to share their own experiences with aging.",
   },
+];
+
+const reflections = [
+  "Keep on smiling! Let the mystery be!",
+  "Starting over later in life takes guts - it requires being comfortable in your own skin.",
+  "I see myself as a cool, wise person who still plays video games while also helping people as a doctor/researcher (hopefully)",
+  "I see myself as a more knowledgeable person in my older age! Probably will learn more about aging!",
+  "I keep growing so much bolder, no one mess with me, I can throw boulders!",
+  "Choose to be healthy, active, and happy",
+  "Smiling till the end :)",
+  "Yesterday is heavy. Put it down!",
+  "This is the best time of (my) life",
+  "'My soul loves to hover over the places I once enjoyed' Kalil Gilnan. I treasure my memories. Keep reading!",
+  "Every day, in every way, I am thankful! ❤️",
+  "This is the time to have new adventures!",
+  "Full of love, joy, and life, having a good time in my 90s!",
+  "No matter what my body says, I will not feel old, only experienced. :)",
+  "I've spent so much of my life caring and loving others, it's time to care and love me. Stop being my own worse critic.",
+  "Kindness to yourself, past, present, and future.",
+  "Expect nothing, appreciate everything.",
+  "Wear sunscreen but enjoy the laugh lines.",
+  "If you're feeling old, there are things you can do to make you feel younger. Try to be active. Do not isolate.",
+  "it's never too late to try something new or start over.",
+  "Being happy and continuing to explore new experiences.",
+  "Keep smiling :)",
 ];
 
 const supporters = [
@@ -314,6 +340,27 @@ export default async function MyAgingStory() {
               </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════ Self-Reflections ═══════════════════ */}
+      <section className="relative overflow-hidden bg-quaternary/[0.04] py-24 md:py-32">
+        <div className="container relative">
+          <div className="mx-auto mb-14 max-w-3xl text-center">
+            <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
+              From the Booth
+            </p>
+            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
+              Self-<span className="text-quaternary italic">reflections.</span>
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
+            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
+              Visitors imagined their future older selves and shared what they
+              hope to remember, become, and let go of.
+            </p>
+          </div>
+
+          <ReflectionsCarousel reflections={reflections} />
         </div>
       </section>
 
