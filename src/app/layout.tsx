@@ -1,4 +1,5 @@
 import { SITE_URL } from "@tac/lib/constants";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Inter, Old_Standard_TT } from "next/font/google";
 import type { ReactNode } from "react";
@@ -78,6 +79,7 @@ export default function RootLayout({
         className={`${oldStandardTT.variable} ${inter.variable} font-sans antialiased`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
