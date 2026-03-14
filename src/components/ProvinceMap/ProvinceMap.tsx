@@ -9,21 +9,70 @@ type Province = {
   x: number;
   y: number;
   count: number;
+  cities: string[];
 };
 
 const provinces: Province[] = [
-  { name: "British Columbia", x: 220, y: 1120, count: 60 },
-  { name: "Alberta", x: 450, y: 1100, count: 35 },
-  { name: "Saskatchewan", x: 650, y: 1200, count: 10 },
-  { name: "Manitoba", x: 815, y: 1250, count: 12 },
-  { name: "Ontario", x: 1100, y: 1300, count: 161 },
-  { name: "Quebec", x: 1400, y: 1300, count: 4 },
-  { name: "New Brunswick", x: 1650, y: 1300, count: 5 },
-  { name: "Prince Edward Island", x: 1730, y: 1250, count: 5 },
-  { name: "Nova Scotia", x: 1750, y: 1360, count: 15 },
-  { name: "Newfoundland and Labrador", x: 1620, y: 1000, count: 5 },
-  { name: "Yukon", x: 200, y: 600, count: 4 },
-  { name: "Northwest Territories", x: 490, y: 740, count: 3 },
+  {
+    name: "British Columbia",
+    x: 220,
+    y: 1120,
+    count: 60,
+    cities: ["Vancouver", "Victoria", "Kelowna"],
+  },
+  {
+    name: "Alberta",
+    x: 450,
+    y: 1100,
+    count: 35,
+    cities: ["Calgary", "Edmonton", "St. Albert"],
+  },
+  {
+    name: "Saskatchewan",
+    x: 650,
+    y: 1200,
+    count: 10,
+    cities: ["Saskatoon", "Regina"],
+  },
+  { name: "Manitoba", x: 815, y: 1250, count: 12, cities: ["Winnipeg"] },
+  {
+    name: "Ontario",
+    x: 1100,
+    y: 1300,
+    count: 161,
+    cities: ["Toronto", "Ottawa", "Hamilton", "London"],
+  },
+  { name: "Quebec", x: 1400, y: 1300, count: 4, cities: ["Montreal"] },
+  {
+    name: "New Brunswick",
+    x: 1650,
+    y: 1300,
+    count: 5,
+    cities: ["Fredericton"],
+  },
+  {
+    name: "Prince Edward Island",
+    x: 1730,
+    y: 1250,
+    count: 5,
+    cities: ["Charlottetown"],
+  },
+  { name: "Nova Scotia", x: 1750, y: 1360, count: 15, cities: ["Halifax"] },
+  {
+    name: "Newfoundland and Labrador",
+    x: 1620,
+    y: 1000,
+    count: 5,
+    cities: ["St. John's"],
+  },
+  { name: "Yukon", x: 200, y: 600, count: 4, cities: ["Whitehorse"] },
+  {
+    name: "Northwest Territories",
+    x: 490,
+    y: 740,
+    count: 3,
+    cities: ["Yellowknife"],
+  },
 ];
 
 const SVG_W = 2000;
@@ -136,8 +185,8 @@ export default function ProvinceMap() {
           }}
         >
           <div className="flex flex-col items-center">
-            <div className="rounded-xl border border-gold/25 bg-[#1A1710] px-5 py-3 shadow-2xl shadow-black/50">
-              <p className="text-center font-sans text-sm text-white/80 md:text-base">
+            <div className="min-w-48 max-w-64 rounded-xl border border-gold/25 bg-[#1A1710] px-5 py-3 shadow-2xl shadow-black/50">
+              <p className="mb-1 text-center font-sans text-sm text-white/80 md:text-base">
                 {activeProv.name}
               </p>
               <p className="text-center font-bold font-serif text-2xl text-gold md:text-3xl">
@@ -146,6 +195,11 @@ export default function ProvinceMap() {
                   poems
                 </span>
               </p>
+              {activeProv.cities.length > 0 && (
+                <p className="mt-1.5 border-gold/15 border-t pt-1.5 text-center font-sans text-white/50 text-xs">
+                  {activeProv.cities.join(" · ")}
+                </p>
+              )}
             </div>
             {/* Caret */}
             <div

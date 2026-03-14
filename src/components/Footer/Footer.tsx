@@ -150,6 +150,9 @@ export default function Footer({
               </a>
             ))}
           </div>
+          <span className="mt-4 inline-block font-sans text-sm text-white/70 transition-colors duration-200 hover:text-white">
+            info@theagecollective.com
+          </span>
         </div>
       </div>
 
@@ -159,7 +162,7 @@ export default function Footer({
       </div>
 
       {/* Land acknowledgement + copyright */}
-      <div className="container flex flex-col gap-4 py-8 text-white/80 sm:flex-row sm:items-end sm:justify-between">
+      <div className="container flex flex-col gap-4 py-8 text-white/60 sm:flex-row sm:items-end sm:justify-between">
         <p className="font-sans text-xs leading-relaxed sm:max-w-2xl">
           {LAND_ACKNOWLEDGEMENT}
         </p>

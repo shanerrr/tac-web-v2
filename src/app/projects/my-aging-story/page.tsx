@@ -35,11 +35,6 @@ const impact = [
 
 const stations = [
   {
-    title: "22 Stories",
-    description:
-      "Powerful personal narratives from Edmontonians of various ages and backgrounds, collected over three years — each one challenging ageism and celebrating resilience.",
-  },
-  {
     title: "Story Scavenger Hunt",
     description:
       "An interactive activity guiding visitors through the exhibit's stories, encouraging deeper engagement with each narrative and the themes they carry.",
@@ -47,12 +42,12 @@ const stations = [
   {
     title: "Self-Reflection Booth",
     description:
-      "A quiet space where visitors imagined and wrote about their future older selves — bridging the gap between who we are and who we're becoming.",
+      "A space where visitors imagined and wrote about their future older selves. This aimed to help bridge the gap between who we are now and who we want to become in late life.",
   },
   {
     title: "Community Dialogue",
     description:
-      "Open conversations sparked by the stories on display, creating space for visitors of all ages to share their own experiences with aging.",
+      "Displayed stories created space for visitors of all ages to begin conversations with others about aging during the exhibit.",
   },
 ];
 
@@ -91,7 +86,6 @@ const supporters = [
 ];
 
 // --- Stat ring for impact section ---
-
 function StatRing({ value }: { value: number }) {
   const r = 46;
   const circumference = 2 * Math.PI * r;
@@ -179,16 +173,16 @@ export default async function MyAgingStory() {
           <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
           <div className="mt-8 space-y-5 font-sans text-foreground/70 text-lg leading-relaxed md:text-xl">
             <p>
-              On February 21&ndash;22, 2025, we hosted the My Aging Story
-              exhibit in Edmonton, AB. The exhibit showcased 22 powerful stories
-              from Edmontonians of various ages and backgrounds, collected over
+              On February 21&ndash;22, 2025, we hosted the{" "}
+              <span className="italic"> My Aging Story</span> exhibit in
+              Edmonton, Alberta. The exhibit featured 22 powerful stories from
+              Edmontonians of different ages and backgrounds, collected over
               three years through our initiative.
             </p>
             <p>
-              Visitors explored interactive activities like a story-based
-              scavenger hunt and the Self-Reflection Booth, where they imagined
-              and wrote about their future older selves &mdash; sparking
-              conversations about what it truly means to grow older.
+              The exhibit created a physical space for visitors to explore
+              diverse experiences of aging, reflect on their own aging journeys,
+              and see aging as a natural and meaningful part of life.
             </p>
           </div>
         </div>
@@ -219,22 +213,22 @@ export default async function MyAgingStory() {
         <div className="container relative">
           <div className="mb-16 text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
-              Stations
+              Engagement
             </p>
             <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
-              Four ways to{" "}
+              Three ways to{" "}
               <span className="text-quaternary italic">engage.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
           </div>
 
-          <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {stations.map((station, i) => (
               <div
                 key={station.title}
                 className="group flex flex-col rounded-2xl border border-quaternary/10 bg-white px-6 py-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
-                <span className="font-sans text-[10px] text-quaternary/35 uppercase tracking-[0.3em]">
+                <span className="font-sans text-[10px] text-quaternary uppercase tracking-[0.3em]">
                   0{i + 1}
                 </span>
                 <h3 className="mt-2 font-serif text-foreground text-xl leading-tight md:text-2xl">
@@ -251,7 +245,7 @@ export default async function MyAgingStory() {
       </section>
 
       {/* ═══════════════════ Highlights ═══════════════════ */}
-      <section className="py-20 md:py-24">
+      <section className="bg-quaternary/4 py-20 md:py-24">
         <div className="container">
           <p className="mb-14 text-center font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
             Highlights
@@ -368,7 +362,7 @@ export default async function MyAgingStory() {
       </section>
 
       {/* ═══════════════════ Self-Reflections ═══════════════════ */}
-      <section className="relative overflow-hidden bg-quaternary/[0.04] py-24 md:py-32">
+      <section className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
         <div className="container relative">
           <div className="mx-auto mb-14 max-w-3xl text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
@@ -385,6 +379,45 @@ export default async function MyAgingStory() {
           </div>
 
           <ReflectionsCarousel reflections={reflections} />
+        </div>
+      </section>
+
+      {/* ═══════════════════ Exhibit Video ═══════════════════ */}
+      <section className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
+        <div className="container relative">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
+              The Experience
+            </p>
+            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
+              Two days of{" "}
+              <span className="text-quaternary italic">
+                stories&nbsp;&amp;&nbsp;connection.
+              </span>
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
+            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
+              In case you missed it, experience the{" "}
+              <span className="italic">My Aging Story</span> exhibit through our
+              video!
+            </p>
+          </div>
+
+          {/* Video embed */}
+          <div className="mx-auto mt-12 max-w-4xl">
+            <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+              <div className="aspect-video">
+                <iframe
+                  src="https://www.youtube-nocookie.com/embed/unh5yVYfwqE"
+                  title="My Aging Story exhibit video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                  className="h-full w-full"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -435,64 +468,6 @@ export default async function MyAgingStory() {
             >
               Get in Touch
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ Exhibit Video ═══════════════════ */}
-      <section className="relative overflow-hidden bg-quaternary/[0.04] py-24 md:py-32">
-        {/* Watermark */}
-        <div
-          className="pointer-events-none absolute animate-spin-slow select-none"
-          aria-hidden="true"
-          style={{
-            width: "min(60vw, 60vh)",
-            height: "min(60vw, 60vh)",
-            bottom: "calc(min(60vw, 60vh) / -3)",
-            right: "calc(min(60vw, 60vh) / -3)",
-          }}
-        >
-          <Image
-            src={logo}
-            alt=""
-            fill
-            className="object-contain opacity-[0.03]"
-            style={{ filter: "invert(1)" }}
-          />
-        </div>
-
-        <div className="container relative">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
-              The Experience
-            </p>
-            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
-              Two days of{" "}
-              <span className="text-quaternary italic">
-                stories&nbsp;&amp;&nbsp;connection.
-              </span>
-            </h2>
-            <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
-            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
-              A look inside the My Aging Story exhibit &mdash; the people, the
-              conversations, and the moments that made it meaningful.
-            </p>
-          </div>
-
-          {/* Video embed */}
-          <div className="mx-auto mt-12 max-w-4xl">
-            <div className="relative overflow-hidden rounded-2xl shadow-2xl">
-              <div className="aspect-video">
-                <iframe
-                  src="https://www.youtube-nocookie.com/embed/unh5yVYfwqE"
-                  title="My Aging Story exhibit video"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  loading="lazy"
-                  className="h-full w-full"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </section>

@@ -51,6 +51,7 @@ export default async function About() {
   const allCollageAssets = [...collageAssets, ...quotes].sort(
     (a, b) => a.sortIndex - b.sortIndex,
   );
+
   return (
     <div className="min-h-dvh w-full overflow-x-clip">
       <Navbar
@@ -308,7 +309,8 @@ export default async function About() {
               Origin
             </p>
             <h2 className="font-serif text-4xl text-foreground leading-tight md:text-5xl">
-              Why <span className="text-tertiary italic">We Are</span>
+              We’re a small but{" "}
+              <span className="text-tertiary italic">mighty team.</span>
             </h2>
             <div className="mt-2 h-px w-16 bg-tertiary/30" />
           </div>
@@ -380,20 +382,20 @@ export default async function About() {
           <p className="mb-5 font-sans text-tertiary text-xs uppercase tracking-[0.4em]">
             Get Involved
           </p>
-          <h2 className="mx-auto max-w-2xl font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
-            Every age has a story.{" "}
-            <span className="text-tertiary italic">What&rsquo;s yours?</span>
+          <h2 className="mx-auto font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
+            We're all aging.{" "}
+            <span className="text-tertiary italic">Let's talk about it.</span>
           </h2>
           <div className="mx-auto mt-2 h-px w-16 bg-tertiary/30" />
           <p className="mx-auto mt-8 max-w-xl font-sans text-foreground/60 text-lg leading-relaxed">
-            Whether you&rsquo;re 22 or 92, your perspective on aging matters.
-            We&rsquo;d love to hear from you.
+            If you have questions, ideas, or perspectives you’d like to share,
+            we’d love to hear from you.
           </p>
           <a
             href="mailto:hello@theagecollective.ca"
             className="mt-10 inline-flex items-center gap-3 rounded-xl border border-tertiary bg-tertiary px-8 py-4 font-sans text-sm text-white uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
           >
-            Share Your Story
+            Get in touch
           </a>
         </div>
       </section>

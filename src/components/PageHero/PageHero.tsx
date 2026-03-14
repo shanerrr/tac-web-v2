@@ -1,3 +1,4 @@
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import logo from "../../../public/logo-rings.svg";
@@ -23,8 +24,6 @@ type PageHeroProps = {
   accentLabelClassName?: string;
   /** CSS class for the scroll-cue text color. Default: "text-white/60". */
   scrollCueClassName?: string;
-  /** CSS class for the scroll-cue line color. Default: "bg-white/20". */
-  scrollLineClassName?: string;
   /** CSS background value for an extra ambient glow overlay. */
   glowOverlay?: string;
   /** Override the vignette background. */
@@ -46,7 +45,6 @@ export default function PageHero({
   subtitleClassName,
   accentLabelClassName = "text-white/60",
   scrollCueClassName = "text-white/60",
-  scrollLineClassName = "bg-white/20",
   glowOverlay,
   vignetteOverlay = "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.18) 100%)",
   watermarkOpacity = "opacity-[0.08]",
@@ -118,11 +116,14 @@ export default function PageHero({
         {/* Scroll cue */}
         <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
           <span
-            className={`font-sans text-xs uppercase tracking-[0.4em] ${scrollCueClassName}`}
+            className={`mr-[-0.4em] font-sans text-xs uppercase tracking-[0.4em] ${scrollCueClassName}`}
           >
             scroll
           </span>
-          <div className={`h-5 w-px ${scrollLineClassName}`} />
+          <ChevronDown
+            size={32}
+            className={`animate-scroll-bounce ${scrollCueClassName}`}
+          />
         </div>
       </section>
     </div>

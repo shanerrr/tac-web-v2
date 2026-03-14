@@ -103,7 +103,7 @@ const navItems: NavItem[] = [
         label: "GOLD",
         href: "/projects/gold",
         description:
-          "Poems celebrating the golden threads of a life well-lived",
+          "Celebrating the creative force of older adults through poetry.",
         accent: "gold",
         accentLabel: "Poetry",
       },

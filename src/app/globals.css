@@ -143,6 +143,22 @@
     animation: shimmer 4s ease-in-out infinite;
 }
 
+@keyframes scroll-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 0.4;
+  }
+}
+
+@utility animate-scroll-bounce {
+    animation: scroll-bounce 2s ease-in-out infinite;
+}
+
 @utility container {
     padding-inline: 1rem;
     margin: auto;

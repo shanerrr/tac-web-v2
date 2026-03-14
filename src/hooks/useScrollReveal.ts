@@ -29,6 +29,19 @@ export function useScrollReveal() {
 
   const reset = useCallback(() => setObservationKey((k) => k + 1), []);
 
+  const revealUpTo = useCallback((itemIds: string[], dividerIds: number[]) => {
+    setVisibleItems((prev) => {
+      const next = new Set(prev);
+      for (const id of itemIds) next.add(id);
+      return next;
+    });
+    setDrawnDividers((prev) => {
+      const next = new Set(prev);
+      for (const id of dividerIds) next.add(id);
+      return next;
+    });
+  }, []);
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: observationKey triggers re-observation after reset
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -74,5 +87,12 @@ export function useScrollReveal() {
     };
   }, [observationKey]);
 
-  return { setItemRef, setDividerRef, visibleItems, drawnDividers, reset };
+  return {
+    setItemRef,
+    setDividerRef,
+    visibleItems,
+    drawnDividers,
+    reset,
+    revealUpTo,
+  };
 }

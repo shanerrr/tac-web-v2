@@ -1,4 +1,6 @@
+import Banner from "@tac/components/Banner/Banner";
 import { SITE_URL } from "@tac/lib/constants";
+import { getAlertBanner } from "@tac/lib/contentful";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Inter, Old_Standard_TT } from "next/font/google";
@@ -68,16 +70,19 @@ export const viewport: Viewport = {
   themeColor: "#FCF2E0",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const banner = await getAlertBanner();
+
   return (
     <html lang="en">
       <body
         className={`${oldStandardTT.variable} ${inter.variable} font-sans antialiased`}
       >
+        {banner && <Banner banner={banner} />}
         {children}
         <Analytics />
       </body>

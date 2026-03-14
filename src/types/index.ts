@@ -39,6 +39,13 @@ export function isStory(item: Story | Film): item is Story {
   return !isFilm(item);
 }
 
+export type AlertBanner = {
+  id: string;
+  message: string;
+  link: string | null;
+  linkText: string | null;
+};
+
 export type GoldJudge = {
   id: string;
   name: string;

@@ -1,8 +1,7 @@
 import { formatDate } from "@tac/lib/utils";
-import type { Film, GoldJudge, GoldPoet, Story } from "@tac/types";
+import type { AlertBanner, Film, GoldJudge, GoldPoet, Story } from "@tac/types";
 import type { Asset, EntryFieldTypes, EntrySkeletonType } from "contentful";
 import { createClient } from "contentful";
-import { link } from "fs";
 import { cacheTag } from "next/cache";
 
 if (!process.env.CONTENTFUL_SPACE_ID || !process.env.CONTENTFUL_ACCESS_TOKEN) {
@@ -55,6 +54,16 @@ interface GoldJudgesSkeleton extends EntrySkeletonType {
     name: EntryFieldTypes.Text;
     description: EntryFieldTypes.Text;
     photo: EntryFieldTypes.AssetLink;
+  };
+}
+
+interface AlertBannerSkeleton extends EntrySkeletonType {
+  contentTypeId: "alertBanner";
+  fields: {
+    message: EntryFieldTypes.Text;
+    link: EntryFieldTypes.Text;
+    linkText: EntryFieldTypes.Text;
+    active: EntryFieldTypes.Boolean;
   };
 }
 
@@ -250,4 +259,25 @@ export const getGoldPoets = async (): Promise<GoldPoet[]> => {
       const lastB = b.name.split(" ").at(-1) ?? "";
       return lastA.localeCompare(lastB);
     });
+};
+
+export const getAlertBanner = async (): Promise<AlertBanner | null> => {
+  "use cache";
+  cacheTag("alertBanner");
+
+  const { items } = await client.getEntries<AlertBannerSkeleton>({
+    content_type: "alertBanner",
+    limit: 1,
+    order: ["-sys.updatedAt"],
+  });
+
+  const entry = items.find((item) => item.fields.active);
+  if (!entry) return null;
+
+  return {
+    id: entry.sys.id,
+    message: entry.fields.message,
+    link: entry.fields.link ?? null,
+    linkText: entry.fields.linkText ?? null,
+  };
 };

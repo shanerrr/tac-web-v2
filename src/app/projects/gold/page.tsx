@@ -13,6 +13,7 @@ import glocalLogo from "../../../../public/glocal.png";
 import logo from "../../../../public/logo-rings.svg";
 
 const highlights = [
+  { value: "32", label: "Cities Reached" },
   { value: "319", label: "Poems Submitted" },
   { value: "260", label: "Older Adults Reached" },
   { value: "91", label: "Organizations Reached" },
@@ -23,25 +24,25 @@ const themes = [
     number: "01",
     title: "Self & Identity",
     description:
-      "Poems exploring who we become as we age — the evolving self, changing roles, and the stories we tell about ourselves.",
+      "Poems that explore who we become as we age, including the evolving self, changing roles, how others perceive us, and finding new meaning or purpose.",
   },
   {
     number: "02",
     title: "Place & Belonging",
     description:
-      "Poems rooted in the places that shape us — home, community, landscape, and the search for where we belong.",
+      "Poems that explore how aging connects to ideas of home, community, the environment, and belonging.",
   },
   {
     number: "03",
     title: "Time, Memory & Legacy",
     description:
-      "Poems that move through time — looking back, holding on, letting go, and asking what we leave behind.",
+      "Poems that explore how time shapes us as we age: what we remember, what we forget, and what we leave behind.",
   },
   {
     number: "04",
     title: "Power & Resistance",
     description:
-      "Poems that push back — against ageism, invisibility, and the assumptions placed on older adults.",
+      "Poems that challenge ageism, invisibility, systems of power, and assumptions about older adults.",
   },
 ];
 
@@ -72,7 +73,7 @@ export default async function Gold() {
         accentLabel="Poetry Anthology"
         title="GOLD"
         subtitle={
-          <>Poems celebrating the golden threads of a life well&#8209;lived.</>
+          <>Celebrating the creative force of older adults through poetry.</>
         }
         bgClass="bg-[#0A0A0A]"
         noTexture
@@ -81,7 +82,7 @@ export default async function Gold() {
         watermarkOpacity="opacity-[0.04]"
         glowOverlay="radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 55%)"
         vignetteOverlay="radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)"
-        accentLabelClassName="text-gold/50"
+        accentLabelClassName="text-gold"
         titleClassName="animate-shimmer bg-clip-text text-transparent tracking-widest"
         titleStyle={{
           backgroundImage:
@@ -89,8 +90,7 @@ export default async function Gold() {
           backgroundSize: "200% 100%",
         }}
         subtitleClassName="max-w-lg text-white/50 text-xl sm:text-3xl"
-        scrollCueClassName="text-gold/40"
-        scrollLineClassName="bg-gold/20"
+        scrollCueClassName="text-gold"
       />
 
       {/* ═══════════════════ About the Anthology ═══════════════════ */}
@@ -106,19 +106,30 @@ export default async function Gold() {
           <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
           <div className="mt-8 space-y-5 font-sans text-foreground/70 text-lg leading-relaxed md:text-xl">
             <p>
-              The GOLD Poetry Project began in response to two connected gaps:
-              older adults are underrepresented in the arts, and aging is often
-              understood in narrow ways. These gaps limit opportunities for
-              creative expression and make it harder to have honest
-              conversations about what it really means to grow older.
+              The Growing Older, Living Deeply (GOLD) Poetry Project began in
+              response to two connected gaps: older adults are underrepresented
+              in the arts, and aging is often understood in narrow ways. These
+              gaps limit opportunities for creative expression for older adults
+              and make it harder to have honest conversations about what it
+              really means to grow older.
             </p>
             <p>
-              Between June 2025 and February 2026, we invited adults aged 55 and
-              older across Canada to submit original poems about their
-              experiences of aging. Over four national calls &mdash; each
-              focused on a different dimension of the aging experience &mdash;
-              the ten highest&#8209;scoring poems from each theme were selected,
-              resulting in a final digital anthology of 40&nbsp;poems.
+              GOLD was created to address this by centering the voices of older
+              adults through poetry. Between June 2025 and February 2026, we
+              invited adults aged 55 years and older across Canada to submit
+              original poems about their experiences of aging. Our goals were to
+              amplify older adults’ voices, challenge ageist assumptions, and
+              create space for open conversations about aging, including its
+              joys, losses, strengths, vulnerabilities, and social realities.
+            </p>
+            <p>
+              Over the year, we released four national calls for poems, each
+              focused on a different dimension of the aging experience: Self
+              &amp; Identity; Place &amp; Belonging; Time, Memory &amp; Legacy;
+              and Power &amp; Resistance. All poems were de-identified before
+              review, and a judging panel of older adult poets selected the top
+              ten poems from each theme, resulting in a final digital anthology
+              of 40 poems.
             </p>
           </div>
         </div>
@@ -126,26 +137,6 @@ export default async function Gold() {
 
       {/* ═══════════════════ The Four Calls ═══════════════════ */}
       <section className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
-        {/* Watermark */}
-        <div
-          className="pointer-events-none absolute animate-spin-slow select-none"
-          aria-hidden="true"
-          style={{
-            width: "min(70vw, 70vh)",
-            height: "min(70vw, 70vh)",
-            top: "calc(min(70vw, 70vh) / -3)",
-            right: "calc(min(70vw, 70vh) / -3)",
-          }}
-        >
-          <Image
-            src={logo}
-            alt=""
-            fill
-            className="object-contain opacity-[0.04]"
-            style={{ filter: "invert(1)" }}
-          />
-        </div>
-
         <div className="container relative">
           <div className="mb-16 text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
@@ -162,16 +153,16 @@ export default async function Gold() {
             {themes.map((theme) => (
               <div
                 key={theme.title}
-                className="group flex flex-col rounded-2xl border border-gold/10 bg-[#0A0A0A] px-6 py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-gold/8 hover:shadow-lg"
+                className="group flex flex-col rounded-2xl border border-gold/10 bg-white px-6 py-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-gold/8 hover:shadow-lg"
               >
-                <span className="font-sans text-[10px] text-gold/40 uppercase tracking-[0.3em]">
+                <span className="font-sans text-[10px] text-gold uppercase tracking-[0.3em]">
                   {theme.number}
                 </span>
-                <h4 className="mt-2 font-serif text-white text-xl leading-tight md:text-2xl">
+                <h4 className="mt-2 font-serif text-foreground text-xl leading-tight md:text-2xl">
                   {theme.title}
                 </h4>
                 <div className="mt-2 h-px w-8 bg-gold/20 transition-all duration-300 group-hover:w-12 group-hover:bg-gold/40" />
-                <p className="mt-4 font-sans text-sm text-white/45 leading-relaxed">
+                <p className="mt-4 font-sans text-foreground/60 text-sm leading-relaxed">
                   {theme.description}
                 </p>
               </div>
@@ -231,9 +222,8 @@ export default async function Gold() {
               </h2>
               <div className="mx-auto mt-2 h-px w-16 bg-gold/20 md:mx-0" />
               <p className="mt-6 font-sans text-base text-white/55 leading-relaxed md:text-lg">
-                The GOLD anthology reflects a wide range of experiences that
-                resist singular narratives of aging and instead reveal its
-                complexity, contradiction, strength, and vulnerability.
+                The GOLD anthology spotlights powerful poems that illuminate the
+                layered and lived realities of growing older.
               </p>
               <a
                 href="#"
@@ -262,18 +252,22 @@ export default async function Gold() {
           {/* Reach Section */}
           <div className="overflow-hidden">
             {/* Stats strip */}
-            <div className="grid grid-cols-1 divide-y divide-gold/30 border-gold/30 border-b sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            <div className="grid grid-cols-2 border-gold/30 border-b sm:grid-cols-4">
               {highlights.map((stat, i) => (
                 <div
                   key={stat.label}
-                  className="flex flex-col items-center px-6 py-8 text-center"
+                  className={`flex flex-col items-center border-gold/30 px-6 py-8 text-center ${
+                    i % 2 !== 0 ? "border-l" : ""
+                  } ${i >= 2 ? "border-t sm:border-t-0" : ""} ${
+                    i >= 1 ? "sm:border-l" : ""
+                  }`}
                 >
                   <CountUp
                     value={Number(stat.value)}
-                    className="font-serif text-6xl text-gold leading-none tracking-tight md:text-7xl"
+                    className="font-serif text-5xl text-gold leading-none tracking-tight md:text-6xl"
                     delay={i * 150}
                   />
-                  <span className="mt-2 font-medium font-sans text-foreground/70 text-sm uppercase tracking-[0.2em]">
+                  <span className="mt-2 font-medium font-sans text-foreground/70 text-xs uppercase tracking-[0.2em] md:text-sm">
                     {stat.label}
                   </span>
                 </div>
@@ -360,11 +354,11 @@ export default async function Gold() {
 
         <div className="container relative">
           <div className="mx-auto mb-16 max-w-3xl text-center">
-            <p className="mb-5 font-sans text-gold/60 text-xs uppercase tracking-[0.4em]">
+            <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
               The Panel
             </p>
             <h2 className="font-serif text-3xl text-white leading-tight md:text-4xl lg:text-5xl">
-              Meet the <span className="text-gold italic">judges.</span>
+              Meet the GOLD <span className="text-gold italic">judges.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-gold/20" />
           </div>
@@ -434,10 +428,6 @@ export default async function Gold() {
               Meet the GOLD <span className="text-gold italic">poets.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
-            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
-              Poets whose words shape the anthology — each bringing their own
-              experience of aging into verse.
-            </p>
           </div>
 
           <div className="mx-auto flex max-w-5xl flex-col gap-14 md:gap-18">
@@ -489,7 +479,9 @@ export default async function Gold() {
                   <div
                     className={`mx-auto mt-3 h-px w-8 bg-gold/15 transition-all duration-300 group-hover:w-14 group-hover:bg-gold/35 ${i % 2 !== 0 ? "sm:mr-0 sm:ml-auto" : "sm:mx-0"}`}
                   />
-                  <p className="mt-4 max-w-md font-sans text-foreground/70 text-sm leading-relaxed md:text-base">
+                  <p
+                    className={`mt-4 max-w-md font-sans text-foreground/70 text-sm leading-relaxed md:text-base ${i % 2 !== 0 ? "sm:ml-auto" : "sm:mr-auto"}`}
+                  >
                     {poet.description}
                   </p>
 
@@ -539,7 +531,7 @@ export default async function Gold() {
       </section>
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <section className="relative overflow-hidden bg-gold/[0.06] py-24 md:py-32">
+      <section className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
         <div className="container relative">
           {/* Section header */}
           <div className="mx-auto mb-20 max-w-3xl text-center">
@@ -645,7 +637,6 @@ export default async function Gold() {
                   "St Albert Library",
                   "Canadian Network for the Prevention of Elder Abuse (CNPEA)",
                   "Aldershot News",
-                  "Abuse (CNPEA)",
                   "Brokenhead Writer's Circle",
                   "ElderActive",
                   "Seniors Take Action Coalition of Richmond County",

@@ -7,7 +7,7 @@ import { useScrollReveal } from "@tac/hooks/useScrollReveal";
 import type { Film } from "@tac/types";
 import { Play } from "lucide-react";
 import Image from "next/image";
-import { Fragment, memo, useCallback, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useState } from "react";
 
 /**
  * Extract YouTube video ID from various URL formats.
@@ -121,13 +121,35 @@ const FilmCard = memo(function FilmCard({
 });
 
 export default function FilmsFeed({ films }: { films: Film[] }) {
-  const { setDividerRef, drawnDividers, setItemRef, visibleItems } =
+  const { setDividerRef, drawnDividers, setItemRef, visibleItems, revealUpTo } =
     useScrollReveal();
   const [activeFilmId, setActiveFilmId] = useState<string | null>(null);
 
   const handlePlay = useCallback((filmId: string) => {
     setActiveFilmId(filmId);
   }, []);
+
+  // On mount, if there's a hash, reveal everything up to that film and scroll to it
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+
+    const targetIndex = films.findIndex((f) => f.id === hash);
+    if (targetIndex === -1) return;
+
+    const itemIds = films.slice(0, targetIndex + 1).map((f) => f.id);
+    const dividerIds = Array.from(
+      { length: targetIndex + 1 },
+      (_, i) => i,
+    ).filter((i) => i > 0);
+    revealUpTo(itemIds, dividerIds);
+
+    requestAnimationFrame(() => {
+      document
+        .getElementById(hash)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }, [films, revealUpTo]);
 
   return (
     <div className="py-20 md:py-28">
