@@ -24,7 +24,10 @@ export default function PillarCard({
   return (
     <button
       type="button"
-      onClick={() => setOpen((o) => !o)}
+      onClick={() => {
+        navigator.vibrate?.(8);
+        setOpen((o) => !o);
+      }}
       aria-expanded={open}
       className="group relative flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/6 px-4 py-8 text-center backdrop-blur-sm transition-all duration-300 sm:px-6 sm:py-10 md:px-8 md:py-12 md:hover:bg-white/12"
     >

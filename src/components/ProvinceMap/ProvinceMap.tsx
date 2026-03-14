@@ -236,10 +236,12 @@ export default function ProvinceMap() {
   const handleClear = useCallback(() => setHovered(null), []);
 
   const handleDotClick = useCallback((prov: Province) => {
+    navigator.vibrate?.(12);
     setDrawerProv(prov);
   }, []);
 
   const closeDrawer = useCallback(() => {
+    navigator.vibrate?.(6);
     setDrawerProv(null);
   }, []);
 
@@ -280,9 +282,11 @@ export default function ProvinceMap() {
           />
           {/* Shimmer masked to map shape */}
           <div
-            className="pointer-events-none absolute inset-0 animate-shimmer-long"
+            className="pointer-events-none absolute inset-0"
             aria-hidden="true"
             style={{
+              backgroundImage:
+                "linear-gradient(105deg, transparent 0%, transparent 40%, rgba(201,168,76,0.12) 50%, transparent 60%, transparent 100%)",
               backgroundSize: "200% 100%",
               WebkitMaskImage: `url(${canadaMap.src})`,
               maskImage: `url(${canadaMap.src})`,

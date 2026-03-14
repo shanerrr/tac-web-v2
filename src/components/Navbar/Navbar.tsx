@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, memo, useCallback, useEffect, useRef, useState } from "react";
-import { useWebHaptics } from "web-haptics/react";
 import logo from "../../../public/logo.svg";
 import logoRings from "../../../public/logo-rings.svg";
 
@@ -176,8 +175,6 @@ export default function Navbar({
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const hamburgerRef = useRef<HTMLButtonElement>(null);
-
-  const { trigger } = useWebHaptics();
 
   useEffect(() => {
     if (!transparent) return;
@@ -368,7 +365,7 @@ export default function Navbar({
               type="button"
               onClick={() => {
                 setMenuOpen((o) => !o);
-                trigger();
+                navigator.vibrate?.(10);
               }}
               aria-label="Toggle menu"
               aria-expanded={menuOpen}
@@ -461,11 +458,12 @@ export default function Navbar({
                       type="button"
                       className="flex items-center gap-2 self-start"
                       aria-expanded={openSubmenu === item.label}
-                      onClick={() =>
+                      onClick={() => {
+                        navigator.vibrate?.(8);
                         setOpenSubmenu((p) =>
                           p === item.label ? null : item.label,
-                        )
-                      }
+                        );
+                      }}
                     >
                       <span className={isActive ? "text-primary" : ""}>
                         {item.label}

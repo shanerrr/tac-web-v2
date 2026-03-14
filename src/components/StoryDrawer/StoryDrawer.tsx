@@ -5,7 +5,7 @@ import type { Block, Inline } from "@contentful/rich-text-types";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import { STORIES_BLUR_DATA_URL } from "@tac/lib/constants";
 import { formatDate } from "@tac/lib/utils";
-import { type Film, isFilm, isStory, type Story } from "@tac/types";
+import { type Film, type Story } from "@tac/types";
 import { Play, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -136,7 +136,10 @@ export default function StoryDrawer({
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent) => {
-      if (e.target === e.currentTarget) onClose();
+      if (e.target === e.currentTarget) {
+        navigator.vibrate?.(6);
+        onClose();
+      }
     },
     [onClose],
   );
@@ -171,7 +174,10 @@ export default function StoryDrawer({
               <div className="mx-auto h-1 w-10 rounded-full bg-foreground/15" />
               <button
                 type="button"
-                onClick={onClose}
+                onClick={() => {
+                  navigator.vibrate?.(6);
+                  onClose();
+                }}
                 className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-foreground/5 transition-colors hover:bg-foreground/10"
                 aria-label="Close story"
               >

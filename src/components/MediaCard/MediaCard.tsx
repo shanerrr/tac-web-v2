@@ -109,6 +109,7 @@ function VideoCard({
   const togglePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
+    navigator.vibrate?.(10);
 
     // First click — load the source
     if (!loaded) {
@@ -161,6 +162,26 @@ function VideoCard({
     },
     [seekFromEvent],
   );
+
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      e.stopPropagation();
+      setIsSeeking(true);
+      seekFromEvent(e.touches[0].clientX);
+    },
+    [seekFromEvent],
+  );
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (isSeeking) seekFromEvent(e.touches[0].clientX);
+    },
+    [isSeeking, seekFromEvent],
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    setIsSeeking(false);
+  }, []);
 
   const handleScrubKeyDown = useCallback((e: React.KeyboardEvent) => {
     const video = videoRef.current;
@@ -224,6 +245,9 @@ function VideoCard({
         aria-valuenow={Math.round(progress * 100)}
         tabIndex={0}
         onMouseDown={handleScrubDown}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onKeyDown={handleScrubKeyDown}
         className={`absolute right-0 bottom-0 left-0 z-20 h-3 cursor-pointer transition-opacity duration-300 ${
           showControls ? "opacity-100" : "opacity-0"

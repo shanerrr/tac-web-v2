@@ -44,6 +44,8 @@ const socialLinks = [
   },
 ];
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 const LAND_ACKNOWLEDGEMENT =
   "The Age Collective is based on the traditional territories of Indigenous Peoples across Canada. As a project that works with individuals from many regions, we recognize that our community gathers across diverse lands and nations. We acknowledge the enduring presence, knowledge, and sovereignty of First Nations, Inuit, and Métis Peoples, and we are committed to learning how our work can contribute to justice, respect, and accountability.";
 
@@ -167,7 +169,7 @@ export default function Footer({
           {LAND_ACKNOWLEDGEMENT}
         </p>
         <p className="shrink-0 font-sans text-sm">
-          &copy; 2026 The Age Collective
+          &copy; {CURRENT_YEAR} The Age Collective
         </p>
       </div>
     </footer>

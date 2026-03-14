@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CountUp({
   value,
@@ -18,40 +18,47 @@ export default function CountUp({
   const [display, setDisplay] = useState(0);
   const [started, setStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
-
-  const animate = useCallback(() => {
-    const start = performance.now();
-    const tick = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // ease-out cubic
-      const eased = 1 - (1 - progress) ** 3;
-      setDisplay(Math.round(eased * value));
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }, [value, duration]);
+  const triggeredRef = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || triggeredRef.current) return;
+
+    let timer: ReturnType<typeof setTimeout>;
+
+    const animate = () => {
+      const start = performance.now();
+      const tick = (now: number) => {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - (1 - progress) ** 3;
+        setDisplay(Math.round(eased * value));
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !started) {
+        if (entry.isIntersecting) {
+          triggeredRef.current = true;
           setStarted(true);
+          observer.disconnect();
           if (delay > 0) {
-            setTimeout(animate, delay);
+            timer = setTimeout(animate, delay);
           } else {
             animate();
           }
-          observer.disconnect();
         }
       },
       { threshold: 0.3 },
     );
     observer.observe(el);
-    return () => observer.disconnect();
-  }, [animate, started]);
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [value, duration, delay]);
 
   return (
     <span ref={ref} className={className}>

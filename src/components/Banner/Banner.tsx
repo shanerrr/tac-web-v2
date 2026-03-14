@@ -18,6 +18,7 @@ export default function Banner({ banner }: { banner: AlertBanner }) {
   }, [banner.id]);
 
   const dismiss = useCallback(() => {
+    navigator.vibrate?.(6);
     setVisible(false);
     localStorage.setItem(DISMISSED_KEY, banner.id);
   }, [banner.id]);

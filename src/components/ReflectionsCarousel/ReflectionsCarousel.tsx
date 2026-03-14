@@ -52,6 +52,7 @@ export default function ReflectionsCarousel({
   const scroll = useCallback((direction: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
+    navigator.vibrate?.(8);
     const cardWidth =
       el.querySelector<HTMLElement>("[data-card]")?.offsetWidth ?? 300;
     el.scrollBy({

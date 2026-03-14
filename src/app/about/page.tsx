@@ -355,7 +355,7 @@ export default async function About() {
             we’d love to hear from you.
           </p>
           <a
-            href="mailto:hello@theagecollective.ca"
+            href="mailto:info@theagecollective.com"
             className="mt-10 inline-flex items-center gap-3 rounded-xl border border-tertiary bg-tertiary px-8 py-4 font-sans text-sm text-white uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
           >
             Get in touch

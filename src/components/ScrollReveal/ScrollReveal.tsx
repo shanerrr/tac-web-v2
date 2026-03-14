@@ -49,7 +49,7 @@ export default function ScrollReveal({
   return (
     <Tag
       ref={ref}
-      className={`transition-all duration-700 ease-out ${visible ? "translate-y-0 translate-x-0 scale-100 opacity-100" : hiddenStyles[animation]} ${className}`}
+      className={`transition-[opacity,transform] duration-700 ease-out ${visible ? "translate-y-0 translate-x-0 scale-100 opacity-100" : hiddenStyles[animation]} ${className}`}
       style={delay > 0 ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}

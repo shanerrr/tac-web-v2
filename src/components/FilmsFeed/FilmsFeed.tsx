@@ -126,6 +126,7 @@ export default function FilmsFeed({ films }: { films: Film[] }) {
   const [activeFilmId, setActiveFilmId] = useState<string | null>(null);
 
   const handlePlay = useCallback((filmId: string) => {
+    navigator.vibrate?.(12);
     setActiveFilmId(filmId);
   }, []);
 

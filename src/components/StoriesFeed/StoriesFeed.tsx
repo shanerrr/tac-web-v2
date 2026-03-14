@@ -18,7 +18,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useWebHaptics } from "web-haptics/react";
 
 const StoryDrawer = dynamic(() => import("@tac/components/StoryDrawer"), {
   ssr: false,
@@ -134,7 +133,6 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
   const [activeDecade, setActiveDecade] = useState<Decade>("all");
   const [newestFirst, setNewestFirst] = useState(true);
   const [openStory, setOpenStory] = useState<Story | null>(null);
-  const { trigger } = useWebHaptics();
   const storiesById = useMemo(() => {
     const map = new Map<string, Story>();
     for (const s of stories) {
@@ -155,11 +153,11 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
     (id: string) => {
       const story = storiesById.get(id);
       if (!story) return;
-      trigger([{ duration: 300 }], { intensity: 1 });
+      navigator.vibrate?.(15);
       setOpenStory(story);
       window.history.pushState(null, "", `${HASH_PREFIX}${id}`);
     },
-    [storiesById, trigger],
+    [storiesById],
   );
 
   const closeDrawer = useCallback(() => {
@@ -210,7 +208,10 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
             <button
               key={d}
               type="button"
-              onClick={() => setActiveDecade(d)}
+              onClick={() => {
+                navigator.vibrate?.(8);
+                setActiveDecade(d);
+              }}
               className={`cursor-pointer rounded-[10px] border px-4 py-2 font-sans text-sm tracking-[0.18em] transition-colors ${
                 activeDecade === d
                   ? "border-primary bg-primary text-white"
@@ -238,7 +239,10 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
         <button
           type="button"
           className="flex cursor-pointer items-center gap-2 font-sans text-foreground/65 text-xs uppercase tracking-[0.2em] transition-colors hover:text-primary"
-          onClick={() => setNewestFirst((n) => !n)}
+          onClick={() => {
+            navigator.vibrate?.(8);
+            setNewestFirst((n) => !n);
+          }}
         >
           <ArrowUpDown size={10} className="opacity-60" />
           {newestFirst ? "Newest First" : "Oldest First"}
@@ -287,7 +291,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
         story={openStory}
         onClose={closeDrawer}
         onOpenStory={(related) => {
-          trigger([{ duration: 300 }], { intensity: 1 });
+          navigator.vibrate?.(15);
           setOpenStory(related);
           window.history.pushState(null, "", `${HASH_PREFIX}${related.id}`);
         }}
