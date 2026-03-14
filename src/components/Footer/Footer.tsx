@@ -78,7 +78,7 @@ export default function Footer({
         </div>
 
         <div>
-          <h3 className="mb-5 font-normal font-sans text-xs text-white uppercase tracking-[0.25em]">
+          <h3 className="mb-5 font-normal font-sans text-white text-xs uppercase tracking-[0.25em]">
             Explore
           </h3>
           <ul className="flex flex-col gap-3">
@@ -97,7 +97,7 @@ export default function Footer({
 
         {/* Projects */}
         <div>
-          <h3 className="mb-5 font-normal font-sans text-xs text-white uppercase tracking-[0.25em]">
+          <h3 className="mb-5 font-normal font-sans text-white text-xs uppercase tracking-[0.25em]">
             Projects
           </h3>
           <ul className="flex flex-col gap-3">
@@ -116,7 +116,7 @@ export default function Footer({
 
         {/* Policies */}
         <div>
-          <h3 className="mb-5 font-normal font-sans text-xs text-white uppercase tracking-[0.25em]">
+          <h3 className="mb-5 font-normal font-sans text-white text-xs uppercase tracking-[0.25em]">
             Policies
           </h3>
           <ul className="flex flex-col gap-3">
@@ -135,7 +135,7 @@ export default function Footer({
 
         {/* Stay Connected */}
         <div className="col-span-2 lg:col-span-1">
-          <h3 className="mb-5 font-normal font-sans text-xs text-white uppercase tracking-[0.25em]">
+          <h3 className="mb-5 font-normal font-sans text-white text-xs uppercase tracking-[0.25em]">
             Stay Connected
           </h3>
           <div className="flex gap-3">

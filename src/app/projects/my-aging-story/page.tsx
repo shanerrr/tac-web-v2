@@ -142,7 +142,10 @@ export default async function MyAgingStory() {
       </ScrollReveal>
 
       {/* ═══════════════════ Exhibit Stations ═══════════════════ */}
-      <ScrollReveal as="section" className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32"
+      >
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -280,7 +283,10 @@ export default async function MyAgingStory() {
       </ScrollReveal>
 
       {/* ═══════════════════ Impact Stats ═══════════════════ */}
-      <ScrollReveal as="section" className="heroTexture relative bg-quaternary py-24 text-white md:py-32">
+      <ScrollReveal
+        as="section"
+        className="heroTexture relative bg-quaternary py-24 text-white md:py-32"
+      >
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -306,8 +312,7 @@ export default async function MyAgingStory() {
               Impact
             </p>
             <h2 className="font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
-              What visitors{" "}
-              <span className="italic">told&nbsp;us.</span>
+              What visitors <span className="italic">told&nbsp;us.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-white/20" />
           </div>
@@ -317,7 +322,10 @@ export default async function MyAgingStory() {
       </ScrollReveal>
 
       {/* ═══════════════════ Self-Reflections ═══════════════════ */}
-      <ScrollReveal as="section" className="relative overflow-hidden py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative overflow-hidden py-24 md:py-32"
+      >
         <div className="container relative">
           <div className="mx-auto mb-14 max-w-3xl text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
@@ -338,7 +346,10 @@ export default async function MyAgingStory() {
       </ScrollReveal>
 
       {/* ═══════════════════ Exhibit Video ═══════════════════ */}
-      <ScrollReveal as="section" className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32"
+      >
         <div className="container relative">
           <div className="mx-auto max-w-3xl text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">

@@ -63,7 +63,7 @@ export default function PillarCard({
       <div
         className={`absolute inset-0 flex items-center justify-center overflow-y-auto rounded-2xl bg-white/12 px-4 py-6 transition-opacity duration-300 sm:px-6 sm:py-8 md:px-8 md:py-10 ${showOverlay}`}
       >
-        <p className="font-sans text-white/80 text-sm leading-relaxed md:text-base">
+        <p className="font-sans text-sm text-white/80 leading-relaxed md:text-base">
           {description}
         </p>
       </div>

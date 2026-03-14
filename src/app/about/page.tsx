@@ -163,7 +163,10 @@ export default async function About() {
       )}
 
       {/* ─── Changing the Narrative ─── */}
-      <ScrollReveal as="section" className="relative bg-tertiary/[0.07] py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative bg-tertiary/[0.07] py-24 md:py-32"
+      >
         <div className="container relative">
           <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-20">
             <div>
@@ -219,7 +222,10 @@ export default async function About() {
       </ScrollReveal>
 
       {/* ─── Values ─── */}
-      <ScrollReveal as="section" className="heroTexture relative bg-tertiary pb-12 text-white md:pb-20">
+      <ScrollReveal
+        as="section"
+        className="heroTexture relative bg-tertiary pb-12 text-white md:pb-20"
+      >
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -340,7 +346,10 @@ export default async function About() {
       </ScrollReveal>
 
       {/* ─── CTA ─── */}
-      <ScrollReveal as="section" className="relative overflow-hidden bg-tertiary/5 py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative overflow-hidden bg-tertiary/5 py-24 md:py-32"
+      >
         <div className="container relative text-center">
           <p className="mb-5 font-sans text-tertiary text-xs uppercase tracking-[0.4em]">
             Get Involved

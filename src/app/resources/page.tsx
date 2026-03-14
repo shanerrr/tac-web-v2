@@ -61,7 +61,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
         <h3 className="font-serif text-foreground text-lg leading-tight transition-colors duration-200 group-hover:text-primary">
           {resource.title}
         </h3>
-        <p className="mt-2 flex-1 font-sans text-foreground/70 text-sm leading-relaxed line-clamp-3">
+        <p className="mt-2 line-clamp-3 flex-1 font-sans text-foreground/70 text-sm leading-relaxed">
           {resource.description}
         </p>
         <div className="mt-4 flex items-center gap-1.5 font-sans text-primary text-xs uppercase tracking-[0.2em] transition-colors duration-200 group-hover:text-foreground">
@@ -116,7 +116,7 @@ export default async function Resources() {
             href={featured.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mx-auto mt-12 block max-w-4xl overflow-hidden rounded-2xl border border-primary/10 bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8 md:flex"
+            className="group mx-auto mt-12 block max-w-4xl overflow-hidden rounded-2xl border border-primary/10 bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-primary/8 hover:shadow-xl md:flex"
           >
             {/* Image side */}
             <div className="relative aspect-video w-full overflow-hidden bg-primary/5 md:aspect-auto md:w-2/5">
@@ -153,10 +153,10 @@ export default async function Resources() {
                   </span>
                 ))}
               </div>
-              <h3 className="font-serif text-foreground text-2xl leading-tight transition-colors duration-200 group-hover:text-primary md:text-3xl">
+              <h3 className="font-serif text-2xl text-foreground leading-tight transition-colors duration-200 group-hover:text-primary md:text-3xl">
                 {featured.title}
               </h3>
-              <p className="mt-4 font-sans text-foreground/60 text-base leading-relaxed line-clamp-3">
+              <p className="mt-4 line-clamp-3 font-sans text-base text-foreground/60 leading-relaxed">
                 {featured.description}
               </p>
               <div className="mt-6 flex items-center gap-1.5 font-sans text-primary text-xs uppercase tracking-[0.2em] transition-colors duration-200 group-hover:text-foreground">

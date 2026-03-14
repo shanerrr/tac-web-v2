@@ -138,7 +138,10 @@ export default async function Gold() {
       </ScrollReveal>
 
       {/* ═══════════════════ The Four Calls ═══════════════════ */}
-      <ScrollReveal as="section" className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative overflow-hidden bg-gold/6 py-24 md:py-32"
+      >
         <div className="container relative">
           <div className="mb-16 text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
@@ -262,7 +265,10 @@ export default async function Gold() {
       </ScrollReveal>
 
       {/* ═══════════════════ Meet the Judges ═══════════════════ */}
-      <ScrollReveal as="section" className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32"
+      >
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -358,7 +364,10 @@ export default async function Gold() {
       </ScrollReveal>
 
       {/* ═══════════════════ The GOLD Poets ═══════════════════ */}
-      <ScrollReveal as="section" className="relative overflow-hidden py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative overflow-hidden py-24 md:py-32"
+      >
         <div className="container relative">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
@@ -471,7 +480,10 @@ export default async function Gold() {
       </ScrollReveal>
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <ScrollReveal as="section" className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        className="relative overflow-hidden bg-gold/6 py-24 md:py-32"
+      >
         <div className="container relative">
           {/* Section header */}
           <div className="mx-auto mb-20 max-w-3xl text-center">

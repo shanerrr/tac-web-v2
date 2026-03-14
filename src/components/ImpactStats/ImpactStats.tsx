@@ -149,7 +149,7 @@ export default function ImpactStats({ stats }: { stats: Stat[] }) {
               <span className="text-2xl md:text-3xl">%</span>
             </span>
           </div>
-          <p className="mt-5 max-w-[16rem] font-sans text-white/70 text-sm leading-relaxed md:text-base">
+          <p className="mt-5 max-w-[16rem] font-sans text-sm text-white/70 leading-relaxed md:text-base">
             {stat.label}
           </p>
         </div>

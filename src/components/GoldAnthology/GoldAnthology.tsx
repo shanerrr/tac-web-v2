@@ -13,7 +13,14 @@ export default function GoldAnthology({ coverUrl }: { coverUrl: string }) {
 
   useGSAP(
     () => {
-      const targets = [".gs-book", ".gs-accent", ".gs-heading", ".gs-divider", ".gs-body", ".gs-cta"];
+      const targets = [
+        ".gs-book",
+        ".gs-accent",
+        ".gs-heading",
+        ".gs-divider",
+        ".gs-body",
+        ".gs-cta",
+      ];
       const mm = gsap.matchMedia();
 
       // Reduced motion: show everything immediately, no animations
@@ -21,91 +28,104 @@ export default function GoldAnthology({ coverUrl }: { coverUrl: string }) {
         gsap.set(targets, { opacity: 1, y: 0, scale: 1, rotate: 0, scaleX: 1 });
       });
 
-      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
-        gsap.set(targets, { opacity: 0 });
+      mm.add(
+        "(prefers-reduced-motion: no-preference) and (min-width: 768px)",
+        () => {
+          gsap.set(targets, { opacity: 0 });
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "+=150%",
-            pin: true,
-            scrub: 0.8,
-          },
-        });
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top top",
+              end: "+=150%",
+              pin: true,
+              scrub: 0.8,
+            },
+          });
 
-        tl.fromTo(
-          ".gs-book",
-          { y: 120, opacity: 0, scale: 0.9, rotate: -6 },
-          { y: 0, opacity: 1, scale: 1, rotate: -3, duration: 0.5, ease: "power2.out" },
-        )
-          .fromTo(
-            ".gs-accent",
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
-            0.25,
+          tl.fromTo(
+            ".gs-book",
+            { y: 120, opacity: 0, scale: 0.9, rotate: -6 },
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              rotate: -3,
+              duration: 0.5,
+              ease: "power2.out",
+            },
           )
-          .fromTo(
-            ".gs-heading",
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
-            0.35,
-          )
-          .fromTo(
-            ".gs-divider",
-            { scaleX: 0 },
-            { scaleX: 1, duration: 0.25, ease: "power2.out" },
-            0.4,
-          )
-          .fromTo(
-            ".gs-body",
-            { y: 25, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
-            0.45,
-          )
-          .fromTo(
-            ".gs-cta",
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
-            0.55,
-          );
-      });
+            .fromTo(
+              ".gs-accent",
+              { y: 20, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
+              0.25,
+            )
+            .fromTo(
+              ".gs-heading",
+              { y: 30, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
+              0.35,
+            )
+            .fromTo(
+              ".gs-divider",
+              { scaleX: 0 },
+              { scaleX: 1, duration: 0.25, ease: "power2.out" },
+              0.4,
+            )
+            .fromTo(
+              ".gs-body",
+              { y: 25, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
+              0.45,
+            )
+            .fromTo(
+              ".gs-cta",
+              { y: 20, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
+              0.55,
+            );
+        },
+      );
 
       // Mobile: no pinning, simple fade-in on enter
-      mm.add("(prefers-reduced-motion: no-preference) and (max-width: 767px)", () => {
-        gsap.set(targets, { opacity: 0 });
+      mm.add(
+        "(prefers-reduced-motion: no-preference) and (max-width: 767px)",
+        () => {
+          gsap.set(targets, { opacity: 0 });
 
-        gsap.fromTo(
-          ".gs-book",
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 80%",
+          gsap.fromTo(
+            ".gs-book",
+            { y: 40, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.8,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top 80%",
+              },
             },
-          },
-        );
+          );
 
-        gsap.fromTo(
-          [".gs-accent", ".gs-heading", ".gs-divider", ".gs-body", ".gs-cta"],
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 60%",
+          gsap.fromTo(
+            [".gs-accent", ".gs-heading", ".gs-divider", ".gs-body", ".gs-cta"],
+            { y: 20, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              stagger: 0.1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top 60%",
+              },
             },
-          },
-        );
-      });
+          );
+        },
+      );
     },
     { scope: containerRef },
   );

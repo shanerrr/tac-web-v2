@@ -3,6 +3,7 @@
 import { MapPin, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import canadaMap from "../../../public/canada.svg";
 
 type Province = {
@@ -232,6 +233,9 @@ function dotRadius(count: number) {
 export default function ProvinceMap() {
   const [hovered, setHovered] = useState<string | null>(null);
   const [drawerProv, setDrawerProv] = useState<Province | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const handleClear = useCallback(() => setHovered(null), []);
 
@@ -396,81 +400,98 @@ export default function ProvinceMap() {
         )}
       </div>
 
-      {/* ═══════════ Locations Drawer ═══════════ */}
-      {/* Backdrop */}
-      <div
-        className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${
-          drawerProv
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
-        }`}
-        onClick={closeDrawer}
-        aria-hidden="true"
-      />
-
-      {/* Drawer panel */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={drawerProv ? `Locations in ${drawerProv.name}` : undefined}
-        className={`fixed inset-x-0 bottom-0 z-50 max-h-[80vh] overflow-y-auto rounded-t-3xl bg-[#0F0D08] shadow-2xl transition-transform duration-500 ease-out ${
-          drawerProv ? "translate-y-0" : "translate-y-full"
-        }`}
-      >
-        {drawerProv && (
+      {/* ═══════════ Locations Drawer (portalled to body to escape ScrollReveal transform) ═══════════ */}
+      {mounted &&
+        createPortal(
           <>
-            {/* Drag handle + close */}
-            <div className="sticky top-0 z-10 flex items-center justify-between bg-[#0F0D08]/95 px-6 pt-4 pb-2 backdrop-blur-sm">
-              <div className="mx-auto h-1 w-10 rounded-full bg-white/15" />
-              <button
-                type="button"
-                onClick={closeDrawer}
-                className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
-                aria-label="Close locations drawer"
-              >
-                <X size={16} className="text-white/60" />
-              </button>
-            </div>
+            {/* Backdrop */}
+            <div
+              className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${
+                drawerProv
+                  ? "pointer-events-auto opacity-100"
+                  : "pointer-events-none opacity-0"
+              }`}
+              onClick={closeDrawer}
+              aria-hidden="true"
+            />
 
-            <div className="px-6 pt-4 pb-12 md:px-12">
-              {/* Header */}
-              <div className="mb-8 text-center">
-                <p className="mb-2 font-sans text-gold/60 text-xs uppercase tracking-[0.3em]">
-                  {drawerProv.count} poems submitted
-                </p>
-                <h2 className="font-serif text-3xl text-white md:text-4xl">
-                  {drawerProv.name}
-                </h2>
-                <div className="mx-auto mt-3 h-px w-16 bg-gold/30" />
-              </div>
+            {/* Drawer panel */}
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={
+                drawerProv ? `Locations in ${drawerProv.name}` : undefined
+              }
+              className={`fixed inset-x-0 bottom-0 z-50 max-h-[80vh] overflow-y-auto rounded-t-3xl bg-[#0F0D08] shadow-2xl transition-transform duration-500 ease-out ${
+                drawerProv ? "translate-y-0" : "translate-y-full"
+              }`}
+            >
+              {drawerProv && (
+                <>
+                  {/* Drag handle + close */}
+                  <div className="sticky top-0 z-10 flex items-center justify-between bg-[#0F0D08]/95 px-6 pt-4 pb-2 backdrop-blur-sm">
+                    <div className="mx-auto h-1 w-10 rounded-full bg-white/15" />
+                    <button
+                      type="button"
+                      onClick={closeDrawer}
+                      className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
+                      aria-label="Close locations drawer"
+                    >
+                      <X size={16} className="text-white/60" />
+                    </button>
+                  </div>
 
-              {/* Locations grid */}
-              <div className="mx-auto max-w-3xl">
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-                  {drawerProv.cities
-                    .slice()
-                    .sort((a, b) => a.localeCompare(b))
-                    .map((city) => (
-                      <div
-                        key={city}
-                        className="flex items-center gap-2.5 rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3 transition-colors duration-200 hover:border-gold/15 hover:bg-gold/[0.04]"
-                      >
-                        <MapPin size={13} className="shrink-0 text-gold/40" />
-                        <span className="font-sans text-sm text-white/70">
-                          {city}
-                        </span>
+                  <div
+                    className="px-6 pt-4 pb-12 md:px-12"
+                    style={{
+                      paddingBottom:
+                        "max(3rem, env(safe-area-inset-bottom, 0px))",
+                    }}
+                  >
+                    {/* Header */}
+                    <div className="mb-8 text-center">
+                      <p className="mb-2 font-sans text-gold/60 text-xs uppercase tracking-[0.3em]">
+                        {drawerProv.count} poems submitted
+                      </p>
+                      <h2 className="font-serif text-3xl text-white md:text-4xl">
+                        {drawerProv.name}
+                      </h2>
+                      <div className="mx-auto mt-3 h-px w-16 bg-gold/30" />
+                    </div>
+
+                    {/* Locations grid */}
+                    <div className="mx-auto max-w-3xl">
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+                        {drawerProv.cities
+                          .slice()
+                          .sort((a, b) => a.localeCompare(b))
+                          .map((city) => (
+                            <div
+                              key={city}
+                              className="flex items-center gap-2.5 rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3 transition-colors duration-200 hover:border-gold/15 hover:bg-gold/[0.04]"
+                            >
+                              <MapPin
+                                size={13}
+                                className="shrink-0 text-gold/40"
+                              />
+                              <span className="font-sans text-sm text-white/70">
+                                {city}
+                              </span>
+                            </div>
+                          ))}
                       </div>
-                    ))}
-                </div>
 
-                <p className="mt-8 text-center font-sans text-white/25 text-xs">
-                  {drawerProv.cities.length} locations reached
-                </p>
-              </div>
+                      <p className="mt-8 text-center font-sans text-white/25 text-xs">
+                        {drawerProv.cities.length} locations reached
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
-          </>
+          </>,
+          document.body,
         )}
-      </div>
     </>
   );
 }

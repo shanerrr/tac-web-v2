@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 type Animation = "fade-up" | "fade-down" | "fade-left" | "fade-right" | "zoom";
 
@@ -49,7 +49,7 @@ export default function ScrollReveal({
   return (
     <Tag
       ref={ref}
-      className={`transition-[opacity,transform] duration-700 ease-out ${visible ? "translate-y-0 translate-x-0 scale-100 opacity-100" : hiddenStyles[animation]} ${className}`}
+      className={`transition-[opacity,transform] duration-700 ease-out ${visible ? "translate-x-0 translate-y-0 scale-100 opacity-100" : hiddenStyles[animation]} ${className}`}
       style={delay > 0 ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}
