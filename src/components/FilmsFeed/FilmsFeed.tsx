@@ -113,7 +113,7 @@ const FilmCard = memo(function FilmCard({
           </span>
         </div>
         <p className="mt-1 font-sans text-foreground/30 text-sm tracking-[0.15em]">
-          {film.date}
+          {film.published}
         </p>
       </div>
     </article>

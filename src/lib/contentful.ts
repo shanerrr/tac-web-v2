@@ -1,5 +1,12 @@
 import { formatDate } from "@tac/lib/utils";
-import type { AlertBanner, Film, GoldJudge, GoldPoet, Story } from "@tac/types";
+import type {
+  AlertBanner,
+  Film,
+  GoldJudge,
+  GoldPoet,
+  Resource,
+  Story,
+} from "@tac/types";
 import type { Asset, EntryFieldTypes, EntrySkeletonType } from "contentful";
 import { createClient } from "contentful";
 import { cacheTag } from "next/cache";
@@ -39,7 +46,7 @@ interface FilmSkeleton extends EntrySkeletonType {
     title: EntryFieldTypes.Text;
     name: EntryFieldTypes.Text;
     age: EntryFieldTypes.Integer;
-    date: EntryFieldTypes.Text;
+    published: EntryFieldTypes.Text;
     location: EntryFieldTypes.Text;
     duration: EntryFieldTypes.Text;
     slug: EntryFieldTypes.Text;
@@ -48,6 +55,17 @@ interface FilmSkeleton extends EntrySkeletonType {
   };
 }
 
+interface ResourceSkeleton extends EntrySkeletonType {
+  contentTypeId: "resources";
+  fields: {
+    title: EntryFieldTypes.Text;
+    featured: EntryFieldTypes.Boolean;
+    description: EntryFieldTypes.Text;
+    tags: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
+    link: EntryFieldTypes.Text;
+    thumbnail: EntryFieldTypes.AssetLink;
+  };
+}
 interface GoldJudgesSkeleton extends EntrySkeletonType {
   contentTypeId: "goldJudges";
   fields: {
@@ -187,23 +205,28 @@ export const getFilms = async (): Promise<Film[]> => {
     include: 1,
   });
 
-  return items.map((item) => {
-    const f = item.fields;
-    const banner = f.banner as Asset | undefined;
-    const bannerUrl = banner?.fields.file?.url;
-    return {
-      id: item.sys.id,
-      title: f.title,
-      name: f.name,
-      age: f.age,
-      date: formatDate(f.date ?? item.sys.createdAt),
-      location: f.location,
-      duration: f.duration,
-      slug: f.slug ?? item.sys.id,
-      banner: bannerUrl ? `https:${bannerUrl}` : null,
-      youtubeUrl: f.youtubeUrl,
-    };
-  });
+  return items
+    .map((item) => {
+      const f = item.fields;
+      const banner = f.banner as Asset | undefined;
+      const bannerUrl = banner?.fields.file?.url;
+      const rawDate = f.published ?? item.sys.createdAt;
+      return {
+        _sortDate: new Date(rawDate).getTime(),
+        id: item.sys.id,
+        title: f.title,
+        name: f.name,
+        age: f.age,
+        published: formatDate(rawDate),
+        location: f.location,
+        duration: f.duration,
+        slug: f.slug ?? item.sys.id,
+        banner: bannerUrl ? `https:${bannerUrl}` : null,
+        youtubeUrl: f.youtubeUrl,
+      };
+    })
+    .sort((a, b) => b._sortDate - a._sortDate)
+    .map(({ _sortDate: _, ...film }) => film);
 };
 
 export const getGoldJudges = async (): Promise<GoldJudge[]> => {
@@ -230,6 +253,30 @@ export const getGoldJudges = async (): Promise<GoldJudge[]> => {
   });
 };
 
+export const getResources = async (): Promise<Resource[]> => {
+  "use cache";
+  cacheTag("resources");
+
+  const { items } = await client.getEntries<ResourceSkeleton>({
+    content_type: "resources",
+    order: ["-sys.createdAt"],
+    include: 1,
+  });
+
+  return items.map((item) => {
+    const f = item.fields;
+    const thumbnail = f.thumbnail as Asset | undefined;
+    return {
+      id: item.sys.id,
+      featured: f.featured,
+      title: f.title,
+      description: f.description,
+      thumbnail: `https:${thumbnail?.fields.file?.url}`,
+      tags: f.tags as string[],
+      link: f.link,
+    };
+  });
+};
 export const getGoldPoets = async (): Promise<GoldPoet[]> => {
   "use cache";
   cacheTag("goldPoets");

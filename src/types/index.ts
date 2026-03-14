@@ -23,7 +23,7 @@ export type Film = {
   title: string;
   name: string;
   age: number;
-  date: string;
+  published: string;
   location: string;
   duration: string;
   slug: string;
@@ -38,6 +38,16 @@ export function isFilm(item: Story | Film): item is Film {
 export function isStory(item: Story | Film): item is Story {
   return !isFilm(item);
 }
+
+export type Resource = {
+  id: string;
+  title: string;
+  featured: boolean;
+  description: string;
+  thumbnail: string | null;
+  tags: string[];
+  link: string;
+};
 
 export type AlertBanner = {
   id: string;
