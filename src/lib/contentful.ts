@@ -120,7 +120,7 @@ export const getStories = async (): Promise<Story[]> => {
         title: f.title,
         name: f.name,
         age: f.age,
-        date: formatDate(f.date ?? entry.sys.createdAt),
+        published: formatDate(f.published ?? entry.sys.createdAt),
         location: f.location,
         duration: f.duration,
         slug: f.slug ?? entry.sys.id,

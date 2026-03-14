@@ -1,4 +1,5 @@
 import CountUp from "@tac/components/CountUp";
+import GoldAnthology from "@tac/components/GoldAnthology";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import ProvinceMap from "@tac/components/ProvinceMap";
@@ -172,69 +173,7 @@ export default async function Gold() {
       </section>
 
       {/* ═══════════════════ Read the Anthology ═══════════════════ */}
-      <section className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
-        {/* Ambient glow */}
-        <div
-          className="pointer-events-none absolute inset-0 select-none"
-          aria-hidden="true"
-          style={{
-            background:
-              "radial-gradient(ellipse at 30% 50%, rgba(201,168,76,0.06) 0%, transparent 55%)",
-          }}
-        />
-
-        <div className="container relative">
-          <div className="mx-auto max-w-5xl items-center gap-16 md:flex lg:gap-24">
-            {/* Cover image — overflows with tilt for emphasis */}
-            <div className="relative mx-auto mb-10 w-56 shrink-0 md:mx-0 md:mb-0 md:-ml-4 md:w-64 lg:w-72">
-              {/* Ambient glow behind book */}
-              <div className="absolute -inset-6 rounded-3xl bg-gold/10 blur-3xl" />
-              <div
-                className="relative aspect-3/4 overflow-hidden rounded-xl shadow-2xl shadow-black/60 ring-1 ring-gold/20 transition-transform duration-500 hover:rotate-0 hover:scale-105"
-                style={{ transform: "rotate(-3deg)" }}
-              >
-                <Image
-                  src={cover[0].url}
-                  alt="GOLD anthology cover"
-                  fill
-                  sizes="(min-width: 1024px) 288px, (min-width: 768px) 256px, 224px"
-                  className="object-cover"
-                />
-                {/* Subtle sheen overlay */}
-                <div
-                  className="pointer-events-none absolute inset-0"
-                  aria-hidden="true"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%)",
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Text + CTA */}
-            <div className="text-center md:text-left">
-              <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
-                The Anthology
-              </p>
-              <h2 className="font-serif text-3xl text-white leading-tight md:text-4xl lg:text-5xl">
-                Read the <span className="text-gold italic">collection.</span>
-              </h2>
-              <div className="mx-auto mt-2 h-px w-16 bg-gold/20 md:mx-0" />
-              <p className="mt-6 font-sans text-base text-white/55 leading-relaxed md:text-lg">
-                The GOLD anthology spotlights powerful poems that illuminate the
-                layered and lived realities of growing older.
-              </p>
-              <a
-                href="#"
-                className="mt-8 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
-              >
-                Read the Anthology
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <GoldAnthology coverUrl={cover[0].url} />
 
       {/* ═══════════════════ Reach & Impact ═══════════════════ */}
       <section className="py-24 md:py-32">
