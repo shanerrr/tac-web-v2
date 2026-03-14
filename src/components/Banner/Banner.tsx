@@ -31,8 +31,9 @@ export default function Banner({ banner }: { banner: AlertBanner }) {
           {banner.message}
           {banner.link && (
             <Link
-              href={banner.link}
               className="ml-2 inline-flex items-center gap-1 font-medium text-white underline decoration-white/40 underline-offset-2 transition-colors duration-200 hover:decoration-white"
+              href={banner.link}
+              onNavigate={dismiss}
             >
               {banner.linkText ?? "Learn more"}
               <ArrowRight size={14} />
