@@ -115,7 +115,7 @@ export default async function About() {
           <p className="mb-6 text-center font-sans text-tertiary text-xs uppercase tracking-[0.4em] md:mb-8">
             Voices &amp; Faces
           </p>
-          <div className="grid grid-cols-2 gap-5 p-2 md:grid-cols-3 md:gap-7 md:p-4">
+          <div className="grid grid-cols-2 gap-3 p-2 md:grid-cols-3 md:gap-7 md:p-4">
             {allCollageAssets.map((asset, i) => {
               // Alternating rotations + offsets for an organic, pinboard feel
               const tilt = [
@@ -217,28 +217,6 @@ export default async function About() {
         </div>
       </section>
 
-      {/* ─── Wave Divider Top + Watermark ─── */}
-      <div className="relative">
-        <svg
-          viewBox="0 0 1440 80"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-          className="block h-12 w-full md:h-20"
-        >
-          {/* Upper half — matches the section above (tertiary/[0.07]) */}
-          <path
-            d="M0 0H1440V40C1200 0 960 80 720 40C480 0 240 80 0 40Z"
-            className="fill-tertiary"
-            fillOpacity="0.07"
-          />
-          {/* Lower half — matches the Values section */}
-          <path
-            d="M0 40C240 80 480 0 720 40C960 80 1200 0 1440 40V80H0Z"
-            className="fill-tertiary"
-          />
-        </svg>
-      </div>
-
       {/* ─── Values ─── */}
       <section className="heroTexture relative bg-tertiary pb-12 text-white md:pb-20">
         {/* Watermark */}
@@ -260,7 +238,7 @@ export default async function About() {
           />
         </div>
 
-        <div className="container relative pt-8 md:pt-14">
+        <div className="container relative pt-16 md:pt-20">
           <div className="mx-auto max-w-4xl text-center">
             <p className="mb-5 font-sans text-white/50 text-xs uppercase tracking-[0.4em]">
               What We Believe
@@ -284,22 +262,6 @@ export default async function About() {
           </div>
         </div>
       </section>
-
-      {/* ─── Wave Divider Bottom ─── */}
-      <div
-        aria-hidden="true"
-        className="heroTexture h-12 w-full bg-tertiary md:h-20"
-        style={{
-          clipPath: "url(#waveBottomClip)",
-        }}
-      />
-      <svg width="0" height="0" aria-hidden="true">
-        <defs>
-          <clipPath id="waveBottomClip" clipPathUnits="objectBoundingBox">
-            <path d="M0 0 H1 V0.5 C0.833 1,0.667 0,0.5 0.5 C0.333 1,0.167 0,0 0.5 Z" />
-          </clipPath>
-        </defs>
-      </svg>
 
       {/* ─── Why We Are ─── */}
       <section className="container py-24 md:py-32">

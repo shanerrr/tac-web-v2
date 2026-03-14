@@ -25,10 +25,12 @@ export default function PillarCard({
     <button
       type="button"
       onClick={() => setOpen((o) => !o)}
-      className="group relative flex min-h-64 flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/6 px-4 py-8 text-center backdrop-blur-sm transition-all duration-300 sm:min-h-80 sm:px-6 sm:py-10 md:px-8 md:py-12 md:hover:bg-white/12 lg:min-h-96"
+      className="group relative flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/6 px-4 py-8 text-center backdrop-blur-sm transition-all duration-300 sm:px-6 sm:py-10 md:px-8 md:py-12 md:hover:bg-white/12"
     >
-      {/* Default state — number + title */}
-      <div className={`transition-opacity duration-300 ${hideTitle}`}>
+      {/* Title centered over the full card via absolute positioning */}
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 ${hideTitle}`}
+      >
         <span className="font-sans text-md text-white/60 uppercase tracking-[0.3em]">
           0{index + 1}
         </span>
@@ -43,11 +45,21 @@ export default function PillarCard({
         </h3>
       </div>
 
+      {/* Invisible description — forces card height to fit longest text */}
+      <div
+        className="pointer-events-none px-0 opacity-0 sm:px-2 md:px-4"
+        aria-hidden="true"
+      >
+        <p className="font-sans text-sm leading-relaxed md:text-base">
+          {description}
+        </p>
+      </div>
+
       {/* Description overlay */}
       <div
-        className={`absolute inset-0 flex items-center justify-center rounded-2xl bg-white/12 px-4 py-6 transition-opacity duration-300 sm:px-6 sm:py-8 md:px-8 md:py-10 ${showOverlay}`}
+        className={`absolute inset-0 flex items-center justify-center overflow-y-auto rounded-2xl bg-white/12 px-4 py-6 transition-opacity duration-300 sm:px-6 sm:py-8 md:px-8 md:py-10 ${showOverlay}`}
       >
-        <p className="font-sans text-white/80 text-xs leading-relaxed sm:text-sm md:text-base">
+        <p className="font-sans text-white/80 text-sm leading-relaxed md:text-base">
           {description}
         </p>
       </div>

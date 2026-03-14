@@ -25,7 +25,7 @@ export default function Banner({ banner }: { banner: AlertBanner }) {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 top-27 z-40 flex justify-center px-4 md:top-32">
+    <div className="fixed inset-x-0 bottom-6 z-40 flex justify-center px-4">
       <div className="flex items-center gap-3 rounded-full bg-foreground/90 px-6 py-3 shadow-xl backdrop-blur-sm">
         <p className="font-sans text-sm text-white leading-snug">
           {banner.message}

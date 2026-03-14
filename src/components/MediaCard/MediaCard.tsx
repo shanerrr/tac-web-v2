@@ -1,7 +1,7 @@
 "use client";
 
 import type { MediaAsset } from "@tac/lib/contentful";
-import { Volume2, VolumeOff } from "lucide-react";
+import { Pause, Play } from "lucide-react";
 import {
   type MouseEvent,
   useCallback,
@@ -10,8 +10,8 @@ import {
   useState,
 } from "react";
 
-// Only one video should be unmuted at a time
-const unmutedVideo = { current: null as HTMLVideoElement | null };
+// Only one video plays at a time
+const activeVideo = { current: null as HTMLVideoElement | null };
 
 function VideoCard({
   asset,
@@ -28,33 +28,37 @@ function VideoCard({
     onUp: () => void;
   } | null>(null);
 
+  const [loaded, setLoaded] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const [muted, setMuted] = useState(true);
   const [progress, setProgress] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
 
-  // Sync muted state when changed externally (e.g. another card unmuted)
+  // Sync play state from the video element
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    const onVolumeChange = () => setMuted(video.muted);
-    video.addEventListener("volumechange", onVolumeChange);
-    return () => video.removeEventListener("volumechange", onVolumeChange);
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+    video.addEventListener("play", onPlay);
+    video.addEventListener("pause", onPause);
+    return () => {
+      video.removeEventListener("play", onPlay);
+      video.removeEventListener("pause", onPause);
+    };
   }, []);
 
-  // Autoplay when visible, pause when scrolled away
+  // Pause when scrolled out of view
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play();
-        } else {
+        if (!entry.isIntersecting && !video.paused) {
           video.pause();
         }
       },
-      { threshold: 0.5 },
+      { threshold: 0.3 },
     );
     observer.observe(video);
     return () => observer.disconnect();
@@ -65,7 +69,7 @@ function VideoCard({
     const video = videoRef.current;
     if (!video) return;
 
-    const onPlay = () => {
+    const startTick = () => {
       const tick = () => {
         if (video.duration) {
           setProgress(video.currentTime / video.duration);
@@ -75,18 +79,17 @@ function VideoCard({
       rafRef.current = requestAnimationFrame(tick);
     };
 
-    const onPause = () => cancelAnimationFrame(rafRef.current);
+    const stopTick = () => cancelAnimationFrame(rafRef.current);
 
-    video.addEventListener("play", onPlay);
-    video.addEventListener("pause", onPause);
+    video.addEventListener("play", startTick);
+    video.addEventListener("pause", stopTick);
 
-    // If already playing (IO fired before this effect)
-    if (!video.paused) onPlay();
+    if (!video.paused) startTick();
 
     return () => {
       cancelAnimationFrame(rafRef.current);
-      video.removeEventListener("play", onPlay);
-      video.removeEventListener("pause", onPause);
+      video.removeEventListener("play", startTick);
+      video.removeEventListener("pause", stopTick);
     };
   }, []);
 
@@ -103,17 +106,30 @@ function VideoCard({
     };
   }, []);
 
-  const toggleMute = useCallback(() => {
+  const togglePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
-    const willUnmute = video.muted;
-    if (willUnmute && unmutedVideo.current && unmutedVideo.current !== video) {
-      unmutedVideo.current.muted = true;
+
+    // First click — load the source
+    if (!loaded) {
+      video.src = asset.url;
+      video.load();
+      setLoaded(true);
     }
-    video.muted = !video.muted;
-    unmutedVideo.current = willUnmute ? video : null;
-    setMuted(video.muted);
-  }, []);
+
+    if (video.paused) {
+      // Pause any other playing video first
+      if (activeVideo.current && activeVideo.current !== video) {
+        activeVideo.current.pause();
+      }
+      activeVideo.current = video;
+      video.muted = false;
+      video.play();
+    } else {
+      video.pause();
+      if (activeVideo.current === video) activeVideo.current = null;
+    }
+  }, [loaded, asset.url]);
 
   const seekFromEvent = useCallback((clientX: number) => {
     const bar = scrubberRef.current;
@@ -157,43 +173,44 @@ function VideoCard({
     }
   }, []);
 
+  const showControls = hovered || isSeeking;
+
   return (
     <>
       <video
         ref={videoRef}
-        src={asset.url}
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
+        poster={asset.description}
         className={`absolute inset-0 h-full w-full scale-[1.01] object-cover ${className ?? ""}`}
       />
 
-      {/* Interaction zone — hover unmutes/remutes, click toggles mute on mobile */}
-      {/* biome-ignore lint/a11y/useKeyWithClickEvents: touch/mouse toggle for mute */}
+      {/* Play/pause overlay */}
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: click to toggle play */}
       {/* biome-ignore lint/a11y/noStaticElementInteractions: overlay interaction zone */}
       <div
-        onMouseEnter={() => {
-          setHovered(true);
-          const video = videoRef.current;
-          if (video?.muted) toggleMute();
-        }}
+        onClick={togglePlay}
+        onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => {
           if (!isSeeking) setHovered(false);
-          const video = videoRef.current;
-          if (video && !video.muted) toggleMute();
         }}
-        onClick={toggleMute}
-        className="absolute inset-0 z-10"
+        className="absolute inset-0 z-10 cursor-pointer"
       >
-        {/* Mute/unmute indicator */}
+        {/* Center play/pause button */}
         <div
-          aria-hidden="true"
-          className={`pointer-events-none absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-opacity duration-300 ${
-            hovered ? "opacity-100" : "opacity-0"
+          className={`pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+            !playing || showControls ? "opacity-100" : "opacity-0"
           }`}
         >
-          {muted ? <VolumeOff size={14} /> : <Volume2 size={14} />}
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm">
+            {playing ? (
+              <Pause size={20} className="fill-white" />
+            ) : (
+              <Play size={20} className="ml-0.5 fill-white" />
+            )}
+          </div>
         </div>
       </div>
 
@@ -209,7 +226,7 @@ function VideoCard({
         onMouseDown={handleScrubDown}
         onKeyDown={handleScrubKeyDown}
         className={`absolute right-0 bottom-0 left-0 z-20 h-3 cursor-pointer transition-opacity duration-300 ${
-          hovered || isSeeking ? "opacity-100" : "opacity-0"
+          showControls ? "opacity-100" : "opacity-0"
         }`}
       >
         <div className="absolute bottom-0 h-2 w-full bg-foreground/40">
@@ -225,7 +242,7 @@ function VideoCard({
 
 function QuoteCard({ asset }: { asset: MediaAsset }) {
   return (
-    <div className="absolute inset-0 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-tertiary via-tertiary to-tertiary/80 p-3 sm:p-5 md:p-4 xl:p-7">
+    <div className="absolute inset-0 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-tertiary via-tertiary to-tertiary/80 p-3 sm:p-5 md:p-4 lg:p-5 xl:p-7">
       {/* Tree-ring watermark */}
       <svg
         viewBox="0 0 200 200"
@@ -247,20 +264,20 @@ function QuoteCard({ asset }: { asset: MediaAsset }) {
 
       {/* Top — oversized decorative quote mark */}
       <span
-        className="select-none font-serif text-4xl text-white/20 leading-[0.7] sm:text-5xl md:text-5xl xl:text-7xl"
+        className="shrink-0 select-none font-serif text-4xl text-white/20 leading-[0.7] sm:text-5xl md:text-3xl lg:text-5xl xl:text-7xl"
         aria-hidden="true"
       >
         &ldquo;
       </span>
 
       {/* Middle — quote text */}
-      <blockquote className="relative my-auto pl-2 font-serif text-[0.7rem] text-white italic leading-snug sm:pl-3 sm:text-sm sm:leading-relaxed md:text-[0.8rem] md:leading-relaxed xl:text-lg">
+      <blockquote className="relative my-auto min-h-0 overflow-hidden pl-2 font-serif text-[0.7rem] text-white italic leading-snug sm:pl-3 sm:text-sm sm:leading-relaxed md:text-xs md:leading-relaxed lg:text-sm xl:text-lg">
         <div className="absolute top-0 bottom-0 left-0 w-[2px] rounded-full bg-white/20" />
         {asset.title}
       </blockquote>
 
       {/* Bottom — attribution with accent line */}
-      <div className="flex items-end justify-between gap-2">
+      <div className="flex shrink-0 items-end justify-between gap-2">
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="h-px w-4 bg-white/30 sm:w-6" />
           <p className="font-sans text-[0.55rem] text-white/60 uppercase leading-tight tracking-[0.15em] sm:text-[0.65rem] sm:tracking-[0.2em] md:text-[0.6rem] xl:text-xs">

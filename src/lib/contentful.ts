@@ -148,6 +148,7 @@ export type MediaAsset = {
   url: string;
   type: "video" | "quote";
   title: string;
+  description?: string;
   sortIndex: number;
 };
 
@@ -169,6 +170,7 @@ export const getAssetsByTag = async (tag: string): Promise<MediaAsset[]> => {
         url: `https:${url}`,
         type: "video" as MediaAsset["type"],
         title: asset.fields.title ?? "",
+        description: asset.fields.description,
         sortIndex,
       };
     })

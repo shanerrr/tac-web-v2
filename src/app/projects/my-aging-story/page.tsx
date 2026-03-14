@@ -105,7 +105,7 @@ function StatRing({ value }: { value: number }) {
         fill="none"
         stroke="currentColor"
         strokeWidth="2.5"
-        className="text-quaternary/10"
+        className="text-white/10"
       />
       {/* Progress ring */}
       <circle
@@ -115,7 +115,7 @@ function StatRing({ value }: { value: number }) {
         fill="none"
         stroke="currentColor"
         strokeWidth="3.5"
-        className="text-quaternary"
+        className="text-white"
         strokeDasharray={circumference}
         strokeDashoffset={offset}
         strokeLinecap="round"
@@ -128,7 +128,7 @@ function StatRing({ value }: { value: number }) {
         fill="none"
         stroke="currentColor"
         strokeWidth="1"
-        className="text-quaternary/8"
+        className="text-white/8"
       />
     </svg>
   );
@@ -244,34 +244,8 @@ export default async function MyAgingStory() {
         </div>
       </section>
 
-      {/* ═══════════════════ Highlights ═══════════════════ */}
-      <section className="bg-quaternary/4 py-20 md:py-24">
-        <div className="container">
-          <p className="mb-14 text-center font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
-            Highlights
-          </p>
-          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-quaternary/10">
-            {highlights.map((stat, i) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center text-center"
-              >
-                <CountUp
-                  value={Number(stat.value)}
-                  className="font-serif text-7xl text-quaternary leading-none tracking-tight md:text-8xl"
-                  delay={i * 150}
-                />
-                <span className="mt-3 font-medium font-sans text-foreground text-sm uppercase tracking-[0.2em]">
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ═══════════════════ Photo Gallery ═══════════════════ */}
-      <section className="py-6">
+      <section className="py-16 md:py-24">
         <div className="container">
           <div className="grid grid-cols-2 gap-5 p-2 md:grid-cols-3 md:gap-7 md:p-4">
             {gallery.map((asset, i) => {
@@ -326,43 +300,90 @@ export default async function MyAgingStory() {
         </div>
       </section>
 
-      {/* ═══════════════════ Impact Stats ═══════════════════ */}
-      <section className="container py-24 md:py-32">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
-            Impact
+      {/* ═══════════════════ Highlights ═══════════════════ */}
+      <section className="bg-quaternary/4 py-20 md:py-24">
+        <div className="container">
+          <p className="mb-14 text-center font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
+            Highlights
           </p>
-          <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
-            What visitors{" "}
-            <span className="text-quaternary italic">told&nbsp;us.</span>
-          </h2>
-          <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
-        </div>
-
-        <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8">
-          {impact.map((stat) => (
-            <div
-              key={stat.label}
-              className="flex flex-col items-center text-center"
-            >
-              {/* Ring + number */}
-              <div className="relative flex items-center justify-center">
-                <StatRing value={stat.value} />
-                <span className="absolute font-serif text-4xl text-quaternary leading-none tracking-tight sm:text-4xl md:text-5xl">
-                  {stat.value}
-                  <span className="text-2xl md:text-3xl">%</span>
+          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-quaternary/10">
+            {highlights.map((stat, i) => (
+              <div
+                key={stat.label}
+                className="flex flex-col items-center text-center"
+              >
+                <CountUp
+                  value={Number(stat.value)}
+                  className="font-serif text-7xl text-quaternary leading-none tracking-tight md:text-8xl"
+                  delay={i * 150}
+                />
+                <span className="mt-3 font-medium font-sans text-foreground text-sm uppercase tracking-[0.2em]">
+                  {stat.label}
                 </span>
               </div>
-              <p className="mt-5 max-w-[16rem] font-sans text-foreground/60 text-sm leading-relaxed md:text-base">
-                {stat.label}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ Impact Stats ═══════════════════ */}
+      <section className="heroTexture relative bg-quaternary py-24 text-white md:py-32">
+        {/* Watermark */}
+        <div
+          className="pointer-events-none absolute animate-spin-slow select-none"
+          aria-hidden="true"
+          style={{
+            width: "min(60vw, 60vh)",
+            height: "min(60vw, 60vh)",
+            bottom: "calc(min(60vw, 60vh) / -3)",
+            right: "calc(min(60vw, 60vh) / -3)",
+          }}
+        >
+          <Image
+            src={logo}
+            alt=""
+            fill
+            className="object-contain opacity-[0.06]"
+          />
+        </div>
+
+        <div className="container relative">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="mb-5 font-sans text-white/50 text-xs uppercase tracking-[0.4em]">
+              Impact
+            </p>
+            <h2 className="font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
+              What visitors{" "}
+              <span className="italic">told&nbsp;us.</span>
+            </h2>
+            <div className="mx-auto mt-2 h-px w-16 bg-white/20" />
+          </div>
+
+          <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8">
+            {impact.map((stat) => (
+              <div
+                key={stat.label}
+                className="flex flex-col items-center text-center"
+              >
+                {/* Ring + number */}
+                <div className="relative flex items-center justify-center">
+                  <StatRing value={stat.value} />
+                  <span className="absolute font-serif text-4xl leading-none tracking-tight sm:text-4xl md:text-5xl">
+                    {stat.value}
+                    <span className="text-2xl md:text-3xl">%</span>
+                  </span>
+                </div>
+                <p className="mt-5 max-w-[16rem] font-sans text-white/70 text-sm leading-relaxed md:text-base">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ═══════════════════ Self-Reflections ═══════════════════ */}
-      <section className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
+      <section className="relative overflow-hidden py-24 md:py-32">
         <div className="container relative">
           <div className="mx-auto mb-14 max-w-3xl text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
@@ -473,7 +494,7 @@ export default async function MyAgingStory() {
       </section>
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <section className="border-quaternary/8 border-t py-24 md:py-32">
+      <section className="bg-quaternary/4 py-24 md:py-32">
         <div className="container">
           <div className="mx-auto max-w-3xl text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
