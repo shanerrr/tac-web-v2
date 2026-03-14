@@ -3,6 +3,7 @@ import GoldAnthology from "@tac/components/GoldAnthology";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import ProvinceMap from "@tac/components/ProvinceMap";
+import ScrollReveal from "@tac/components/ScrollReveal";
 import {
   getAssetsByTag,
   getGoldJudges,
@@ -14,7 +15,7 @@ import glocalLogo from "../../../../public/glocal.png";
 import logo from "../../../../public/logo-rings.svg";
 
 const highlights = [
-  { value: "142", label: "Communities Reached" },
+  { value: "142", label: "Locations Reached" },
   { value: "319", label: "Poems Submitted" },
   { value: "260", label: "Older Adults Reached" },
   { value: "91", label: "Organizations Reached" },
@@ -90,12 +91,12 @@ export default async function Gold() {
             "linear-gradient(105deg, #8A7230 0%, #C9A84C 25%, #F5E6A3 45%, #FFFDE0 50%, #F5E6A3 55%, #C9A84C 75%, #8A7230 100%)",
           backgroundSize: "200% 100%",
         }}
-        subtitleClassName="max-w-lg text-white/50 text-xl sm:text-3xl"
+        subtitleClassName="max-w-lg text-white/70 text-xl sm:text-3xl"
         scrollCueClassName="text-gold"
       />
 
       {/* ═══════════════════ About the Anthology ═══════════════════ */}
-      <section className="container py-24 md:py-32">
+      <ScrollReveal as="section" className="container py-24 md:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-6 font-sans text-gold text-xs uppercase tracking-[0.4em]">
             About the Anthology
@@ -134,19 +135,19 @@ export default async function Gold() {
             </p>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ The Four Calls ═══════════════════ */}
-      <section className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
+      <ScrollReveal as="section" className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
         <div className="container relative">
           <div className="mb-16 text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
               The Four Calls
             </p>
-            <h3 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
+            <h2 className="font-serif text-3xl text-foreground leading-tight md:text-4xl lg:text-5xl">
               Four dimensions of{" "}
               <span className="text-gold italic">the aging experience.</span>
-            </h3>
+            </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-gold/30" />
           </div>
 
@@ -170,13 +171,13 @@ export default async function Gold() {
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Read the Anthology ═══════════════════ */}
       <GoldAnthology coverUrl={cover[0].url} />
 
       {/* ═══════════════════ Reach & Impact ═══════════════════ */}
-      <section className="py-24 md:py-32">
+      <ScrollReveal as="section" className="py-24 md:py-32">
         <div className="container">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
@@ -258,10 +259,10 @@ export default async function Gold() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Meet the Judges ═══════════════════ */}
-      <section className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
+      <ScrollReveal as="section" className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32">
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -346,7 +347,7 @@ export default async function Gold() {
                   <div
                     className={`mx-auto mt-3 h-px w-10 bg-gold/20 transition-all duration-300 group-hover:w-16 group-hover:bg-gold/40 ${i % 2 !== 0 ? "md:mr-0 md:ml-auto" : "md:mx-0"}`}
                   />
-                  <p className="mt-5 max-w-lg font-sans text-[15px] text-white/50 leading-relaxed md:text-base">
+                  <p className="mt-5 max-w-lg font-sans text-[15px] text-white/70 leading-relaxed md:text-base">
                     {judge.description}
                   </p>
                 </div>
@@ -354,10 +355,10 @@ export default async function Gold() {
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ The GOLD Poets ═══════════════════ */}
-      <section className="relative overflow-hidden py-24 md:py-32">
+      <ScrollReveal as="section" className="relative overflow-hidden py-24 md:py-32">
         <div className="container relative">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
@@ -453,7 +454,7 @@ export default async function Gold() {
                                   target: "_blank",
                                   rel: "noopener noreferrer",
                                 })}
-                                className="group/link flex items-center gap-1.5 rounded-full border border-foreground/10 px-3.5 py-1.5 font-sans text-foreground/40 text-xs capitalize transition-all duration-200 hover:border-foreground/20 hover:text-foreground/70"
+                                className="group/link flex items-center gap-1.5 rounded-full border border-foreground/10 px-3.5 py-1.5 font-sans text-foreground/60 text-xs capitalize transition-all duration-200 hover:border-foreground/20 hover:text-foreground/70"
                               >
                                 <Icon size={13} className="shrink-0" />
                                 {label}
@@ -467,10 +468,10 @@ export default async function Gold() {
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <section className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
+      <ScrollReveal as="section" className="relative overflow-hidden bg-gold/6 py-24 md:py-32">
         <div className="container relative">
           {/* Section header */}
           <div className="mx-auto mb-20 max-w-3xl text-center">
@@ -599,7 +600,7 @@ export default async function Gold() {
                 ].map((org) => (
                   <p
                     key={org}
-                    className="font-sans text-foreground/40 text-sm leading-relaxed transition-colors duration-200 hover:text-gold"
+                    className="font-sans text-foreground/60 text-sm leading-relaxed transition-colors duration-200 hover:text-gold"
                   >
                     {org}
                   </p>
@@ -634,7 +635,7 @@ export default async function Gold() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
     </div>
   );
 }

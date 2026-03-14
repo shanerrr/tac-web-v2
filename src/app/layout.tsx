@@ -78,12 +78,18 @@ export default async function RootLayout({
   const banner = await getAlertBanner();
 
   return (
-    <html lang="en">
+    <html lang="en-CA">
       <body
         className={`${oldStandardTT.variable} ${inter.variable} font-sans antialiased`}
       >
+        <a
+          href="#main-content"
+          className="fixed top-4 left-4 z-[100] -translate-y-20 rounded-lg bg-foreground px-4 py-2 font-sans text-sm text-white shadow-lg transition-transform focus:translate-y-0"
+        >
+          Skip to main content
+        </a>
         {banner && <Banner banner={banner} />}
-        {children}
+        <main id="main-content">{children}</main>
         <Analytics />
       </body>
     </html>

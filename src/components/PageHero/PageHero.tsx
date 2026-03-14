@@ -43,8 +43,8 @@ export default function PageHero({
   titleClassName,
   titleStyle,
   subtitleClassName,
-  accentLabelClassName = "text-white/60",
-  scrollCueClassName = "text-white/60",
+  accentLabelClassName = "text-white/70",
+  scrollCueClassName = "text-white/70",
   glowOverlay,
   vignetteOverlay = "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.18) 100%)",
   watermarkOpacity = "opacity-[0.08]",
@@ -114,7 +114,10 @@ export default function PageHero({
         </div>
 
         {/* Scroll cue */}
-        <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
+        <div
+          className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
+          aria-hidden="true"
+        >
           <span
             className={`mr-[-0.4em] font-sans text-xs uppercase tracking-[0.4em] ${scrollCueClassName}`}
           >

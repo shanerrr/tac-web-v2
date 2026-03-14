@@ -25,7 +25,7 @@ export default function Banner({ banner }: { banner: AlertBanner }) {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-6 z-40 flex justify-center px-4">
+    <div role="alert" className="fixed inset-x-0 bottom-6 z-40 flex justify-center px-4">
       <div className="flex items-center gap-3 rounded-full bg-foreground/90 px-6 py-3 shadow-xl backdrop-blur-sm">
         <p className="font-sans text-sm text-white leading-snug">
           {banner.message}
@@ -44,7 +44,7 @@ export default function Banner({ banner }: { banner: AlertBanner }) {
           type="button"
           onClick={dismiss}
           aria-label="Dismiss announcement"
-          className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors duration-200 hover:bg-white/15 hover:text-white"
+          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors duration-200 hover:bg-white/15 hover:text-white"
         >
           <X size={14} />
         </button>

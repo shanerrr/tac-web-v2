@@ -4,7 +4,7 @@ import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Fragment, memo, useCallback, useEffect, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useRef, useState } from "react";
 import { useWebHaptics } from "web-haptics/react";
 import logo from "../../../public/logo.svg";
 import logoRings from "../../../public/logo-rings.svg";
@@ -144,7 +144,7 @@ const DropdownLink = memo(function DropdownLink({
           {child.label}
         </p>
         {child.description && (
-          <p className="font-sans text-[13px] text-foreground/40 leading-snug transition-colors duration-200 group-hover/drop:text-foreground/55">
+          <p className="font-sans text-[13px] text-foreground/60 leading-snug transition-colors duration-200 group-hover/drop:text-foreground/70">
             {child.description}
           </p>
         )}
@@ -175,6 +175,7 @@ export default function Navbar({
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
 
   const { trigger } = useWebHaptics();
 
@@ -189,7 +190,18 @@ export default function Navbar({
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
     setOpenSubmenu(null);
+    hamburgerRef.current?.focus();
   }, []);
+
+  // Close mobile menu on Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeMenu();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen, closeMenu]);
 
   const activeTextColor =
     transparent && scrolled ? "text-foreground" : textColor;
@@ -351,6 +363,7 @@ export default function Navbar({
 
             {/* ─── Hamburger — morphing lines ─── */}
             <button
+              ref={hamburgerRef}
               className="relative h-11 w-11 md:hidden"
               type="button"
               onClick={() => {
@@ -447,6 +460,7 @@ export default function Navbar({
                     <button
                       type="button"
                       className="flex items-center gap-2 self-start"
+                      aria-expanded={openSubmenu === item.label}
                       onClick={() =>
                         setOpenSubmenu((p) =>
                           p === item.label ? null : item.label,

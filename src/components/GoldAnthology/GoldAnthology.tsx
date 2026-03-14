@@ -13,9 +13,17 @@ export default function GoldAnthology({ coverUrl }: { coverUrl: string }) {
 
   useGSAP(
     () => {
+      const targets = [".gs-book", ".gs-accent", ".gs-heading", ".gs-divider", ".gs-body", ".gs-cta"];
       const mm = gsap.matchMedia();
 
-      mm.add("(min-width: 768px)", () => {
+      // Reduced motion: show everything immediately, no animations
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(targets, { opacity: 1, y: 0, scale: 1, rotate: 0, scaleX: 1 });
+      });
+
+      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
+        gsap.set(targets, { opacity: 0 });
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
@@ -64,7 +72,9 @@ export default function GoldAnthology({ coverUrl }: { coverUrl: string }) {
       });
 
       // Mobile: no pinning, simple fade-in on enter
-      mm.add("(max-width: 767px)", () => {
+      mm.add("(prefers-reduced-motion: no-preference) and (max-width: 767px)", () => {
+        gsap.set(targets, { opacity: 0 });
+
         gsap.fromTo(
           ".gs-book",
           { y: 40, opacity: 0 },
@@ -118,7 +128,7 @@ export default function GoldAnthology({ coverUrl }: { coverUrl: string }) {
       <div className="container relative flex min-h-dvh items-center py-24 md:py-32">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-16 md:flex-row lg:gap-24">
           {/* Cover image */}
-          <div className="gs-book relative w-72 shrink-0 opacity-0 md:w-88 lg:w-[26rem]">
+          <div className="gs-book relative w-72 shrink-0 md:w-88 lg:w-[26rem]">
             {/* Ambient glow behind book */}
             <div className="absolute -inset-6 rounded-3xl bg-gold/10 blur-3xl" />
             <div
@@ -146,20 +156,20 @@ export default function GoldAnthology({ coverUrl }: { coverUrl: string }) {
 
           {/* Text + CTA */}
           <div className="text-center md:text-left">
-            <p className="gs-accent mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em] opacity-0">
+            <p className="gs-accent mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
               The Anthology
             </p>
-            <h2 className="gs-heading font-serif text-3xl text-white leading-tight opacity-0 md:text-4xl lg:text-5xl">
+            <h2 className="gs-heading font-serif text-3xl text-white leading-tight md:text-4xl lg:text-5xl">
               Read the <span className="text-gold italic">collection.</span>
             </h2>
             <div className="gs-divider mx-auto mt-2 h-px w-16 origin-left bg-gold/20 md:mx-0" />
-            <p className="gs-body mt-6 font-sans text-base text-white/55 leading-relaxed opacity-0 md:text-lg">
+            <p className="gs-body mt-6 font-sans text-base text-white/70 leading-relaxed md:text-lg">
               The GOLD anthology spotlights powerful poems that illuminate the
               layered and lived realities of growing older.
             </p>
             <a
               href="#"
-              className="gs-cta mt-8 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] opacity-0 transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
+              className="gs-cta mt-8 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
             >
               Read the Anthology
             </a>

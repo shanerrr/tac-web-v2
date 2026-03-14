@@ -111,7 +111,7 @@ const provinces: Province[] = [
       "Waterloo",
       "Vaughan",
       "Eagle Lake",
-      "OHSWEKEN",
+      "Ohsweken",
       "Kenora",
       "North York",
       "Ottawa",
@@ -309,8 +309,19 @@ export default function ProvinceMap() {
               <g
                 key={prov.name}
                 className="cursor-pointer"
+                role="button"
+                tabIndex={0}
+                aria-label={`${prov.name}: ${prov.count} poems. Click to view locations.`}
                 onMouseEnter={() => setHovered(prov.name)}
+                onFocus={() => setHovered(prov.name)}
+                onBlur={() => setHovered(null)}
                 onClick={() => handleDotClick(prov)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleDotClick(prov);
+                  }
+                }}
               >
                 {/* Glow */}
                 <circle
@@ -359,12 +370,12 @@ export default function ProvinceMap() {
                 </p>
                 <p className="text-center font-bold font-serif text-2xl text-gold md:text-3xl">
                   {hoveredProv.count}{" "}
-                  <span className="font-normal font-sans text-white/40 text-xs md:text-sm">
+                  <span className="font-normal font-sans text-white/70 text-xs md:text-sm">
                     poems
                   </span>
                 </p>
-                <p className="mt-1.5 text-center font-sans text-gold/50 text-[10px] uppercase tracking-[0.15em]">
-                  Click to view cities
+                <p className="mt-1.5 text-center font-sans text-gold/50 text-xs uppercase tracking-[0.15em]">
+                  Click to view locations
                 </p>
               </div>
               {/* Caret */}
@@ -381,7 +392,7 @@ export default function ProvinceMap() {
         )}
       </div>
 
-      {/* ═══════════ Cities Drawer ═══════════ */}
+      {/* ═══════════ Locations Drawer ═══════════ */}
       {/* Backdrop */}
       <div
         className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${
@@ -397,7 +408,7 @@ export default function ProvinceMap() {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={drawerProv ? `Cities in ${drawerProv.name}` : undefined}
+        aria-label={drawerProv ? `Locations in ${drawerProv.name}` : undefined}
         className={`fixed inset-x-0 bottom-0 z-50 max-h-[80vh] overflow-y-auto rounded-t-3xl bg-[#0F0D08] shadow-2xl transition-transform duration-500 ease-out ${
           drawerProv ? "translate-y-0" : "translate-y-full"
         }`}
@@ -410,8 +421,8 @@ export default function ProvinceMap() {
               <button
                 type="button"
                 onClick={closeDrawer}
-                className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
-                aria-label="Close cities drawer"
+                className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
+                aria-label="Close locations drawer"
               >
                 <X size={16} className="text-white/60" />
               </button>
@@ -429,7 +440,7 @@ export default function ProvinceMap() {
                 <div className="mx-auto mt-3 h-px w-16 bg-gold/30" />
               </div>
 
-              {/* Cities grid */}
+              {/* Locations grid */}
               <div className="mx-auto max-w-3xl">
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
                   {drawerProv.cities
@@ -449,7 +460,7 @@ export default function ProvinceMap() {
                 </div>
 
                 <p className="mt-8 text-center font-sans text-white/25 text-xs">
-                  {drawerProv.cities.length} communities reached
+                  {drawerProv.cities.length} locations reached
                 </p>
               </div>
             </div>

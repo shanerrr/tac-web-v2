@@ -76,7 +76,7 @@ function StoryMeta({ story, className }: { story: Story; className?: string }) {
           {story.age} years old
         </span>
         <span className="h-px w-5 shrink-0 bg-primary/30" />
-        <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
+        <span className="font-sans text-foreground/60 text-xs uppercase tracking-[0.2em]">
           {story.location}
         </span>
       </div>
@@ -172,7 +172,7 @@ export default function StoryDrawer({
               <button
                 type="button"
                 onClick={onClose}
-                className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-foreground/5 transition-colors hover:bg-foreground/10"
+                className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-foreground/5 transition-colors hover:bg-foreground/10"
                 aria-label="Close story"
               >
                 <X size={16} className="text-foreground/60" />
@@ -231,7 +231,7 @@ export default function StoryDrawer({
                   {story.body ? (
                     documentToReactComponents(story.body, richTextOptions)
                   ) : (
-                    <p className="text-center font-serif text-foreground/40 italic">
+                    <p className="text-center font-serif text-foreground/60 italic">
                       Full story coming soon.
                     </p>
                   )}

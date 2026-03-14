@@ -107,7 +107,7 @@ const StoryCard = memo(function StoryCard({
             {story.age} years old
           </span>
           <span className="h-px w-8 shrink-0 bg-primary/40" />
-          <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.2em]">
+          <span className="font-sans text-foreground/65 text-xs uppercase tracking-[0.2em]">
             {story.location}
           </span>
         </div>
@@ -199,7 +199,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
     <div className="container py-16">
       {/* Filter bar */}
       <div className="flex flex-col items-center gap-5">
-        <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.3em]">
+        <span className="font-sans text-foreground/65 text-xs uppercase tracking-[0.3em]">
           Filter by decade
         </span>
         <fieldset
@@ -214,14 +214,14 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
               className={`cursor-pointer rounded-[10px] border px-4 py-2 font-sans text-sm tracking-[0.18em] transition-colors ${
                 activeDecade === d
                   ? "border-primary bg-primary text-white"
-                  : "border-primary/20 text-foreground/50 hover:bg-primary/5 hover:text-primary"
+                  : "border-primary/20 text-foreground/65 hover:bg-primary/5 hover:text-primary"
               }`}
             >
               {decadeLabel(d)}
             </button>
           ))}
         </fieldset>
-        <span className="font-sans text-foreground/40 text-xs">
+        <span className="font-sans text-foreground/60 text-xs">
           Showing {filtered.length}{" "}
           {filtered.length === 1 ? "story" : "stories"}
         </span>
@@ -229,7 +229,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
 
       {/* Meta row */}
       <div className="flex items-center justify-between pt-10">
-        <span className="font-sans text-foreground/50 text-xs uppercase tracking-[0.25em]">
+        <span className="font-sans text-foreground/65 text-xs uppercase tracking-[0.25em]">
           <span className="font-normal text-primary text-sm">
             {filtered.length}
           </span>{" "}
@@ -237,7 +237,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
         </span>
         <button
           type="button"
-          className="flex cursor-pointer items-center gap-2 font-sans text-foreground/50 text-xs uppercase tracking-[0.2em] transition-colors hover:text-primary"
+          className="flex cursor-pointer items-center gap-2 font-sans text-foreground/65 text-xs uppercase tracking-[0.2em] transition-colors hover:text-primary"
           onClick={() => setNewestFirst((n) => !n)}
         >
           <ArrowUpDown size={10} className="opacity-60" />
@@ -248,7 +248,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
       {/* Stories feed */}
       <div>
         {filtered.length === 0 ? (
-          <p className="py-20 text-center font-serif text-foreground/40 text-xl italic">
+          <p className="py-20 text-center font-serif text-foreground/60 text-xl italic">
             No stories in this decade yet.
           </p>
         ) : (

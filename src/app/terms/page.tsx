@@ -164,14 +164,14 @@ export default function TermsOfUse() {
       <main className="container pt-40 pb-24 md:pt-48">
         <div className="mx-auto max-w-3xl">
           {/* Header */}
-          <p className="mb-4 font-sans text-foreground/40 text-xs uppercase tracking-[0.4em]">
+          <p className="mb-4 font-sans text-foreground/60 text-xs uppercase tracking-[0.4em]">
             Legal
           </p>
           <h1 className="font-serif text-4xl text-foreground leading-tight md:text-5xl lg:text-6xl">
             Terms of Use
           </h1>
           <div className="mt-3 h-px w-16 bg-foreground/15" />
-          <p className="mt-4 font-sans text-foreground/40 text-sm">
+          <p className="mt-4 font-sans text-foreground/60 text-sm">
             Effective Date: March 10, 2026
           </p>
           <p className="mt-6 font-sans text-base text-foreground/70 leading-relaxed">
@@ -195,7 +195,7 @@ export default function TermsOfUse() {
 
           {/* Contact footer */}
           <div className="mt-20 rounded-2xl border border-foreground/10 bg-foreground/2 px-8 py-8">
-            <p className="font-sans text-foreground/50 text-sm">
+            <p className="font-sans text-foreground/65 text-sm">
               Questions about these Terms? Contact us at{" "}
               <a
                 href="mailto:info@theagecollective.com"

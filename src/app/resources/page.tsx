@@ -1,6 +1,7 @@
 import Footer from "@tac/components/Footer";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
+import ScrollReveal from "@tac/components/ScrollReveal";
 import { getResources } from "@tac/lib/contentful";
 import type { Resource } from "@tac/types";
 import { ExternalLink } from "lucide-react";
@@ -60,7 +61,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
         <h3 className="font-serif text-foreground text-lg leading-tight transition-colors duration-200 group-hover:text-primary">
           {resource.title}
         </h3>
-        <p className="mt-2 flex-1 font-sans text-foreground/55 text-sm leading-relaxed line-clamp-3">
+        <p className="mt-2 flex-1 font-sans text-foreground/70 text-sm leading-relaxed line-clamp-3">
           {resource.description}
         </p>
         <div className="mt-4 flex items-center gap-1.5 font-sans text-primary text-xs uppercase tracking-[0.2em] transition-colors duration-200 group-hover:text-foreground">
@@ -103,7 +104,7 @@ export default async function Resources() {
 
       {/* ═══════════════════ Featured Resource ═══════════════════ */}
       {featured && (
-        <section className="container py-24 md:py-32">
+        <ScrollReveal as="section" className="container py-24 md:py-32">
           <div className="mx-auto max-w-3xl text-center">
             <p className="mb-5 font-sans text-primary text-xs uppercase tracking-[0.4em]">
               Featured Resource
@@ -167,11 +168,11 @@ export default async function Resources() {
               </div>
             </div>
           </a>
-        </section>
+        </ScrollReveal>
       )}
 
       {/* ═══════════════════ Resource Hub ═══════════════════ */}
-      <section className="bg-primary/[0.04] py-24 md:py-32">
+      <ScrollReveal as="section" className="bg-primary/[0.04] py-24 md:py-32">
         <div className="container">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <p className="mb-5 font-sans text-primary text-xs uppercase tracking-[0.4em]">
@@ -189,10 +190,10 @@ export default async function Resources() {
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ CTA ═══════════════════ */}
-      <section className="container py-24 md:py-32">
+      <ScrollReveal as="section" className="container py-24 md:py-32">
         <div className="mx-auto max-w-2xl text-center">
           <p className="mb-5 font-sans text-primary text-xs uppercase tracking-[0.4em]">
             Contribute
@@ -213,7 +214,7 @@ export default async function Resources() {
             Share a Resource
           </a>
         </div>
-      </section>
+      </ScrollReveal>
 
       <Footer bgColor="bg-primary" />
     </div>

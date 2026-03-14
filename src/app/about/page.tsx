@@ -2,6 +2,7 @@ import MediaCard from "@tac/components/MediaCard";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import PillarCard from "@tac/components/PillarCard";
+import ScrollReveal from "@tac/components/ScrollReveal";
 import { getAssetsByTag, type MediaAsset } from "@tac/lib/contentful";
 import Image from "next/image";
 import logo from "../../../public/logo-rings.svg";
@@ -76,7 +77,7 @@ export default async function About() {
       />
 
       {/* ─── Mission Statement ─── */}
-      <section className="container py-24 md:py-32">
+      <ScrollReveal as="section" className="container py-24 md:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-6 font-sans text-tertiary text-xs uppercase tracking-[0.4em]">
             Our Mission
@@ -107,11 +108,11 @@ export default async function About() {
             </p>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─── Photo Collage ─── */}
       {collageAssets.length > 0 && (
-        <section className="container pb-8">
+        <ScrollReveal as="section" className="container pb-8">
           <p className="mb-6 text-center font-sans text-tertiary text-xs uppercase tracking-[0.4em] md:mb-8">
             Voices &amp; Faces
           </p>
@@ -158,11 +159,11 @@ export default async function About() {
               );
             })}
           </div>
-        </section>
+        </ScrollReveal>
       )}
 
       {/* ─── Changing the Narrative ─── */}
-      <section className="relative bg-tertiary/[0.07] py-24 md:py-32">
+      <ScrollReveal as="section" className="relative bg-tertiary/[0.07] py-24 md:py-32">
         <div className="container relative">
           <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-20">
             <div>
@@ -215,10 +216,10 @@ export default async function About() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─── Values ─── */}
-      <section className="heroTexture relative bg-tertiary pb-12 text-white md:pb-20">
+      <ScrollReveal as="section" className="heroTexture relative bg-tertiary pb-12 text-white md:pb-20">
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -240,7 +241,7 @@ export default async function About() {
 
         <div className="container relative pt-16 md:pt-20">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="mb-5 font-sans text-white/50 text-xs uppercase tracking-[0.4em]">
+            <p className="mb-5 font-sans text-white/70 text-xs uppercase tracking-[0.4em]">
               What We Believe
             </p>
             <h2 className="font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
@@ -261,10 +262,10 @@ export default async function About() {
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─── Why We Are ─── */}
-      <section className="container py-24 md:py-32">
+      <ScrollReveal as="section" className="container py-24 md:py-32">
         <div className="mx-auto grid items-start gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20">
           <div className="lg:sticky lg:top-38">
             <p className="mb-4 font-sans text-tertiary text-xs uppercase tracking-[0.4em]">
@@ -336,10 +337,10 @@ export default async function About() {
             </p>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─── CTA ─── */}
-      <section className="relative overflow-hidden bg-tertiary/5 py-24 md:py-32">
+      <ScrollReveal as="section" className="relative overflow-hidden bg-tertiary/5 py-24 md:py-32">
         <div className="container relative text-center">
           <p className="mb-5 font-sans text-tertiary text-xs uppercase tracking-[0.4em]">
             Get Involved
@@ -349,7 +350,7 @@ export default async function About() {
             <span className="text-tertiary italic">Let's talk about it.</span>
           </h2>
           <div className="mx-auto mt-2 h-px w-16 bg-tertiary/30" />
-          <p className="mx-auto mt-8 max-w-xl font-sans text-foreground/60 text-lg leading-relaxed">
+          <p className="mx-auto mt-8 max-w-xl font-sans text-foreground/70 text-lg leading-relaxed">
             If you have questions, ideas, or perspectives you’d like to share,
             we’d love to hear from you.
           </p>
@@ -360,7 +361,7 @@ export default async function About() {
             Get in touch
           </a>
         </div>
-      </section>
+      </ScrollReveal>
     </div>
   );
 }

@@ -108,11 +108,11 @@ const FilmCard = memo(function FilmCard({
             {film.name}
           </span>
           <span className="h-px w-5 shrink-0 bg-primary/30" />
-          <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.2em]">
+          <span className="font-sans text-foreground/60 text-xs uppercase tracking-[0.2em]">
             {film.location}
           </span>
         </div>
-        <p className="mt-1 font-sans text-foreground/30 text-sm tracking-[0.15em]">
+        <p className="mt-1 font-sans text-foreground/60 text-sm tracking-[0.15em]">
           {film.published}
         </p>
       </div>
@@ -155,7 +155,7 @@ export default function FilmsFeed({ films }: { films: Film[] }) {
     <div className="py-20 md:py-28">
       {/* Meta */}
       <div className="container mb-16 text-center">
-        <span className="font-sans text-foreground/40 text-xs uppercase tracking-[0.3em]">
+        <span className="font-sans text-foreground/60 text-xs uppercase tracking-[0.3em]">
           <span className="text-primary">{films.length}</span> films
         </span>
       </div>

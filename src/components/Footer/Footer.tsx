@@ -76,7 +76,7 @@ export default function Footer({
         </div>
 
         <div>
-          <h3 className="mb-5 font-normal font-sans text-[0.6rem] text-white uppercase tracking-[0.25em]">
+          <h3 className="mb-5 font-normal font-sans text-xs text-white uppercase tracking-[0.25em]">
             Explore
           </h3>
           <ul className="flex flex-col gap-3">
@@ -95,7 +95,7 @@ export default function Footer({
 
         {/* Projects */}
         <div>
-          <h3 className="mb-5 font-normal font-sans text-[0.6rem] text-white uppercase tracking-[0.25em]">
+          <h3 className="mb-5 font-normal font-sans text-xs text-white uppercase tracking-[0.25em]">
             Projects
           </h3>
           <ul className="flex flex-col gap-3">
@@ -114,7 +114,7 @@ export default function Footer({
 
         {/* Policies */}
         <div>
-          <h3 className="mb-5 font-normal font-sans text-[0.6rem] text-white uppercase tracking-[0.25em]">
+          <h3 className="mb-5 font-normal font-sans text-xs text-white uppercase tracking-[0.25em]">
             Policies
           </h3>
           <ul className="flex flex-col gap-3">
@@ -133,7 +133,7 @@ export default function Footer({
 
         {/* Stay Connected */}
         <div className="col-span-2 lg:col-span-1">
-          <h3 className="mb-5 font-normal font-sans text-[0.6rem] text-white uppercase tracking-[0.25em]">
+          <h3 className="mb-5 font-normal font-sans text-xs text-white uppercase tracking-[0.25em]">
             Stay Connected
           </h3>
           <div className="flex gap-3">
@@ -144,7 +144,7 @@ export default function Footer({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 hover:bg-white/20"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 hover:bg-white/20"
               >
                 <Icon />
               </a>
@@ -166,7 +166,7 @@ export default function Footer({
         <p className="font-sans text-xs leading-relaxed sm:max-w-2xl">
           {LAND_ACKNOWLEDGEMENT}
         </p>
-        <p className="shrink-0 font-sans text-[0.6rem]">
+        <p className="shrink-0 font-sans text-sm">
           &copy; 2026 The Age Collective
         </p>
       </div>

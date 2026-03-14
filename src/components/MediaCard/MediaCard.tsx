@@ -188,17 +188,17 @@ function VideoCard({
       />
 
       {/* Play/pause overlay */}
-      {/* biome-ignore lint/a11y/useKeyWithClickEvents: click to toggle play */}
-      {/* biome-ignore lint/a11y/noStaticElementInteractions: overlay interaction zone */}
-      <div
+      <button
+        type="button"
         onClick={togglePlay}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => {
           if (!isSeeking) setHovered(false);
         }}
-        className="absolute inset-0 z-10 cursor-pointer"
+        aria-label={playing ? "Pause video" : "Play video"}
+        className="absolute inset-0 z-10 cursor-pointer border-none bg-transparent"
       >
-        {/* Center play/pause button */}
+        {/* Center play/pause icon */}
         <div
           className={`pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
             !playing || showControls ? "opacity-100" : "opacity-0"
@@ -212,7 +212,7 @@ function VideoCard({
             )}
           </div>
         </div>
-      </div>
+      </button>
 
       {/* Scrubber */}
       <div

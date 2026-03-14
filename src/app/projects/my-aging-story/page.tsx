@@ -1,7 +1,9 @@
 import CountUp from "@tac/components/CountUp";
+import ImpactStats from "@tac/components/ImpactStats";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import ReflectionsCarousel from "@tac/components/ReflectionsCarousel";
+import ScrollReveal from "@tac/components/ScrollReveal";
 import { getAssetsByTag } from "@tac/lib/contentful";
 import Image from "next/image";
 import ACSELLogo from "../../../../public/ACSEL.png";
@@ -85,55 +87,6 @@ const supporters = [
   },
 ];
 
-// --- Stat ring for impact section ---
-function StatRing({ value }: { value: number }) {
-  const r = 46;
-  const circumference = 2 * Math.PI * r;
-  const offset = circumference * (1 - value / 100);
-
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      className="h-36 w-36 -rotate-90 sm:h-40 sm:w-40 md:h-44 md:w-44"
-      aria-hidden="true"
-    >
-      {/* Background ring */}
-      <circle
-        cx="50"
-        cy="50"
-        r={r}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        className="text-white/10"
-      />
-      {/* Progress ring */}
-      <circle
-        cx="50"
-        cy="50"
-        r={r}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3.5"
-        className="text-white"
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        strokeLinecap="round"
-      />
-      {/* Inner decorative ring */}
-      <circle
-        cx="50"
-        cy="50"
-        r={r - 8}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
-        className="text-white/8"
-      />
-    </svg>
-  );
-}
-
 export default async function MyAgingStory() {
   const galleryAssets = await getAssetsByTag("masGallery");
   const gallery = galleryAssets.sort((a, b) => a.sortIndex - b.sortIndex);
@@ -159,7 +112,7 @@ export default async function MyAgingStory() {
       />
 
       {/* ═══════════════════ About the Exhibit ═══════════════════ */}
-      <section className="container py-24 md:py-32">
+      <ScrollReveal as="section" className="container py-24 md:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-6 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
             About the Exhibit
@@ -186,10 +139,10 @@ export default async function MyAgingStory() {
             </p>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Exhibit Stations ═══════════════════ */}
-      <section className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
+      <ScrollReveal as="section" className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -235,17 +188,17 @@ export default async function MyAgingStory() {
                   {station.title}
                 </h3>
                 <div className="mt-2 h-px w-8 bg-quaternary/20 transition-all duration-300 group-hover:w-12 group-hover:bg-quaternary/40" />
-                <p className="mt-4 font-sans text-foreground/55 text-sm leading-relaxed">
+                <p className="mt-4 font-sans text-foreground/70 text-sm leading-relaxed">
                   {station.description}
                 </p>
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Photo Gallery ═══════════════════ */}
-      <section className="py-16 md:py-24">
+      <ScrollReveal as="section" className="py-16 md:py-24">
         <div className="container">
           <div className="grid grid-cols-2 gap-5 p-2 md:grid-cols-3 md:gap-7 md:p-4">
             {gallery.map((asset, i) => {
@@ -298,10 +251,10 @@ export default async function MyAgingStory() {
             })}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Highlights ═══════════════════ */}
-      <section className="bg-quaternary/4 py-20 md:py-24">
+      <ScrollReveal as="section" className="bg-quaternary/4 py-20 md:py-24">
         <div className="container">
           <p className="mb-14 text-center font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
             Highlights
@@ -324,10 +277,10 @@ export default async function MyAgingStory() {
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Impact Stats ═══════════════════ */}
-      <section className="heroTexture relative bg-quaternary py-24 text-white md:py-32">
+      <ScrollReveal as="section" className="heroTexture relative bg-quaternary py-24 text-white md:py-32">
         {/* Watermark */}
         <div
           className="pointer-events-none absolute animate-spin-slow select-none"
@@ -349,7 +302,7 @@ export default async function MyAgingStory() {
 
         <div className="container relative">
           <div className="mx-auto max-w-3xl text-center">
-            <p className="mb-5 font-sans text-white/50 text-xs uppercase tracking-[0.4em]">
+            <p className="mb-5 font-sans text-white/70 text-xs uppercase tracking-[0.4em]">
               Impact
             </p>
             <h2 className="font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
@@ -359,31 +312,12 @@ export default async function MyAgingStory() {
             <div className="mx-auto mt-2 h-px w-16 bg-white/20" />
           </div>
 
-          <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8">
-            {impact.map((stat) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center text-center"
-              >
-                {/* Ring + number */}
-                <div className="relative flex items-center justify-center">
-                  <StatRing value={stat.value} />
-                  <span className="absolute font-serif text-4xl leading-none tracking-tight sm:text-4xl md:text-5xl">
-                    {stat.value}
-                    <span className="text-2xl md:text-3xl">%</span>
-                  </span>
-                </div>
-                <p className="mt-5 max-w-[16rem] font-sans text-white/70 text-sm leading-relaxed md:text-base">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
+          <ImpactStats stats={impact} />
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Self-Reflections ═══════════════════ */}
-      <section className="relative overflow-hidden py-24 md:py-32">
+      <ScrollReveal as="section" className="relative overflow-hidden py-24 md:py-32">
         <div className="container relative">
           <div className="mx-auto mb-14 max-w-3xl text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
@@ -393,7 +327,7 @@ export default async function MyAgingStory() {
               Self-<span className="text-quaternary italic">reflections.</span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
-            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
+            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/70 leading-relaxed md:text-lg">
               Visitors imagined their future older selves and shared what they
               hope to remember, become, and let go of.
             </p>
@@ -401,10 +335,10 @@ export default async function MyAgingStory() {
 
           <ReflectionsCarousel reflections={reflections} />
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Exhibit Video ═══════════════════ */}
-      <section className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
+      <ScrollReveal as="section" className="relative overflow-hidden bg-quaternary/4 py-24 md:py-32">
         <div className="container relative">
           <div className="mx-auto max-w-3xl text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
@@ -417,7 +351,7 @@ export default async function MyAgingStory() {
               </span>
             </h2>
             <div className="mx-auto mt-2 h-px w-16 bg-quaternary/30" />
-            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/60 leading-relaxed md:text-lg">
+            <p className="mx-auto mt-6 max-w-xl font-sans text-base text-foreground/70 leading-relaxed md:text-lg">
               In case you missed it, experience the{" "}
               <span className="italic">My Aging Story</span> exhibit through our
               video!
@@ -440,10 +374,10 @@ export default async function MyAgingStory() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Feature CTA ═══════════════════ */}
-      <section className="container py-24 md:py-32">
+      <ScrollReveal as="section" className="container py-24 md:py-32">
         <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl shadow-xl">
           {/* Gradient background */}
           <div className="absolute inset-0 bg-linear-to-br from-quaternary via-quaternary/90 to-quaternary/80" />
@@ -469,7 +403,7 @@ export default async function MyAgingStory() {
           </div>
 
           <div className="relative px-8 py-20 text-center text-white md:px-16 md:py-28">
-            <p className="font-sans text-sm text-white/60 uppercase tracking-[0.4em]">
+            <p className="font-sans text-sm text-white/70 uppercase tracking-[0.4em]">
               Why It Matters
             </p>
             <h2 className="mt-6 font-serif text-3xl leading-tight md:text-4xl lg:text-5xl">
@@ -491,10 +425,10 @@ export default async function MyAgingStory() {
             </a>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
-      <section className="bg-quaternary/4 py-24 md:py-32">
+      <ScrollReveal as="section" className="bg-quaternary/4 py-24 md:py-32">
         <div className="container">
           <div className="mx-auto max-w-3xl text-center">
             <p className="mb-5 font-sans text-quaternary text-xs uppercase tracking-[0.4em]">
@@ -562,7 +496,7 @@ export default async function MyAgingStory() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
     </div>
   );
 }
