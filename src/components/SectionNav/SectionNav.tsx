@@ -27,9 +27,8 @@ export default function SectionNav({ sections }: { sections: Section[] }) {
       if (!el) continue;
       const rect = el.getBoundingClientRect();
 
-      // For sections with activeAfter, use a point further down the element
-      // instead of the geometric center
-      const anchor = rect.top + rect.height * Math.max(activeAfter, 0.5);
+      // Use activeAfter fraction if set, otherwise anchor near the top of the section
+      const anchor = rect.top + rect.height * (activeAfter || 0.05);
       const dist = Math.abs(anchor - mid);
 
       if (dist < closestDist) {
