@@ -15,12 +15,14 @@ const hiddenStyles: Record<Animation, string> = {
 export default function ScrollReveal({
   children,
   className = "",
+  id,
   as: Tag = "div",
   animation = "fade-up",
   delay = 0,
 }: {
   children: ReactNode;
   className?: string;
+  id?: string;
   as?: "div" | "section";
   animation?: Animation;
   delay?: number;
@@ -49,6 +51,7 @@ export default function ScrollReveal({
   return (
     <Tag
       ref={ref}
+      id={id}
       className={`transition-[opacity,transform] duration-700 ease-out ${visible ? "translate-x-0 translate-y-0 scale-100 opacity-100" : hiddenStyles[animation]} ${className}`}
       style={delay > 0 ? { transitionDelay: `${delay}ms` } : undefined}
     >

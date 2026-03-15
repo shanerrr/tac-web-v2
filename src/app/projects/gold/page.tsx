@@ -4,6 +4,7 @@ import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import ProvinceMap from "@tac/components/ProvinceMap";
 import ScrollReveal from "@tac/components/ScrollReveal";
+import SectionNav from "@tac/components/SectionNav";
 import {
   getAssetsByTag,
   getGoldJudges,
@@ -95,8 +96,28 @@ export default async function Gold() {
         scrollCueClassName="text-gold"
       />
 
+      <SectionNav
+        sections={[
+          { id: "about", label: "About" },
+          {
+            id: "anthology",
+            label: "Anthology",
+            activeAfter: 0.4,
+            scrollTo: 0.6,
+          },
+          { id: "impact", label: "Impact" },
+          { id: "judges", label: "Judges" },
+          { id: "poets", label: "Poets" },
+          { id: "thanks", label: "Thanks" },
+        ]}
+      />
+
       {/* ═══════════════════ About the Anthology ═══════════════════ */}
-      <ScrollReveal as="section" className="container py-24 md:py-32">
+      <ScrollReveal
+        as="section"
+        id="about"
+        className="container py-24 md:py-32"
+      >
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-6 font-sans text-gold text-xs uppercase tracking-[0.4em]">
             About the Anthology
@@ -177,10 +198,12 @@ export default async function Gold() {
       </ScrollReveal>
 
       {/* ═══════════════════ Read the Anthology ═══════════════════ */}
-      <GoldAnthology coverUrl={cover[0].url} />
+      <div id="anthology">
+        <GoldAnthology coverUrl={cover[0].url} />
+      </div>
 
       {/* ═══════════════════ Reach & Impact ═══════════════════ */}
-      <ScrollReveal as="section" className="py-24 md:py-32">
+      <ScrollReveal as="section" id="impact" className="py-24 md:py-32">
         <div className="container">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <p className="mb-5 font-sans text-gold text-xs uppercase tracking-[0.4em]">
@@ -267,6 +290,7 @@ export default async function Gold() {
       {/* ═══════════════════ Meet the Judges ═══════════════════ */}
       <ScrollReveal
         as="section"
+        id="judges"
         className="relative overflow-hidden bg-[#0A0A0A] py-24 md:py-32"
       >
         {/* Watermark */}
@@ -366,6 +390,7 @@ export default async function Gold() {
       {/* ═══════════════════ The GOLD Poets ═══════════════════ */}
       <ScrollReveal
         as="section"
+        id="poets"
         className="relative overflow-hidden py-24 md:py-32"
       >
         <div className="container relative">
@@ -482,6 +507,7 @@ export default async function Gold() {
       {/* ═══════════════════ Acknowledgements ═══════════════════ */}
       <ScrollReveal
         as="section"
+        id="thanks"
         className="relative overflow-hidden bg-gold/6 py-24 md:py-32"
       >
         <div className="container relative">

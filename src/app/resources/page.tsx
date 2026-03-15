@@ -1,4 +1,3 @@
-import Footer from "@tac/components/Footer";
 import Navbar from "@tac/components/Navbar";
 import PageHero from "@tac/components/PageHero";
 import ScrollReveal from "@tac/components/ScrollReveal";
@@ -215,8 +214,6 @@ export default async function Resources() {
           </a>
         </div>
       </ScrollReveal>
-
-      <Footer bgColor="bg-primary" />
     </div>
   );
 }
