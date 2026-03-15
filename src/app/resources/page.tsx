@@ -4,15 +4,8 @@ import ScrollReveal from "@tac/components/ScrollReveal";
 import { getResources } from "@tac/lib/contentful";
 import type { Resource } from "@tac/types";
 import { ExternalLink } from "lucide-react";
-import type { Metadata } from "next";
 import Image from "next/image";
 import logo from "../../../public/logo-rings.svg";
-
-export const metadata: Metadata = {
-  title: "Resources",
-  description:
-    "Learn, connect, and engage around aging and ageism with curated resources from The Age Collective.",
-};
 
 function ResourceCard({ resource }: { resource: Resource }) {
   return (

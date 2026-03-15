@@ -3,7 +3,7 @@ import Navbar from "@tac/components/Navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Use | The Age Collective",
+  title: "Terms of Use",
   description: "Terms and conditions for using The Age Collective website.",
 };
 

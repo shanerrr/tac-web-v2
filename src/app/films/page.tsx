@@ -17,7 +17,7 @@ export default async function Films() {
       <PageHero
         accentLabel="Storytelling"
         title="Films"
-        subtitle={<>Short documentaries exploring diverse aging stories</>}
+        subtitle={<>Short documentaries exploring personal aging journeys</>}
         bgClass="bg-primary"
         watermarkRight="calc(min(110vw, 110vh) / 2)"
         glowOverlay="radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 55%)"

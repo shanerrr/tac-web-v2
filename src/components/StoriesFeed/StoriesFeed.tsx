@@ -222,7 +222,10 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
             </button>
           ))}
         </fieldset>
-        <span className="font-sans text-foreground/60 text-xs">
+        <span
+          className="font-sans text-foreground/60 text-xs"
+          aria-live="polite"
+        >
           Showing {filtered.length}{" "}
           {filtered.length === 1 ? "story" : "stories"}
         </span>

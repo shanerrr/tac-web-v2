@@ -3,7 +3,7 @@ import Navbar from "@tac/components/Navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | The Age Collective",
+  title: "Privacy Policy",
   description:
     "How The Age Collective collects, uses, and safeguards your personal information.",
 };

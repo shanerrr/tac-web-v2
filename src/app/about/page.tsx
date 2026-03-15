@@ -19,9 +19,9 @@ const pillars = [
       "We embrace the full and complex reality of aging, including joy, loss, growth, change, and resilience. We also recognize that factors such as income, race, gender, ability, and access to care all shape how people experience growing older.",
   },
   {
-    title: "Conversation Creates Change.",
+    title: "Conversation creates Change.",
     description:
-      "When people are invited to listen and be listened to, change emerges. Through stories, poetry, film, and art, we challenge ageist assumptions and create space for empathy, understanding, and connection.",
+      "When people are invited to listen and be listened to, change emerges. Through stories, poetry, and film we challenge ageist assumptions and create space for empathy, understanding, and connection.",
   },
 ];
 
@@ -276,7 +276,7 @@ export default async function About() {
         <div className="mx-auto grid items-start gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20">
           <div className="lg:sticky lg:top-38">
             <p className="mb-4 font-sans text-tertiary text-xs uppercase tracking-[0.4em]">
-              Origin
+              Who we are
             </p>
             <h2 className="font-serif text-4xl text-foreground leading-tight md:text-5xl">
               We’re a small but{" "}
@@ -302,7 +302,7 @@ export default async function About() {
               </div>
             )}
             <p>
-              The Age Collective was founded in 2021 by a sister duo who saw
+              The Age Collective was created in 2021 by us, a sister duo who saw
               gaps that needed addressing. We watched our own parents navigate
               complex systems as older immigrants, often facing confusing
               processes, limited support, and age-based assumptions. In our work
@@ -311,17 +311,18 @@ export default async function About() {
             </p>
             <p>
               These experiences made it clear to us that aging is not just
-              personal, but shaped by systems, power, and whose voices are taken
-              seriously. We also believe aging is not only an &ldquo;older adult
-              issue.&rdquo; Younger people are aging too. Intergenerational
-              relationships matter if we want greater understanding, solidarity,
-              and collective action.
+              personal, but shaped by systems, power, and whose voices are
+              listened to. We also believe aging is not only an &ldquo;older
+              adult issue.&rdquo; Younger people are aging too.
+              Intergenerational relationships matter if we want greater
+              understanding, solidarity, and collective action.
             </p>
 
             <p>
-              What began as a small collection of written narratives has grown
-              into a multi-platform initiative spanning films, exhibits, poetry,
-              and community dialogue.
+              Today, The Age Collective continues to be led and run by the two
+              of us. What began as a small collection of written narratives has
+              grown into a multi-platform initiative spanning films, an exhibit,
+              poetry, and community dialogue.
             </p>
 
             <blockquote className="border-tertiary/50 border-l-2 pl-6 font-bold font-serif text-tertiary text-xl italic leading-relaxed md:text-2xl">

@@ -95,6 +95,7 @@ export default function StoryDrawer({
 }) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const metaRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
   const [metaScrolledPast, setMetaScrolledPast] = useState(false);
   const isOpen = story !== null;
 
@@ -103,6 +104,9 @@ export default function StoryDrawer({
 
     // Lock body scroll
     document.body.style.overflow = "hidden";
+
+    // Focus the close button for keyboard accessibility
+    requestAnimationFrame(() => closeRef.current?.focus());
 
     // Close on Escape
     const onKey = (e: KeyboardEvent) => {
@@ -173,6 +177,7 @@ export default function StoryDrawer({
             <div className="sticky top-0 z-10 flex items-center justify-between bg-white/95 px-6 pt-4 pb-2 backdrop-blur-sm">
               <div className="mx-auto h-1 w-10 rounded-full bg-foreground/15" />
               <button
+                ref={closeRef}
                 type="button"
                 onClick={() => {
                   navigator.vibrate?.(6);

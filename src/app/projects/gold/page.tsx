@@ -76,7 +76,7 @@ export default async function Gold() {
         accentLabel="Poetry Anthology"
         title="GOLD"
         subtitle={
-          <>Celebrating the creative force of older adults through poetry.</>
+          <>Celebrating the creativity of older adults through poetry.</>
         }
         bgClass="bg-[#0A0A0A]"
         noTexture
@@ -130,11 +130,11 @@ export default async function Gold() {
           <div className="mt-8 space-y-5 font-sans text-foreground/70 text-lg leading-relaxed md:text-xl">
             <p>
               The Growing Older, Living Deeply (GOLD) Poetry Project began in
-              response to two connected gaps: older adults are underrepresented
-              in the arts, and aging is often understood in narrow ways. These
-              gaps limit opportunities for creative expression for older adults
-              and make it harder to have honest conversations about what it
-              really means to grow older.
+              response to two interconnected gaps: older adults are
+              underrepresented in the arts, and aging is often understood in
+              narrow ways. These gaps limit opportunities for creative
+              expression for older adults and make it harder to have honest
+              conversations about what it really means to grow older.
             </p>
             <p>
               GOLD was created to address this by centering the voices of older

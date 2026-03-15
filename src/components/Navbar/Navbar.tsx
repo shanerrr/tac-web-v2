@@ -85,7 +85,7 @@ const navItems: NavItem[] = [
       {
         label: "films",
         href: "/films",
-        description: "Short films about aging told by real voices",
+        description: "Short documentaries exploring personal aging journeys",
         accent: "primary",
         accentLabel: "Visual",
       },
@@ -109,7 +109,7 @@ const navItems: NavItem[] = [
         label: "GOLD",
         href: "/projects/gold",
         description:
-          "Celebrating the creative force of older adults through poetry.",
+          "Celebrating the creativity of older adults through poetry",
         accent: "gold",
         accentLabel: "Poetry",
       },
@@ -242,7 +242,7 @@ export default function Navbar({
             </Link>
 
             {/* ─── Desktop nav ─── */}
-            <ol className="ml-8 hidden items-baseline md:flex">
+            <ul className="ml-8 hidden items-baseline md:flex">
               {navItems.map((item, idx) => {
                 const isActive = item.href
                   ? pathname === item.href
@@ -363,7 +363,7 @@ export default function Navbar({
                   </Fragment>
                 );
               })}
-            </ol>
+            </ul>
 
             {/* ─── Hamburger — morphing lines ─── */}
             <button
@@ -440,7 +440,7 @@ export default function Navbar({
         </div>
 
         {/* Nav items with staggered entrance */}
-        <ol className="container relative flex flex-col gap-8 font-serif text-4xl">
+        <ul className="container relative flex flex-col gap-8 font-serif text-4xl">
           {navItems.map((item, idx) => {
             const isActive = item.href
               ? pathname === item.href
@@ -540,7 +540,7 @@ export default function Navbar({
               </li>
             );
           })}
-        </ol>
+        </ul>
 
         {/* Tagline — enters last */}
         <p

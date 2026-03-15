@@ -44,7 +44,7 @@ const stations = [
   {
     title: "Self-Reflection Booth",
     description:
-      "A space where visitors imagined and wrote about their future older selves. This aimed to help bridge the gap between who we are now and who we want to become in late life.",
+      "A space where visitors imagined and wrote about their future older selves. This aimed to help bridge the gap between who they were then and who they want to become in late life.",
   },
   {
     title: "Community Dialogue",

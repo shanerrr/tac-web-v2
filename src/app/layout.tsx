@@ -16,6 +16,7 @@ const oldStandardTT = Old_Standard_TT({
 
 const inter = Inter({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-inter-sans",
 });
 
@@ -90,7 +91,7 @@ export default async function RootLayout({
           Skip to main content
         </a>
         {banner && <Banner banner={banner} />}
-        <main id="main-content">{children}</main>
+        <div id="main-content">{children}</div>
         <Analytics />
       </body>
     </html>
