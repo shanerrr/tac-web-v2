@@ -1,3 +1,4 @@
+import AgeDistribution from "@tac/components/AgeDistribution";
 import CountUp from "@tac/components/CountUp";
 import GoldAnthology from "@tac/components/GoldAnthology";
 import Navbar from "@tac/components/Navbar";
@@ -262,26 +263,7 @@ export default async function Gold() {
                 <p className="mb-8 text-center font-sans text-foreground/70 text-sm leading-relaxed md:text-start">
                   Poems were submitted by older adults from 55 to 95 years old.
                 </p>
-                <div className="space-y-5">
-                  {ageGroups.map((group) => (
-                    <div key={group.range}>
-                      <div className="mb-1.5 flex items-baseline justify-between">
-                        <span className="font-sans text-foreground/70 text-md">
-                          {group.range}
-                        </span>
-                        <span className="font-bold font-serif text-gold text-lg">
-                          {group.percentage}%
-                        </span>
-                      </div>
-                      <div className="relative h-2 overflow-hidden rounded-full bg-gold/10">
-                        <div
-                          className="h-full rounded-full bg-linear-to-r from-gold/70 to-gold"
-                          style={{ width: `${group.percentage}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <AgeDistribution groups={ageGroups} />
               </div>
             </div>
           </div>

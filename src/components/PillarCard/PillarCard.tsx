@@ -38,7 +38,7 @@ export default function PillarCard({
         <span className="font-sans text-md text-white/60 uppercase tracking-[0.3em]">
           0{index + 1}
         </span>
-        <h3 className="mt-3 font-sans text-2xl leading-tight md:text-3xl px-0 lg:px-2">
+        <h3 className="mt-3 px-0 font-sans text-2xl leading-tight md:text-3xl lg:px-2">
           <span className="font-medium">{titleStart}</span>
           {titleEnd && (
             <>
