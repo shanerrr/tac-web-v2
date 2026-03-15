@@ -176,9 +176,10 @@ export default async function Gold() {
           </div>
 
           <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {themes.map((theme) => (
-              <div
+            {themes.map((theme, i) => (
+              <ScrollReveal
                 key={theme.title}
+                delay={i * 120}
                 className="group flex flex-col rounded-2xl border border-gold/10 bg-white px-6 py-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-gold/8 hover:shadow-lg"
               >
                 <span className="font-sans text-[10px] text-gold uppercase tracking-[0.3em]">
@@ -191,7 +192,7 @@ export default async function Gold() {
                 <p className="mt-4 font-sans text-foreground/60 text-sm leading-relaxed">
                   {theme.description}
                 </p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>

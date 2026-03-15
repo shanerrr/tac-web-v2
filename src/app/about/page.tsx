@@ -259,12 +259,13 @@ export default async function About() {
 
           <div className="mx-auto mt-16 grid max-w-5xl gap-6 sm:grid-cols-3 lg:gap-8">
             {pillars.map((pillar, i) => (
-              <PillarCard
-                key={pillar.title}
-                index={i}
-                title={pillar.title}
-                description={pillar.description}
-              />
+              <ScrollReveal key={pillar.title} delay={i * 150}>
+                <PillarCard
+                  index={i}
+                  title={pillar.title}
+                  description={pillar.description}
+                />
+              </ScrollReveal>
             ))}
           </div>
         </div>

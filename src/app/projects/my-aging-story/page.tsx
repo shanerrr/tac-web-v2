@@ -180,8 +180,9 @@ export default async function MyAgingStory() {
 
           <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {stations.map((station, i) => (
-              <div
+              <ScrollReveal
                 key={station.title}
+                delay={i * 120}
                 className="group flex flex-col rounded-2xl border border-quaternary/10 bg-white px-6 py-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
                 <span className="font-sans text-[10px] text-quaternary uppercase tracking-[0.3em]">
@@ -194,7 +195,7 @@ export default async function MyAgingStory() {
                 <p className="mt-4 font-sans text-foreground/70 text-sm leading-relaxed">
                   {station.description}
                 </p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>

@@ -58,7 +58,21 @@ export default function Footer({
 }) {
   return (
     <footer className={`text-white ${bgColor} ${textureClass}`}>
-      <div className="container grid grid-cols-2 gap-x-6 gap-y-12 py-16 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
+      {/* Decorative top border with centered ring */}
+      <div className="container flex items-center gap-4 pt-12 pb-2">
+        <div className="h-px flex-1 bg-white/10" />
+        <Image
+          src={logo}
+          alt=""
+          width={32}
+          height={32}
+          className="opacity-15"
+          aria-hidden="true"
+        />
+        <div className="h-px flex-1 bg-white/10" />
+      </div>
+
+      <div className="container grid grid-cols-2 gap-x-6 gap-y-12 py-10 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
         <div className="col-span-2 flex flex-col gap-2 lg:col-span-1">
           <Link href="/" className="flex flex-col justify-center gap-3">
             <Image
