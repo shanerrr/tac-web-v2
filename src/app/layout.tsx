@@ -81,6 +81,28 @@ export default async function RootLayout({
 
   return (
     <html lang="en-CA">
+      <head>
+        <script
+          type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: static JSON-LD structured data
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "The Age Collective",
+              url: SITE_URL,
+              logo: `${SITE_URL}/logo.svg`,
+              description:
+                "Challenging ageism through storytelling, film, art, and community.",
+              sameAs: [
+                "https://www.linkedin.com/company/the-age-collective",
+                "https://www.instagram.com/theagecollective",
+                "https://www.youtube.com/@TheAgeCollective",
+              ],
+            }),
+          }}
+        />
+      </head>
       <body
         className={`${oldStandardTT.variable} ${inter.variable} font-sans antialiased`}
       >

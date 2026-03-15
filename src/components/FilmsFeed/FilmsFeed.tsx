@@ -44,7 +44,7 @@ const FilmCard = memo(function FilmCard({
       {/* Framed thumbnail / YouTube embed */}
       <button
         type="button"
-        className="group block w-full cursor-pointer text-left"
+        className="group block w-full text-left"
         onClick={onPlay}
         disabled={!videoId || playing}
       >
@@ -55,6 +55,7 @@ const FilmCard = memo(function FilmCard({
                 src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`}
                 allow="autoplay; encrypted-media; picture-in-picture"
                 allowFullScreen
+                loading="lazy"
                 className="absolute inset-0 h-full w-full"
                 title={film.title}
               />

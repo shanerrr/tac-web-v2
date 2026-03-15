@@ -217,7 +217,7 @@ function VideoCard({
           if (!isSeeking) setHovered(false);
         }}
         aria-label={playing ? "Pause video" : "Play video"}
-        className="absolute inset-0 z-10 cursor-pointer border-none bg-transparent"
+        className="absolute inset-0 z-10 border-none bg-transparent"
       >
         {/* Center play/pause icon */}
         <div

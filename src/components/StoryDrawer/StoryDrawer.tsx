@@ -317,7 +317,7 @@ export default function StoryDrawer({
                             key={related.id}
                             type="button"
                             onClick={() => onOpenStory?.(related)}
-                            className="group flex cursor-pointer items-center gap-4 rounded-2xl border border-primary/10 bg-primary/[0.02] p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/5"
+                            className="group flex items-center gap-4 rounded-2xl border border-primary/10 bg-primary/[0.02] p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/5"
                           >
                             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl shadow-sm ring-1 ring-primary/10 transition-all duration-300 group-hover:ring-primary/25">
                               <Image

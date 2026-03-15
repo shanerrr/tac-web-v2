@@ -48,7 +48,7 @@ export default function Banner({ banner }: { banner: AlertBanner }) {
           type="button"
           onClick={dismiss}
           aria-label="Dismiss announcement"
-          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors duration-200 hover:bg-white/15 hover:text-white"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white/60 transition-colors duration-200 hover:bg-white/15 hover:text-white"
         >
           <X size={14} />
         </button>

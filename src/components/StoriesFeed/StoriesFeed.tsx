@@ -119,7 +119,7 @@ const StoryCard = memo(function StoryCard({
         <button
           type="button"
           onClick={handleRead}
-          className="inline-flex cursor-pointer items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
+          className="inline-flex items-center gap-3 border-primary/30 border-b pb-1 font-sans text-primary text-xs uppercase tracking-[0.22em] transition-all duration-300 hover:gap-5 hover:border-foreground hover:text-foreground"
         >
           Read {story.pronoun} story
           <ArrowRight size={16} />
@@ -212,7 +212,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
                 navigator.vibrate?.(8);
                 setActiveDecade(d);
               }}
-              className={`cursor-pointer rounded-[10px] border px-4 py-2 font-sans text-sm tracking-[0.18em] transition-colors ${
+              className={`rounded-[10px] border px-4 py-2 font-sans text-sm tracking-[0.18em] transition-colors ${
                 activeDecade === d
                   ? "border-primary bg-primary text-white"
                   : "border-primary/20 text-foreground/65 hover:bg-primary/5 hover:text-primary"
@@ -241,7 +241,7 @@ export default function StoriesFeed({ stories }: { stories: Story[] }) {
         </span>
         <button
           type="button"
-          className="flex cursor-pointer items-center gap-2 font-sans text-foreground/65 text-xs uppercase tracking-[0.2em] transition-colors hover:text-primary"
+          className="flex items-center gap-2 font-sans text-foreground/65 text-xs uppercase tracking-[0.2em] transition-colors hover:text-primary"
           onClick={() => {
             navigator.vibrate?.(8);
             setNewestFirst((n) => !n);

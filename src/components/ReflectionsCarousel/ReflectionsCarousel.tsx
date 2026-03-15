@@ -90,7 +90,7 @@ export default function ReflectionsCarousel({
           onClick={() => scroll("left")}
           disabled={!canScrollLeft}
           aria-label="Previous reflections"
-          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-quaternary/25 text-quaternary transition-all duration-200 hover:bg-quaternary/10 disabled:cursor-default disabled:opacity-30"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-quaternary/25 text-quaternary transition-all duration-200 hover:bg-quaternary/10 disabled:opacity-30"
         >
           <ChevronLeft size={20} />
         </button>
@@ -99,7 +99,7 @@ export default function ReflectionsCarousel({
           onClick={() => scroll("right")}
           disabled={!canScrollRight}
           aria-label="Next reflections"
-          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-quaternary/25 text-quaternary transition-all duration-200 hover:bg-quaternary/10 disabled:cursor-default disabled:opacity-30"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-quaternary/25 text-quaternary transition-all duration-200 hover:bg-quaternary/10 disabled:opacity-30"
         >
           <ChevronRight size={20} />
         </button>

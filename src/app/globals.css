@@ -175,6 +175,11 @@ body {
   color: var(--color-foreground);
 }
 
+/* Tailwind v4 removed cursor:pointer from buttons — restore it globally */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 /* Global focus-visible ring for keyboard users */
 :focus-visible {
   outline: 2px solid var(--color-primary);
