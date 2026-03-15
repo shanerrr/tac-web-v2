@@ -75,13 +75,13 @@ export default function SectionNav({ sections }: { sections: Section[] }) {
   return (
     <nav
       aria-label="Page sections"
-      className={`fixed right-0 top-1/2 z-40 hidden -translate-y-1/2 transition-all duration-500 md:block ${
+      className={`fixed top-1/2 right-0 z-40 hidden -translate-y-1/2 transition-all duration-500 md:block ${
         visible
           ? "pointer-events-auto translate-x-0 opacity-100"
           : "pointer-events-none translate-x-8 opacity-0"
       }`}
     >
-      <div className="flex flex-col items-stretch gap-1 rounded-l-2xl border border-r-0 border-white/[0.06] bg-black/60 px-3 py-3 shadow-2xl backdrop-blur-xl">
+      <div className="flex flex-col items-stretch gap-1 rounded-l-2xl border border-white/[0.06] border-r-0 bg-black/60 px-3 py-3 shadow-2xl backdrop-blur-xl">
         {sections.map((section) => {
           const isActive = active === section.id;
           return (
@@ -97,14 +97,14 @@ export default function SectionNav({ sections }: { sections: Section[] }) {
             >
               {/* Active bar */}
               <span
-                className={`absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full transition-all duration-300 ${
+                className={`absolute top-1/2 left-0 h-5 w-[3px] -translate-y-1/2 rounded-full transition-all duration-300 ${
                   isActive ? "bg-gold opacity-100" : "opacity-0"
                 }`}
               />
 
               {/* Label */}
               <span
-                className={`font-sans text-[11px] font-medium uppercase tracking-[0.18em] transition-colors duration-300 ${
+                className={`font-medium font-sans text-[11px] uppercase tracking-[0.18em] transition-colors duration-300 ${
                   isActive
                     ? "text-gold"
                     : "text-white/40 group-hover:text-white/70"

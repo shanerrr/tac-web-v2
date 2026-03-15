@@ -5,7 +5,7 @@ import type { Block, Inline } from "@contentful/rich-text-types";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import { STORIES_BLUR_DATA_URL } from "@tac/lib/constants";
 import { formatDate } from "@tac/lib/utils";
-import { type Film, type Story } from "@tac/types";
+import type { Film, Story } from "@tac/types";
 import { Play, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
