@@ -188,7 +188,9 @@ export default function GoldAnthology({ coverUrl }: { coverUrl: string }) {
               layered and lived realities of growing older.
             </p>
             <a
-              href="#"
+              target="_blank"
+              rel="noreferrer"
+              href="/GOLD-Digital-Anthology.pdf"
               className="gs-cta mt-8 inline-flex items-center gap-3 rounded-xl border border-gold/20 bg-gold/10 px-8 py-4 font-sans text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold/40 hover:bg-gold/15 hover:shadow-gold/5 hover:shadow-lg"
             >
               Read the Anthology
