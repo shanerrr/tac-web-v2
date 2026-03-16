@@ -319,7 +319,7 @@ export default function ProvinceMap() {
                 className="cursor-pointer"
                 role="button"
                 tabIndex={0}
-                aria-label={`${prov.name}: ${prov.count} poems. Click to view locations.`}
+                aria-label={`${prov.name}: ${prov.count} poems. Click to view localities.`}
                 onMouseEnter={() => setHovered(prov.name)}
                 onFocus={() => setHovered(prov.name)}
                 onBlur={() => setHovered(null)}
@@ -383,7 +383,7 @@ export default function ProvinceMap() {
                   </span>
                 </p>
                 <p className="mt-1.5 text-center font-sans text-gold/50 text-xs uppercase tracking-[0.15em]">
-                  Click to view locations
+                  Click to view localities
                 </p>
               </div>
               {/* Caret */}
@@ -400,7 +400,7 @@ export default function ProvinceMap() {
         )}
       </div>
 
-      {/* ═══════════ Locations Drawer (portalled to body to escape ScrollReveal transform) ═══════════ */}
+      {/* ═══════════ Localities Drawer (portalled to body to escape ScrollReveal transform) ═══════════ */}
       {mounted &&
         createPortal(
           <>
@@ -420,7 +420,7 @@ export default function ProvinceMap() {
               role="dialog"
               aria-modal="true"
               aria-label={
-                drawerProv ? `Locations in ${drawerProv.name}` : undefined
+                drawerProv ? `Localities in ${drawerProv.name}` : undefined
               }
               className={`fixed inset-x-0 bottom-0 z-50 max-h-[80vh] overflow-y-auto rounded-t-3xl bg-[#0F0D08] shadow-2xl transition-transform duration-500 ease-out ${
                 drawerProv ? "translate-y-0" : "translate-y-full"
@@ -435,7 +435,7 @@ export default function ProvinceMap() {
                       type="button"
                       onClick={closeDrawer}
                       className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
-                      aria-label="Close locations drawer"
+                      aria-label="Close localities drawer"
                     >
                       <X size={16} className="text-white/60" />
                     </button>
@@ -459,7 +459,7 @@ export default function ProvinceMap() {
                       <div className="mx-auto mt-3 h-px w-16 bg-gold/30" />
                     </div>
 
-                    {/* Locations grid */}
+                    {/* Localities grid */}
                     <div className="mx-auto max-w-3xl">
                       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
                         {drawerProv.cities
@@ -482,7 +482,7 @@ export default function ProvinceMap() {
                       </div>
 
                       <p className="mt-8 text-center font-sans text-white/25 text-xs">
-                        {drawerProv.cities.length} locations reached
+                        {drawerProv.cities.length} localities reached
                       </p>
                     </div>
                   </div>

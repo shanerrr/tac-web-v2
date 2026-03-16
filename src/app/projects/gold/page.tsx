@@ -17,7 +17,7 @@ import glocalLogo from "../../../../public/glocal.png";
 import logo from "../../../../public/logo-rings.svg";
 
 const highlights = [
-  { value: "142", label: "Locations Reached" },
+  { value: "142", label: "Localities Reached" },
   { value: "319", label: "Poems Submitted" },
   { value: "260", label: "Older Adults Reached" },
   { value: "91", label: "Organizations Reached" },
