@@ -72,6 +72,7 @@ interface GoldJudgesSkeleton extends EntrySkeletonType {
     name: EntryFieldTypes.Text;
     description: EntryFieldTypes.Text;
     photo: EntryFieldTypes.AssetLink;
+    order: EntryFieldTypes.Integer;
   };
 }
 
@@ -235,7 +236,7 @@ export const getGoldJudges = async (): Promise<GoldJudge[]> => {
 
   const { items } = await client.getEntries<GoldJudgesSkeleton>({
     content_type: "goldJudges",
-    order: ["-sys.createdAt"],
+    order: ["fields.order"],
     include: 1,
   });
 
@@ -249,6 +250,7 @@ export const getGoldJudges = async (): Promise<GoldJudge[]> => {
       name: f.name,
       description: f.description,
       photo: photo ? `https:${photoUrl}` : null,
+      order: f.order ?? 0,
     };
   });
 };

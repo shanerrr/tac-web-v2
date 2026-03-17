@@ -56,7 +56,7 @@ export default function PageHero({
       className={`-mt-27 ${bgClass} md:-mt-32 ${noTexture ? "" : "heroTexture"}`}
     >
       <section
-        className={`relative flex flex-col items-center justify-center overflow-hidden pt-27 pb-27 text-center text-white md:pt-32 md:pb-32 ${fullHeight ? "min-h-dvh" : "min-h-[70vh]"}`}
+        className={`relative flex flex-col items-center justify-center overflow-hidden pt-20 pb-20 text-center text-white sm:pt-27 sm:pb-27 md:pt-32 md:pb-32 ${fullHeight ? "min-h-dvh" : "min-h-[70vh]"}`}
       >
         {/* Ambient glow overlay */}
         {glowOverlay && (
@@ -94,20 +94,20 @@ export default function PageHero({
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center">
+        <div className="relative z-10 flex flex-col items-center px-6">
           <p
-            className={`mb-6 font-sans text-sm uppercase tracking-[0.5em] ${accentLabelClassName}`}
+            className={`mb-4 font-sans text-xs uppercase tracking-[0.5em] sm:mb-6 sm:text-sm ${accentLabelClassName}`}
           >
             {accentLabel}
           </p>
           <h1
-            className={`my-6 font-bold font-serif text-8xl leading-none tracking-tight sm:text-9xl lg:text-[11rem] ${titleClassName ?? ""}`}
+            className={`my-4 font-bold font-serif text-7xl leading-none tracking-tight sm:my-6 sm:text-8xl md:text-9xl lg:text-[11rem] ${titleClassName ?? ""}`}
             style={titleStyle}
           >
             {title}
           </h1>
           <p
-            className={`font-light font-sans text-2xl sm:text-4xl ${subtitleClassName ?? ""}`}
+            className={`font-light font-sans text-xl sm:text-3xl md:text-4xl ${subtitleClassName ?? ""}`}
           >
             {subtitle}
           </p>

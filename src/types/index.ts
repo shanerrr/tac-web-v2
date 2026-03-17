@@ -61,6 +61,7 @@ export type GoldJudge = {
   name: string;
   photo: string | null;
   description: string;
+  order: number;
 };
 
 export type GoldPoet = {
