@@ -242,7 +242,7 @@ export default function Navbar({
             </Link>
 
             {/* ─── Desktop nav ─── */}
-            <ul className="ml-8 hidden items-baseline md:flex">
+            <ul className="ml-8 hidden items-baseline lg:flex">
               {navItems.map((item, idx) => {
                 const isActive = item.href
                   ? pathname === item.href
@@ -368,7 +368,7 @@ export default function Navbar({
             {/* ─── Hamburger — morphing lines ─── */}
             <button
               ref={hamburgerRef}
-              className="relative h-11 w-11 md:hidden"
+              className="relative h-11 w-11 lg:hidden"
               type="button"
               onClick={() => {
                 setMenuOpen((o) => !o);
@@ -414,7 +414,7 @@ export default function Navbar({
 
       {/* ─── Full-screen mobile menu ─── */}
       <div
-        className={`fixed inset-0 z-40 flex flex-col justify-center overflow-hidden bg-white transition-[opacity,transform] duration-500 ease-in-out md:hidden ${
+        className={`fixed inset-0 z-40 flex flex-col justify-center overflow-hidden bg-white transition-[opacity,transform] duration-500 ease-in-out lg:hidden ${
           menuOpen
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none translate-y-4 opacity-0"
