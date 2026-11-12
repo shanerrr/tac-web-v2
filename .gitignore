@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# impeccable working files (decision sketches, review captures)
+.impeccable/
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/build/

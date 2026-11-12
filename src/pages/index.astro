@@ -1,16 +1,709 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import Arcs from '../components/Arcs.astro';
+
+// The ring hills: circles whose centres sit below the frame, in the 1440 x 900 space of the approved sketch.
+// Listed back to front. Each is opaque and covers the ones before it, so ring lines never cross.
+const hills = [
+	{ cx: 250, cy: 1010, r: 430, ink: 'var(--rust)' },
+	{ cx: 1230, cy: 990, r: 450, ink: 'var(--must)' },
+	{ cx: 730, cy: 1150, r: 620, ink: 'var(--tang)' },
+	{ cx: 1080, cy: 1230, r: 520, ink: 'var(--olive)' },
+	{ cx: 300, cy: 1260, r: 480, ink: 'var(--must)' },
+];
+const rings = (r: number, step = 26) =>
+	Array.from({ length: Math.floor((r - 20) / step) }, (_, i) => r - step * (i + 1));
+// Each walker stands on a hill's ridge: [hill index, degrees from the top, scale].
+const walkers = [
+	[0, -1.5, 1], [0, 1.6, 0.85],
+	[2, -8.5, 1], [2, -3, 0.85], [2, -0.8, 1],
+	[1, -6.5, 1], [1, -3.2, 0.9], [1, 7.5, 1],
+	[3, -17, 1], [3, -14, 0.85],
+	[4, 14, 1],
+];
+
+// ponytail: placeholders until EmDash is wired. Replace with the newest stories and films from the CMS.
+const featured = [
+	{ format: 'story', ink: 'var(--rust)' },
+	{ format: 'story', ink: 'var(--sage)' },
+	{ format: 'film', ink: 'var(--must)' },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+	<section class="hero">
+		<div class="hero-copy">
+			<h1><span style="--i:0">We’re all aging.</span> <span style="--i:1">Let’s talk about it.</span></h1>
+		</div>
+		<div class="hills" aria-hidden="true">
+			<svg viewBox="0 470 1440 430" preserveAspectRatio="xMidYMin slice">
+				{
+					hills.map((h, i) => (
+						<g class="hill" style={`--i:${i}; transform-origin:${h.cx}px ${h.cy}px`}>
+							<circle cx={h.cx} cy={h.cy} r={h.r} fill={h.ink} />
+							{rings(h.r).map((r) => (
+								<circle cx={h.cx} cy={h.cy} r={r} fill="none" stroke="var(--paper)" stroke-width="5" opacity=".75" />
+							))}
+						</g>
+					))
+				}
+				{
+					walkers.map(([hi, deg, s], i) => {
+						const h = hills[hi];
+						return (
+							<g class:list={['stroll', { front: hi > 2 }]} style={`transform-origin:${h.cx}px ${h.cy}px`}>
+								<g class="walker" style={`--i:${i}; --from:${deg < 0 ? -14 : 14}deg; transform-origin:${h.cx}px ${h.cy}px`}>
+									<g transform={`rotate(${deg} ${h.cx} ${h.cy}) translate(${h.cx} ${h.cy - h.r}) scale(${s * 1.25})`} fill="var(--ink)">
+										<g class="step">
+											<g class="hop">
+												<circle cy="-34" r="6" />
+												<rect x="-6" y="-26" width="12" height="27" rx="6" />
+											</g>
+										</g>
+									</g>
+								</g>
+							</g>
+						);
+					})
+				}
+			</svg>
+		</div>
+		<a class="btn btn-paper hero-cta" href="#stories" aria-label="Learn more: read the stories">
+			Learn more
+			<svg viewBox="0 0 16 24" aria-hidden="true"><path d="M8 2v19M2 15l6 6 6-6" /></svg>
+		</a>
+	</section>
+
+	<section class="stories wrap" id="stories" aria-labelledby="stories-h">
+		<div class="stories-head">
+			<h2 id="stories-h">In their own words.</h2>
+			<p>Real people tell us what growing older is actually like. Read a story, or watch a short film.</p>
+		</div>
+		<ul class="plates">
+			{
+				featured.map((f) => (
+					<li class={`plate ${f.format}`}>
+						<div class="slot" style={`--slot:${f.ink}`}>
+							<Arcs />
+							<span>Placeholder {f.format === 'film' ? 'film still' : 'portrait'}</span>
+						</div>
+						<div class="plate-copy">
+							<h3>{f.format === 'film' ? 'Film title' : 'Name, age'}</h3>
+							<p class="meta">{f.format === 'film' ? 'Name, age · Place · Duration' : 'Place · Pronouns'}</p>
+							{f.format === 'story' && <p class="line">“A line from their story, in their own words.”</p>}
+							<a href="/stories">{f.format === 'film' ? 'Watch the film' : 'Read the story'}</a>
+						</div>
+					</li>
+				))
+			}
+			<li class="more"><a class="btn" href="/stories">All stories and films</a></li>
+		</ul>
+	</section>
+
+	<section class="ageism sheet" aria-labelledby="ageism-h">
+		<div class="wrap ageism-grid">
+			<div>
+				<h2 id="ageism-h">Aging isn’t the problem. <span>Ageism is.</span></h2>
+				<p>
+					Ageism is the way we think, feel, or act towards people based on age. It is one of the most
+					common and normalized forms of discrimination, and it shows up in everyday language, in
+					media, and in how systems like healthcare, housing, and employment are designed.
+				</p>
+				<a class="btn btn-paper" href="/about">Why we do this work</a>
+			</div>
+			<div class="voices">
+				<figure>
+					<blockquote>
+						<p>
+							Racism, sexism, etc. - none of this is okay, but ageism is somehow still acceptable in a
+							lot of different sectors.
+						</p>
+					</blockquote>
+					<figcaption>Jamie, 24</figcaption>
+				</figure>
+				<figure>
+					<blockquote>
+						<p>
+							Some seniors are being abused, even by their own families. Some are new immigrant
+							seniors who don’t understand the system.
+						</p>
+					</blockquote>
+					<figcaption>Sushila, 72</figcaption>
+				</figure>
+			</div>
+		</div>
+	</section>
+
+	<section class="projects wrap" aria-labelledby="projects-h">
+		<h2 id="projects-h">What we’ve made together.</h2>
+		<div class="project-pair">
+			<article class="project sheet" style="--sheet:var(--must)">
+				<h3>GOLD: Growing Older, Living Deeply</h3>
+				<p class="figure">319 poems</p>
+				<p>
+					Submitted by adults 55 and older across four national calls, June 2025 to February 2026. A
+					panel of older adult poets chose forty for a digital anthology.
+				</p>
+				<a href="/projects/gold">See the GOLD Poetry Project</a>
+			</article>
+			<article class="project sheet" style="--sheet:var(--sage)">
+				<h3>My Aging Story</h3>
+				<p class="figure">22 stories</p>
+				<p>Collected over three years and shown in person in Edmonton on February 21–22, 2025.</p>
+				<a href="/projects/my-aging-story">See the exhibit</a>
+			</article>
+		</div>
+	</section>
+
+	<section class="resource wrap" aria-labelledby="resource-h">
+		<div class="slot" style="--slot:var(--tang)">
+			<Arcs />
+			<span>Placeholder thumbnail</span>
+		</div>
+		<div>
+			<h2 id="resource-h">Something to take with you.</h2>
+			<h3>Featured resource title</h3>
+			<p>A short description of the featured resource will sit here once the CMS is connected.</p>
+			<a href="/resources">Browse all resources</a>
+		</div>
+	</section>
+
+	<section class="talk sheet" aria-labelledby="talk-h">
+		<svg class="talk-hill" viewBox="0 0 600 300" aria-hidden="true">
+			<g class="hill">
+				<circle cx="300" cy="420" r="380" fill="var(--sage)"></circle>
+				{rings(380).map((r) => <circle cx="300" cy="420" r={r} fill="none" stroke="var(--paper)" stroke-width="5" opacity=".75" />)}
+			</g>
+			{
+				[-3.4, 3.4].map((deg, i) => (
+					<g transform={`rotate(${deg} 300 420) translate(300 40) scale(${i ? 0.85 : 1})`} fill="var(--ink)">
+						<circle cy="-34" r="6" />
+						<rect x="-6" y="-26" width="12" height="27" rx="6" />
+					</g>
+				))
+			}
+		</svg>
+		<div class="wrap">
+			<h2 id="talk-h">Let’s talk about it.</h2>
+			<p>Tell us your story, ask a question, or bring us into your community.</p>
+			<a class="btn" href="mailto:info@theagecollective.com">info@theagecollective.com</a>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	section {
+		padding-block: var(--space);
+	}
+
+	section h2 + p,
+	section h3 + p {
+		margin-top: 1.25rem;
+	}
+
+	/*
+	 * Hero: the tagline owns the sky, the ring hills hold the ground.
+	 * The copy keeps its own height: generous air under the header, then an interval before the scene.
+	 * The hills take whatever height is left, so the spacing holds on any screen shape.
+	 * The one action sits on the hills at the bottom centre, out of the sky.
+	 */
+	.hero {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		min-height: calc(100svh - var(--header));
+		padding-block: 0;
+		background: var(--paper);
+	}
+
+	/* Above the grain that covers the scene. */
+	.hero-copy {
+		position: relative;
+		z-index: 1;
+		padding: clamp(1.5rem, 11vh, 7.5rem) var(--gutter) clamp(1.5rem, 8vh, 5rem);
+		text-align: center;
+	}
+
+	/*
+	 * The tagline is set solid, without the print grain; each line carries its own ink, so the h1 prints nothing.
+	 * Its size is capped by height so it clears the hills on a short screen, and the cap rises again past
+	 * about 2000px wide so it keeps its place beside the hills on a very large one.
+	 */
+	h1 {
+		background: none;
+		font-size: clamp(2.25rem, min(6vw, 10vh), max(4.75rem, 3.75vw));
+	}
+
+	h1 span {
+		display: block;
+		background: none;
+		color: var(--ink);
+	}
+
+	/* The first line is said plainly; the second carries the weight. */
+	h1 span:first-child {
+		font-weight: 400;
+	}
+
+	.hero-cta {
+		position: absolute;
+		inset: auto 0 clamp(1.25rem, 4vh, 2.5rem);
+		z-index: 1;
+		gap: 0.625rem;
+		width: fit-content;
+		margin-inline: auto;
+        outline: 4px solid;
+	}
+
+	.hero-cta svg {
+		height: 1.1em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 3;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		transition: translate 0.25s var(--ease);
+	}
+
+	.hero-cta:is(:hover, :focus-visible) svg {
+		translate: 0 0.2rem;
+	}
+
+	/* A phone on its side: the button drops to the header's target size, and the people on the two front hills step out of its way. */
+	@media (height < 28rem) {
+		.hero-cta {
+			min-height: 3rem;
+			padding-block: 0;
+			font-size: 1.125rem;
+		}
+
+		.front {
+			display: none;
+		}
+	}
+
+	/* Grain over sky and hills alike, under the words. */
+	.hero::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: var(--grain);
+		pointer-events: none;
+	}
+
+	/*
+	 * The drawing is pinned to its top edge and scaled to cover: a short box crops the foot of the hills, a tall one
+	 * enlarges them. On a very short screen (a phone on its side) the hills give up height so the button stays in view.
+	 */
+	.hills {
+		position: relative;
+		flex: 1 0 min(15rem, 36svh);
+	}
+
+	.hills svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	/* Narrow screens frame x 590 to 1230 of the drawing and let it run on below the viewBox. */
+	@media (max-width: 30rem) {
+		/* Capped by height so the button on the hills stays inside the first screen on a short phone. */
+		.hills {
+			flex: 1 0 min(97vw, 44svh);
+			overflow: hidden;
+		}
+
+		.hills svg {
+			inset: 0 auto auto -92.2vw;
+			width: 225vw;
+			max-width: none;
+			height: auto;
+			overflow: visible;
+		}
+	}
+
+	/*
+	 * One authored moment, once, about four seconds: the sheet prints in passes.
+	 * Each tagline line prints into register; the hills grow from their centres like rings being added; the
+	 * button prints onto them; the people walk in along the ridges.
+	 * Everything rests in its final state by default, so nothing is hidden if the animation never runs.
+	 * Fills are backwards only: once a pass has landed the animation lets go, so hover transitions still run.
+	 */
+	@media (prefers-reduced-motion: no-preference) {
+		h1 span {
+			animation: land 0.8s var(--ease) backwards;
+			animation-delay: calc(var(--i) * 0.25s + 0.1s);
+		}
+
+		.hero-cta {
+			animation: land 0.7s var(--ease) 1.5s backwards;
+		}
+
+		.hill {
+			animation: grow 1.2s var(--ease) backwards;
+			animation-delay: calc(var(--i) * 0.14s + 0.4s);
+		}
+
+		.walker {
+			animation: walk-in 1.6s var(--ease) backwards;
+			animation-delay: calc(var(--i) * 0.06s + 1.7s);
+		}
+
+		.step {
+			animation: step 0.4s ease-in-out 4 alternate;
+			animation-delay: calc(var(--i) * 0.06s + 1.7s);
+		}
+
+		/* Reaching for the button, the people hop in a wave. */
+		.hero:has(.hero-cta:is(:hover, :focus-visible)) .hop {
+			animation: hop 0.5s var(--ease);
+			animation-delay: calc(var(--i) * 0.04s);
+		}
+
+		/* Scrolling on, the people walk on with you. Only where scroll timelines exist; otherwise they stand. */
+		@supports (animation-timeline: view()) {
+			.hero {
+				view-timeline: --hero block;
+			}
+
+			.stroll {
+				animation: stroll linear both;
+				animation-timeline: --hero;
+				animation-range: exit 0% exit 100%;
+			}
+		}
+	}
+
+	@keyframes land {
+		from {
+			opacity: 0;
+			translate: -0.05em -0.04em;
+		}
+	}
+
+	@keyframes grow {
+		from {
+			opacity: 0;
+			scale: 0.72;
+		}
+	}
+
+	@keyframes walk-in {
+		from {
+			opacity: 0;
+			rotate: var(--from);
+		}
+	}
+
+	@keyframes step {
+		to {
+			translate: 0 -3px;
+		}
+	}
+
+	@keyframes hop {
+		40% {
+			translate: 0 -9px;
+		}
+	}
+
+	@keyframes stroll {
+		to {
+			rotate: 9deg;
+		}
+	}
+
+	/* Stories */
+	.stories-head {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.plates {
+		display: grid;
+		gap: clamp(2rem, 4vw, 3rem);
+		margin-top: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	.plate {
+		display: grid;
+		gap: 1.25rem;
+		align-content: start;
+	}
+
+	.slot {
+		position: relative;
+		display: grid;
+		place-items: end start;
+		overflow: hidden;
+		aspect-ratio: 4 / 5;
+		border: 3px dashed var(--ink);
+		border-radius: 6px;
+		background: var(--grain), var(--slot);
+	}
+
+	.film .slot {
+		aspect-ratio: 16 / 9;
+	}
+
+	.slot span {
+		position: relative;
+		margin: 0.75rem;
+		padding: 0.25rem 0.75rem;
+		border-radius: 1rem;
+		background: var(--ink);
+		color: var(--paper);
+		font-size: 1.0625rem;
+		font-weight: 700;
+	}
+
+	.plate-copy {
+		display: grid;
+		gap: 0.5rem;
+		justify-items: start;
+	}
+
+	.meta {
+		font-weight: 700;
+	}
+
+	.line {
+		font: 500 1.375rem/1.35 var(--font-display);
+	}
+
+	.plate-copy a,
+	.project a,
+	.resource a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-weight: 700;
+	}
+
+	@media (min-width: 48rem) {
+		.stories-head {
+			grid-template-columns: 1fr 1fr;
+			align-items: end;
+		}
+
+		.plates {
+			grid-template-columns: minmax(0, 0.8fr) 1.2fr;
+			grid-template-rows: auto auto 1fr;
+		}
+
+		.plate:first-child {
+			grid-row: span 3;
+		}
+
+		.more {
+			align-self: end;
+		}
+
+		.plate:not(:first-child) {
+			grid-template-columns: minmax(0, 0.8fr) 1fr;
+			align-items: center;
+		}
+	}
+
+	/* Ageism: a whole sheet of rust, two voices pinned to it. Rust is dark, so the sheet's own text is paper. */
+	.ageism {
+		--sheet: var(--rust);
+		color: var(--paper);
+	}
+
+	.ageism h2 {
+		--type: var(--paper);
+	}
+
+	.ageism-grid {
+		display: grid;
+		gap: clamp(3rem, 6vw, 5rem);
+	}
+
+	.ageism h2 {
+		font-size: clamp(2.5rem, 6vw, 4.75rem);
+	}
+
+	.ageism h2 span {
+		display: block;
+	}
+
+	.ageism h2 + p {
+		margin-top: 2rem;
+	}
+
+	.ageism .btn {
+		margin-top: 2rem;
+	}
+
+	.voices {
+		display: grid;
+		gap: 2.5rem;
+		align-content: center;
+	}
+
+	/* Knockouts: the rust is not printed here, so the paper shows through, and the words on it are ink again. */
+	.voices figure {
+		padding: clamp(1.5rem, 3vw, 2.25rem);
+		background: var(--grain), var(--paper);
+		color: var(--ink);
+	}
+
+	.voices figure + figure {
+		margin-left: clamp(1.5rem, 5vw, 4rem);
+	}
+
+	.voices blockquote p {
+		font: 500 clamp(1.25rem, 2vw, 1.5rem) / 1.35 var(--font-display);
+	}
+
+	.voices figcaption {
+		margin-top: 1rem;
+		font-weight: 700;
+	}
+
+	@media (min-width: 60rem) {
+		.ageism-grid {
+			grid-template-columns: 1.1fr 1fr;
+		}
+	}
+
+	/* Projects: two sheets, one real number each. */
+	.project-pair {
+		display: grid;
+		isolation: isolate;
+		margin-top: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	.project-pair {
+		--lap: 2rem;
+	}
+
+	.project {
+		display: grid;
+		gap: 0.75rem;
+		align-content: start;
+		justify-items: start;
+		padding: clamp(1.75rem, 4vw, 3rem);
+	}
+
+	/* The sage sheet is printed over the mustard one; where they lap, the inks mix. */
+	.project:first-child {
+		margin-right: var(--lap);
+		padding-bottom: calc(clamp(1.75rem, 4vw, 3rem) + var(--lap));
+	}
+
+	.project + .project {
+		margin: calc(-1 * var(--lap)) 0 0 var(--lap);
+		padding-top: calc(clamp(1.75rem, 4vw, 3rem) + var(--lap));
+		mix-blend-mode: multiply;
+	}
+
+	.project .figure {
+		margin-top: 0.75rem;
+		font: 800 clamp(2.125rem, 5.4vw, 5rem) / 1 var(--font-display);
+		letter-spacing: -0.03em;
+		white-space: nowrap;
+	}
+
+	.project .figure + p {
+		margin-top: 0;
+	}
+
+	@media (min-width: 48rem) {
+		.project-pair {
+			grid-template-columns: repeat(12, 1fr);
+			gap: 0;
+		}
+
+		.project:first-child {
+			grid-area: 1 / 1 / 2 / 8;
+			align-self: start;
+			margin: 0;
+			padding: clamp(2rem, 4vw, 3.5rem);
+			padding-right: calc(14.3% + 2rem);
+		}
+
+		.project + .project {
+			grid-area: 1 / 7 / 2 / 13;
+			margin: 6rem 0 0;
+			padding: clamp(2rem, 4vw, 3.5rem);
+			padding-left: calc(16.7% + 2rem);
+		}
+	}
+
+	/* Featured resource */
+	.resource {
+		display: grid;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: center;
+		padding-top: 0;
+	}
+
+	.resource .slot {
+		aspect-ratio: 4 / 3;
+	}
+
+	.resource h3 {
+		margin-top: 2rem;
+	}
+
+	.resource a {
+		margin-top: 0.75rem;
+	}
+
+	@media (min-width: 48rem) {
+		.resource {
+			grid-template-columns: 0.8fr 1fr;
+		}
+	}
+
+	/* The close: the tagline's second half, on a sheet of orange. */
+	.talk {
+		--sheet: var(--tang);
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+	}
+
+	.talk-hill {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		z-index: -1;
+		width: min(44%, 36rem);
+		overflow: visible;
+		mix-blend-mode: multiply;
+	}
+
+	.talk-hill .hill {
+		animation: none;
+	}
+
+	@media (min-width: 48rem) {
+		.talk .wrap > * {
+			max-width: min(34rem, 52%);
+		}
+	}
+
+	@media (max-width: 47.99rem) {
+		.talk {
+			padding-bottom: calc(var(--space) + 8rem);
+		}
+
+		.talk-hill {
+			width: 20rem;
+		}
+	}
+
+	.talk h2 {
+		font-size: clamp(2.75rem, 8vw, 6rem);
+	}
+
+	.talk .btn {
+		margin-top: 2rem;
+		font-size: clamp(1rem, 4.2vw, 1.25rem);
+	}
+</style>

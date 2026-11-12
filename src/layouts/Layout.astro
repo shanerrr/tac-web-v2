@@ -1,0 +1,622 @@
+---
+import { Font } from 'astro:assets';
+import Arcs from '../components/Arcs.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'The Age Collective: We’re all aging. Let’s talk about it.',
+	description = 'The Age Collective challenges ageism through storytelling, film, poetry, art and community dialogue.',
+} = Astro.props;
+
+const nav = [
+	{ href: '/stories', label: 'Stories' },
+	{ href: '/projects', label: 'Projects' },
+	{ href: '/resources', label: 'Resources' },
+	{ href: '/about', label: 'About' },
+];
+const social = [
+	{ href: 'https://www.linkedin.com/company/the-age-collective', label: 'LinkedIn' },
+	{ href: 'https://www.instagram.com/theagecollective', label: 'Instagram' },
+	{ href: 'https://www.youtube.com/@TheAgeCollective', label: 'YouTube' },
+];
+const path = Astro.url.pathname;
+const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
+---
+
+<!doctype html>
+<html lang="en-CA">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/png" href="/logo-mark.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<Font cssVariable="--font-display" preload />
+		<Font cssVariable="--font-body" preload />
+	</head>
+	<body>
+		<a class="skip" href="#main">Skip to content</a>
+		<header class="site-header">
+			<div class="bar">
+				<a class="brand" href="/" aria-current={path === '/' ? 'page' : undefined}>
+					<img src="/logo-inks.png" alt="" width="48" height="48" />
+					<span>the age<br />collective</span>
+				</a>
+				<button class="menu-btn btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+				<nav id="site-nav" aria-label="Main">
+					{nav.map((l) => <a href={l.href} aria-current={current(l.href)}>{l.label}</a>)}
+					<p class="menu-foot">We’re all aging.<br />Let’s talk about it.</p>
+					<div class="menu-hill" aria-hidden="true"><div><Arcs /></div></div>
+				</nav>
+			</div>
+		</header>
+
+		<main id="main"><slot /></main>
+
+		<footer class="site-footer">
+			<div class="wrap footer-grid">
+				<div>
+					<p class="footer-tag">We’re all aging.<br />Let’s talk about it.</p>
+					<p><a href="mailto:info@theagecollective.com">info@theagecollective.com</a></p>
+				</div>
+				<nav aria-label="Footer">
+					<ul>
+						{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+					</ul>
+					<ul>
+						{social.map((l) => <li><a href={l.href} rel="noopener">{l.label}</a></li>)}
+					</ul>
+				</nav>
+				<p class="land">
+					The Age Collective is based on the traditional territories of Indigenous Peoples across
+					Canada. As a project that works with individuals from many regions, we recognize that our
+					community gathers across diverse lands and nations. We acknowledge the enduring presence,
+					knowledge, and sovereignty of First Nations, Inuit, and Métis Peoples, and we are committed
+					to learning how our work can contribute to justice, respect, and accountability.
+				</p>
+				<p class="legal">
+					<span>© {new Date().getFullYear()} The Age Collective</span>
+					<a href="/privacy">Privacy Policy</a>
+					<a href="/terms">Terms of Use</a>
+				</p>
+			</div>
+		</footer>
+	</body>
+</html>
+
+<script>
+	const header = document.querySelector<HTMLElement>('.site-header')!;
+	const btn = header.querySelector<HTMLButtonElement>('.menu-btn')!;
+
+	// Clear only at the very top of the page; without this script the header is always the paper band.
+	const atTop = () => header.toggleAttribute('data-top', scrollY <= 20);
+	addEventListener('scroll', atTop, { passive: true });
+	atTop();
+
+	// Below 56rem the links open as a full-screen menu.
+	const isOpen = () => btn.getAttribute('aria-expanded') === 'true';
+	const setMenu = (open: boolean) => {
+		btn.setAttribute('aria-expanded', String(open));
+		btn.textContent = open ? 'Close' : 'Menu';
+		document.documentElement.toggleAttribute('data-menu', open);
+		for (const el of document.querySelectorAll<HTMLElement>('main, .site-footer')) el.inert = open;
+	};
+	btn.addEventListener('click', () => setMenu(!isOpen()));
+	addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && isOpen()) {
+			setMenu(false);
+			btn.focus();
+		}
+	});
+	matchMedia('(min-width: 56rem)').addEventListener('change', () => setMenu(false));
+</script>
+
+<style is:global>
+	:root {
+		/* Inks. One sheet of paper and six inks. */
+		--paper: #f7ecc9;
+		--ink: #2f2d1c;
+		--rust: #a8481a;
+		--tang: #ee8a3c;
+		--must: #e2a52b;
+		--sage: #b9c49a;
+		--olive: #636128;
+		/* White print grain, tiled. Sits on grounds and artwork, never over text. */
+		--grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 3.2 0 0 0 -1.8'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+		--gutter: clamp(1.25rem, 5vw, 4rem);
+		--space: clamp(4rem, 9vw, 7.5rem);
+		--ease: cubic-bezier(0.16, 1, 0.3, 1);
+		/* Height of the fixed header; 5rem from 56rem up. */
+		--header: 4.5rem;
+		color-scheme: light;
+		accent-color: var(--rust);
+		scrollbar-color: var(--olive) var(--paper);
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	html {
+		font-size: 100%;
+		-webkit-text-size-adjust: 100%;
+		/* Keeps in-page targets and focused elements out from under the fixed header. */
+		scroll-padding-top: calc(var(--header) + 1rem);
+	}
+
+	html[data-menu] {
+		overflow: hidden;
+	}
+
+	/* In-page jumps (the hero's action, section links) glide; under reduced motion they just arrive. */
+	@media (prefers-reduced-motion: no-preference) {
+		html {
+			scroll-behavior: smooth;
+		}
+	}
+
+	body {
+		margin: 0;
+		padding-top: var(--header);
+		background: var(--grain), var(--paper);
+		color: var(--ink);
+		font: 400 1.25rem/1.55 var(--font-body);
+	}
+
+	::selection {
+		background: var(--tang);
+		color: var(--ink);
+	}
+
+	h1,
+	h2,
+	h3,
+	p,
+	ul,
+	figure,
+	blockquote {
+		margin: 0;
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: var(--font-display);
+		font-weight: 800;
+		line-height: 1.02;
+		letter-spacing: -0.02em;
+		text-wrap: balance;
+	}
+
+	h2 {
+		font-size: clamp(2.25rem, 5vw, 3.75rem);
+	}
+
+	h1,
+	h2,
+	h1 span {
+		color: var(--type, var(--ink));
+	}
+
+	/* Display lettering takes the print grain. Body text never does. */
+	@supports (background-clip: text) {
+		h1,
+		h2,
+		h1 span {
+			/* Room below the box so the clipped fill reaches descenders. */
+			margin-bottom: -0.2em;
+			padding-bottom: 0.2em;
+			background: var(--grain), var(--type, var(--ink));
+			background-clip: text;
+			color: transparent;
+		}
+
+		@media (forced-colors: active) {
+			h1,
+			h2,
+			h1 span {
+				background: none;
+				color: CanvasText;
+			}
+		}
+	}
+
+	h3 {
+		font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+		line-height: 1.15;
+	}
+
+	p {
+		max-width: 34rem;
+	}
+
+	ul {
+		padding: 0;
+		list-style: none;
+	}
+
+	img,
+	svg {
+		display: block;
+		max-width: 100%;
+	}
+
+	a {
+		color: inherit;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.2em;
+	}
+
+	a:hover {
+		text-decoration-thickness: 4px;
+	}
+
+	:focus-visible {
+		outline: 3px solid currentColor;
+		outline-offset: 4px;
+		border-radius: 4px;
+	}
+
+	.wrap {
+		width: min(100% - 2 * var(--gutter), 76rem);
+		margin-inline: auto;
+	}
+
+	/* A whole sheet of one ink. Set --sheet on the element. */
+	.sheet {
+		background: var(--grain), var(--sheet, var(--paper));
+	}
+
+	/* The one button: a flat pill of ink. Its fill changes when it is used: ink to rust, or whatever --fill-used names. */
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		min-height: 3.5rem;
+		padding: 0.75rem 2rem;
+		border-radius: 999px;
+		background-color: var(--fill, var(--ink));
+		color: var(--paper);
+		font-weight: 700;
+		font-size: 1.25rem;
+		text-decoration: none;
+		transition: background-color 0.2s;
+	}
+
+	.btn:is(:hover, :focus-visible, :active) {
+		background-color: var(--fill-used, var(--rust));
+	}
+
+	.btn:focus-visible {
+		outline-color: var(--ink);
+	}
+
+	/*
+	 * On a dark ground (the hills, a rust sheet) the button prints in paper. Used, it inverts to ink with a paper label;
+	 * its focus ring sits inside the pill. Flat like every button: a grain layer can't fade with the fill, so it flickered.
+	 */
+	.btn-paper {
+		--fill: var(--paper);
+		--fill-used: var(--ink);
+		color: var(--ink);
+		transition:
+			background-color 0.2s,
+			color 0.2s;
+	}
+
+	.btn-paper:is(:hover, :focus-visible, :active) {
+		color: var(--paper);
+	}
+
+	.btn-paper:focus-visible {
+		outline-color: var(--paper);
+		outline-offset: -6px;
+	}
+
+	.skip {
+		position: absolute;
+		left: 1rem;
+		top: -6rem;
+		z-index: 30;
+		padding: 0.75rem 1.25rem;
+		border-radius: 999px;
+		background: var(--ink);
+		color: var(--paper);
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.skip:focus {
+		top: 1rem;
+	}
+
+	/* Header: fixed. Clear at the very top of the page; once scrolled, a paper band with an ink rule along its foot. */
+	.site-header {
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 20;
+		isolation: isolate;
+	}
+
+	.site-header::before,
+	.site-header::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+	}
+
+	/* The rule grows down from the band's foot when the band appears. */
+	.site-header::before {
+		inset: 100% 0 auto;
+		height: 3px;
+		background: var(--ink);
+		transform-origin: top;
+		transition: scale 0.25s var(--ease);
+	}
+
+	.site-header::after {
+		inset: 0;
+		background: var(--grain), var(--paper);
+		transition: opacity 0.2s;
+	}
+
+	.site-header[data-top]::before {
+		scale: 1 0;
+	}
+
+	.site-header[data-top]::after {
+		opacity: 0;
+	}
+
+	.bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		width: min(100% - 2 * var(--gutter), 76rem);
+		height: var(--header);
+		margin-inline: auto;
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		/* Room at the end so the pill-shaped focus ring clears the last letter. */
+		padding-right: 1rem;
+		border-radius: 999px;
+		font: 700 clamp(1.25rem, 5.5vw, 1.5rem) / 1 var(--font-display);
+		letter-spacing: -0.02em;
+		text-decoration: none;
+	}
+
+	.menu-btn {
+		flex: none;
+		min-height: 3rem;
+		padding: 0 1.25rem;
+		border: 0;
+		font-family: inherit;
+		font-size: 1.125rem;
+		cursor: pointer;
+	}
+
+	.site-header nav a {
+		text-decoration: none;
+	}
+
+	/* Below 56rem the links are a full-screen menu on paper, opened by the Menu button. */
+	@media (width < 56rem) {
+		.site-header nav {
+			position: fixed;
+			inset: 0;
+			z-index: -1;
+			display: flex;
+			flex-direction: column;
+			padding: calc(var(--header) + 1rem) var(--gutter) 9.5rem;
+			overflow-y: auto;
+			background: var(--grain), var(--paper);
+			visibility: hidden;
+			opacity: 0;
+			transition:
+				opacity 0.2s,
+				visibility 0.2s;
+		}
+
+		[data-menu] .site-header nav {
+			visibility: visible;
+			opacity: 1;
+		}
+
+		.site-header nav a {
+			display: flex;
+			align-items: center;
+			min-height: 4.25rem;
+			font: 800 clamp(2.25rem, 11vw, 3.25rem) / 1.1 var(--font-display);
+			letter-spacing: -0.02em;
+		}
+
+		.site-header nav a:first-child {
+			margin-top: auto;
+		}
+
+		.site-header nav a:is(:hover, :focus-visible, [aria-current]) {
+			text-decoration: underline;
+			text-decoration-thickness: 4px;
+		}
+
+		.site-header nav a[aria-current] {
+			color: var(--rust);
+		}
+
+		.menu-foot {
+			margin-top: auto;
+			padding-top: 2rem;
+			font: 800 1.25rem / 1.2 var(--font-display);
+			letter-spacing: -0.02em;
+		}
+
+		/* A ring hill holds the bottom corner of the menu. */
+		.menu-hill {
+			position: absolute;
+			right: -2rem;
+			bottom: 0;
+			z-index: -1;
+			width: min(72vw, 22rem);
+			aspect-ratio: 2.4;
+		}
+
+		.menu-hill div {
+			position: absolute;
+			inset: 0;
+			overflow: hidden;
+			border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+			background: var(--grain), var(--must);
+		}
+
+		/* No room for the hill on a short screen (a phone on its side). */
+		@media (height < 34rem) {
+			.site-header nav {
+				padding-bottom: 2rem;
+			}
+
+			.menu-hill {
+				display: none;
+			}
+		}
+	}
+
+	/* From 56rem the links sit in the bar: an ink pill prints behind one on hover and focus, and stays behind the current page. */
+	@media (width >= 56rem) {
+		:root {
+			--header: 5rem;
+		}
+
+		.menu-btn,
+		.menu-foot,
+		.menu-hill {
+			display: none;
+		}
+
+		.site-header nav {
+			display: flex;
+			gap: 0.25rem;
+		}
+
+		.site-header nav a {
+			position: relative;
+			isolation: isolate;
+			display: inline-flex;
+			align-items: center;
+			min-height: 3rem;
+			padding-inline: 1rem;
+			font-weight: 700;
+			font-size: 1.125rem;
+			transition: color 0.15s;
+		}
+
+		.site-header nav a::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			border-radius: 999px;
+			transition: background-color 0.15s;
+		}
+
+		.site-header nav a:is(:hover, :focus-visible, [aria-current]) {
+			color: var(--paper);
+		}
+
+		.site-header nav a:is(:hover, :focus-visible, [aria-current])::before {
+			background-color: var(--ink);
+		}
+
+		.site-header nav a:focus-visible {
+			outline: none;
+		}
+
+		.site-header nav a:focus-visible::before {
+			outline: 3px solid var(--paper);
+			outline-offset: -3px;
+		}
+
+		@media (forced-colors: active) {
+			.site-header nav a[aria-current] {
+				text-decoration: underline;
+				text-decoration-thickness: 3px;
+			}
+		}
+	}
+
+	.site-footer {
+		/* No grain here: white speckle on the darkest ink costs small text its edges. */
+		background: var(--olive);
+		padding-block: var(--space) 3rem;
+		color: var(--paper);
+		font-size: 1.125rem;
+	}
+
+	.footer-grid {
+		display: grid;
+		gap: 3rem clamp(2rem, 6vw, 6rem);
+		grid-template-columns: 1fr;
+	}
+
+	.footer-tag {
+		margin-bottom: 1.5rem;
+		font: 800 clamp(1.75rem, 3vw, 2.25rem) / 1.1 var(--font-display);
+		letter-spacing: -0.02em;
+	}
+
+	.site-footer nav {
+		display: flex;
+		gap: clamp(2rem, 6vw, 5rem);
+	}
+
+	.site-footer li a,
+	.site-footer p > a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-weight: 700;
+	}
+
+	.land {
+		max-width: 44rem;
+		grid-column: 1 / -1;
+	}
+
+	.legal {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.25rem 2rem;
+		max-width: none;
+		grid-column: 1 / -1;
+	}
+
+	@media (min-width: 48rem) {
+		.footer-grid {
+			grid-template-columns: 1.2fr 1fr;
+		}
+
+		.site-footer nav {
+			justify-content: flex-end;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation: none !important;
+			transition: none !important;
+		}
+	}
+</style>
