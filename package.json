@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "EMDASH_SITE_URL=https://theagecollective.com astro build && wrangler deploy"
+    "deploy": "EMDASH_SITE_URL=https://theagecollective.com astro build && wrangler deploy",
+    "check": "astro check"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.4.7",
@@ -22,7 +23,9 @@
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
     "@cloudflare/workers-types": "^5.20261112.1",
+    "typescript": "^6",
     "wrangler": "^4.160.1"
   }
 }

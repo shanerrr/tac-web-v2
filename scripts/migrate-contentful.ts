@@ -10,6 +10,7 @@
  */
 
 type Json = any; // Contentful and EmDash payloads are both loosely typed JSON here.
+export {}; // a module, so top-level await type-checks
 
 const { CONTENTFUL_SPACE_ID, CONTENTFUL_ACCESS_TOKEN, CONTENTFUL_ENVIRONMENT = 'master' } = process.env;
 const BASE = (process.env.EMDASH_URL ?? 'http://localhost:4321').replace(/\/$/, '');
@@ -26,7 +27,7 @@ async function contentful(path: string): Promise<Json[]> {
 			headers: { Authorization: `Bearer ${CONTENTFUL_ACCESS_TOKEN}` },
 		});
 		if (!r.ok) throw new Error(`Contentful ${path}: ${r.status} ${await r.text()}`);
-		const page = await r.json();
+		const page: Json = await r.json();
 		items.push(...page.items);
 		skip += page.items.length;
 		if (skip >= page.total || !page.items.length) return items;
@@ -53,7 +54,7 @@ async function api(method: string, path: string, body?: Json): Promise<Json> {
 		headers: isForm || !body ? headers : { ...headers, 'Content-Type': 'application/json' },
 		body: isForm ? body : body && JSON.stringify(body),
 	});
-	const res = await r.json().catch(() => ({ success: false, error: { message: `HTTP ${r.status}` } }));
+	const res: Json = await r.json().catch(() => ({ success: false, error: { message: `HTTP ${r.status}` } }));
 	if (!res.success) throw new Error(`${method} ${path}: ${r.status} ${JSON.stringify(res.error)}`);
 	return res.data;
 }

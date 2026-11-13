@@ -1,0 +1,80 @@
+# Every push is checked: types, a production build, and a smoke test of that build running in the
+# Workers runtime against a fresh local database. Production deploys only when this workflow is run
+# by hand (Actions → CI → Run workflow) on main, and only after the same checks pass.
+name: CI
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # Lets EmDash optimise images served from the production domain (read at build time only).
+  EMDASH_SITE_URL: https://theagecollective.com
+  WRANGLER_SEND_METRICS: 'false'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - run: bun install --frozen-lockfile
+
+      - name: Type check
+        run: bun run check
+
+      - name: Build
+        run: bun run build
+
+      - name: Bundle the Worker as a deploy would (no upload)
+        run: bunx wrangler deploy --dry-run
+
+      # Runs the built Worker in workerd with an empty local D1 and R2, so the first request also
+      # runs EmDash's migrations and applies the seed: the same path a fresh production deploy takes.
+      - name: Smoke test the built Worker
+        run: |
+          bunx wrangler dev --port 8787 > wrangler.log 2>&1 &
+          fail() { echo "::error::$1"; cat wrangler.log; exit 1; }
+          for i in $(seq 1 90); do curl -fs -o /dev/null --max-time 5 http://localhost:8787/ && break; sleep 1; done
+          curl -fsS --max-time 30 http://localhost:8787/ -o home.html || fail "Home page did not return 200"
+          grep -q '<title>The Age Collective' home.html || fail "Home page rendered without its title"
+          curl -fsSL --max-time 30 -o /dev/null http://localhost:8787/_emdash/admin/ || fail "EmDash admin did not load"
+
+  deploy:
+    needs: check
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - run: bun install --frozen-lockfile
+
+      - name: Build and deploy
+        run: bun run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # Set the PRODUCTION_URL variable (the workers.dev URL until the domain moves) to check the live site.
+      - name: Check the live site
+        if: vars.PRODUCTION_URL != ''
+        run: |
+          curl -fsS --retry 5 --retry-delay 5 --retry-all-errors --max-time 30 "${{ vars.PRODUCTION_URL }}/" -o home.html
+          grep -q '<title>The Age Collective' home.html
