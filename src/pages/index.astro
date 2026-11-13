@@ -114,16 +114,14 @@ const filmId = film?.youtubeUrl && (() => {
 				}
 			</svg>
 		</div>
-		<div class="hero-actions">
-			<button class="btn btn-paper chat-toggle" type="button" hidden>
-				<svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-pause" d="M5 3v10M11 3v10" /><path class="i-play" d="M5 3l8 5-8 5z" /></svg>
-				<span class="sr-only">Pause the people talking</span>
-			</button>
-			<a class="btn btn-paper hero-cta" href="#ageism" aria-label="Learn more: why ageism is the problem">
-				Learn more
-				<svg viewBox="0 0 16 24" aria-hidden="true"><path d="M8 2v19M2 15l6 6 6-6" /></svg>
-			</a>
-		</div>
+		<a class="btn btn-paper hero-cta" href="#ageism" aria-label="Learn more: why ageism is the problem">
+			Learn more
+			<svg viewBox="0 0 16 24" aria-hidden="true"><path d="M8 2v19M2 15l6 6 6-6" /></svg>
+		</a>
+		<button class="btn btn-paper motion-toggle chat-toggle" type="button" hidden>
+			<svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-pause" d="M5 3v10M11 3v10" /><path class="i-play" d="M5 3l8 5-8 5z" /></svg>
+			<span class="sr-only">Pause the people talking</span>
+		</button>
 	</section>
 
 	<!-- From here the page is one walk: each section rises as the crown of the next hill. -->
@@ -318,9 +316,9 @@ const filmId = film?.youtubeUrl && (() => {
 			<p>Tell us your story, ask a question, or bring us into your community.</p>
 			<a class="btn" href="mailto:info@theagecollective.com">info@theagecollective.com</a>
 		</div>
-		<button class="btn btn-paper shout-toggle" type="button" hidden>
+		<button class="btn btn-paper motion-toggle shout-toggle" type="button" hidden>
 			<svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-pause" d="M5 3v10M11 3v10" /><path class="i-play" d="M5 3l8 5-8 5z" /></svg>
-			<span class="label">Pause</span><span class="sr-only"> the people shouting</span>
+			<span class="sr-only">Pause the people shouting</span>
 		</button>
 	</section>
 </Layout>
@@ -360,7 +358,7 @@ const filmId = film?.youtubeUrl && (() => {
 	toggle.hidden = false;
 	toggle.addEventListener('click', () => {
 		const paused = talk.toggleAttribute('data-paused');
-		toggle.querySelector('.label')!.textContent = paused ? 'Play' : 'Pause';
+		toggle.querySelector('.sr-only')!.textContent = `${paused ? 'Play' : 'Pause'} the people shouting`;
 	});
 
 	// Pressing play swaps the still for the player, captions on, and hands it focus so the keyboard carries on there.
@@ -447,69 +445,14 @@ const filmId = film?.youtubeUrl && (() => {
 		font-weight: 400;
 	}
 
-	/* The one action, with a small pause for the people's talk above it. */
-	.hero-actions {
+	.hero-cta {
 		position: absolute;
 		inset: auto 0 calc(var(--handoff) + clamp(1.25rem, 4vh, 2.5rem));
 		z-index: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 		gap: 0.625rem;
-		pointer-events: none;
-	}
-
-	.hero-actions > * {
-		pointer-events: auto;
-	}
-
-	.hero-cta {
-		gap: 0.625rem;
+		width: fit-content;
+		margin-inline: auto;
 		outline: 4px solid;
-	}
-
-	/*
-	 * Icon only and far smaller than the action, so it reads as a control for the scene, not a second destination.
-	 * 1.75rem (28px) stays above the 24px minimum target.
-	 */
-	.chat-toggle {
-		--rim: 2px;
-		justify-content: center;
-		width: 1.75rem;
-		min-height: 1.75rem;
-		padding: 0;
-		cursor: pointer;
-	}
-
-	/* Too small for the paper button's inset focus ring; it rings outside instead. */
-	.chat-toggle:focus-visible {
-		outline-offset: 3px;
-	}
-
-	.chat-toggle svg {
-		width: 0.75rem;
-		height: 0.75rem;
-		fill: none;
-		stroke: currentColor;
-		stroke-width: 2.5;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-	}
-
-	.chat-toggle .i-play {
-		fill: currentColor;
-		stroke-width: 2;
-	}
-
-	/* The icon names what pressing it does: pause while they can talk, play once stopped. */
-	.hero:not([data-paused]) .chat-toggle .i-play,
-	.hero[data-paused] .chat-toggle .i-pause {
-		display: none;
-	}
-
-	/* .btn sets a display, so the hidden attribute (no script, or reduced motion) needs saying again. */
-	.chat-toggle[hidden] {
-		display: none;
 	}
 
 	.hero-cta svg {
@@ -528,11 +471,6 @@ const filmId = film?.youtubeUrl && (() => {
 
 	/* A phone on its side: the button drops to the header's target size, and the people on the two front hills step out of its way. */
 	@media (height < 28rem) {
-		.hero-actions {
-			flex-direction: row;
-			justify-content: center;
-		}
-
 		.hero-cta {
 			min-height: 3rem;
 			padding-block: 0;
@@ -591,7 +529,8 @@ const filmId = film?.youtubeUrl && (() => {
 			animation-delay: calc(var(--i) * 0.25s + 0.1s);
 		}
 
-		.hero-actions {
+		.hero-cta,
+		.hero > .motion-toggle {
 			animation: land 0.7s var(--ease) 1.5s backwards;
 		}
 
@@ -1314,22 +1253,30 @@ const filmId = film?.youtubeUrl && (() => {
 		}
 	}
 
-	/* The way to stop it: a small paper pill in the sheet's bottom-right corner, on the hill. Nothing to stop without motion. */
-	.shout-toggle {
+	/*
+	 * The way to stop a looping scene: a 3rem Paper circle with a pause/play glyph in its section's bottom-right corner,
+	 * on the hill; its name is for screen readers only. On the hero the corner is the first screen's, above the hand-off.
+	 * Nothing to stop without motion.
+	 */
+	.motion-toggle {
 		position: absolute;
 		right: var(--gutter);
-		bottom: 1.25rem;
-		gap: 0.5rem;
+		bottom: var(--toggle-bottom, 1.25rem);
+		z-index: 1;
+		justify-content: center;
+		width: 3rem;
 		min-height: 3rem;
-		padding: 0 calc(1.25rem - var(--rim));
-		font-family: inherit;
-		font-size: 1.125rem;
+		padding: 0;
 		cursor: pointer;
 	}
 
-	.shout-toggle svg {
-		width: 0.875em;
-		height: 0.875em;
+	.hero {
+		--toggle-bottom: calc(var(--handoff) + 1.25rem);
+	}
+
+	.motion-toggle svg {
+		width: 1rem;
+		height: 1rem;
 		fill: none;
 		stroke: currentColor;
 		stroke-width: 2.5;
@@ -1337,24 +1284,24 @@ const filmId = film?.youtubeUrl && (() => {
 		stroke-linejoin: round;
 	}
 
-	.shout-toggle .i-play {
+	.motion-toggle .i-play {
 		fill: currentColor;
 		stroke-width: 2;
 	}
 
-	/* The icon names what pressing it does: pause while they shout, play once stopped. */
-	.talk:not([data-paused]) .i-play,
-	.talk[data-paused] .i-pause {
+	/* The icon names what pressing it does: pause while the scene can move, play once stopped. */
+	:not([data-paused]) > .motion-toggle .i-play,
+	[data-paused] > .motion-toggle .i-pause {
 		display: none;
 	}
 
 	/* .btn sets a display, so the hidden attribute (no script) needs saying again. */
-	.shout-toggle[hidden] {
+	.motion-toggle[hidden] {
 		display: none;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.shout-toggle {
+		.motion-toggle {
 			display: none;
 		}
 	}
