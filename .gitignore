@@ -29,7 +29,6 @@ pnpm-debug.log*
 .impeccable/review/
 .impeccable/build/
 
-# emdash / wrangler local state (local D1 + R2 live in .wrangler/)
+# wrangler local state
 .wrangler/
 .dev.vars*
-.emdash/migrations.json

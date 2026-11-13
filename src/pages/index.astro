@@ -1,8 +1,9 @@
 ---
-import { getEmDashCollection } from 'emdash';
-import { Image } from 'emdash/ui';
+import Photo from '../components/Photo.astro';
 import Ridge from '../components/Ridge.astro';
+import { grain } from '../grain';
 import Layout from '../layouts/Layout.astro';
+import { getStories } from '../lib/contentful';
 
 // The ring hills: circles whose centres sit below the frame, in the 1440 x 900 space of the approved sketch.
 // Listed back to front. Each is opaque and covers the ones before it, so ring lines never cross.
@@ -24,17 +25,9 @@ const walkers = [
 	[4, 14, 1],
 ];
 
-// EmDash filters take strings only; booleans are stored as INTEGER 0/1, and SQLite matches '1' against that column.
-const newest = (format: 'written' | 'film', limit: number) =>
-	getEmDashCollection('stories', { where: { format, in_feed: '1' }, orderBy: { published_at: 'desc' }, limit });
-const results = await Promise.all([
-	// The newest two written stories and the newest film in the feed.
-	newest('written', 2),
-	newest('film', 1),
-]);
-// A failed query must not be cached for a day as a home page without stories.
-if (results.some((r) => r.error)) Astro.cache?.set(false);
-else if (Astro.cache?.enabled) for (const r of results) Astro.cache.set(r.cacheHint);
+// The newest two written stories and the newest film in the feed.
+const stories = (await getStories()).filter((s) => s.inFeed);
+const written = stories.filter((s) => s.format === 'written').slice(0, 2);
 
 // The two quotes stay close in length: past 160 characters a quote keeps the person's opening sentences, whole, and
 // marks the rest as left out; the full words are in their story. Their own quote marks are dropped; the page sets its own.
@@ -49,17 +42,17 @@ const excerpt = (quote: string) => {
 	}
 	return `${out.trim()} …`;
 };
-const faces = results[0].entries.map(({ data }, i) => ({
+const faces = written.map((data, i) => ({
 	...data,
 	ink: ['rust', 'sage'][i],
 	line: data.quote && excerpt(data.quote),
 	meta: [data.location, data.pronouns].filter(Boolean),
 }));
 
-const film = results[1].entries[0]?.data;
+const film = stories.find((s) => s.format === 'film');
 // The film plays here from YouTube's privacy-enhanced player once asked for; without script its link opens YouTube.
-const filmId = film?.youtube_url && (() => {
-	const url = new URL(film.youtube_url);
+const filmId = film?.youtubeUrl && (() => {
+	const url = new URL(film.youtubeUrl);
 	return url.hostname.endsWith('youtu.be') ? url.pathname.slice(1) : url.searchParams.get('v');
 })();
 ---
@@ -71,6 +64,11 @@ const filmId = film?.youtube_url && (() => {
 		</div>
 		<div class="hills" aria-hidden="true">
 			<svg viewBox="0 470 1440 430" preserveAspectRatio="xMidYMin slice">
+				<defs>
+					<pattern id="hero-grain" patternUnits="userSpaceOnUse" width="240" height="240">
+						<image href={grain} width="240" height="240" />
+					</pattern>
+				</defs>
 				{
 					hills.map((h, i) => (
 						<g class="hill" style={`--i:${i}; transform-origin:${h.cx}px ${h.cy}px`}>
@@ -78,6 +76,8 @@ const filmId = film?.youtube_url && (() => {
 							{rings(h.r).map((r) => (
 								<circle cx={h.cx} cy={h.cy} r={r} fill="none" stroke="var(--paper)" stroke-width="5" opacity=".75" />
 							))}
+							{/* The grain prints inside each hill, so the people on the ridges stay solid ink. */}
+							<circle cx={h.cx} cy={h.cy} r={h.r} fill="url(#hero-grain)" />
 						</g>
 					))
 				}
@@ -166,12 +166,11 @@ const filmId = film?.youtube_url && (() => {
 					<li class:list={['spread', f.ink]}>
 						<figure>
 						<div class="photo arch">
-							<Image
-								image={f.image}
+							<Photo
+								photo={f.image}
 								width={520}
 								height={650}
 								sizes="(min-width: 48rem) 26rem, calc(100vw - 2.5rem)"
-								placeholder={false}
 							/>
 						</div>
 							{f.line && (
@@ -210,14 +209,13 @@ const filmId = film?.youtube_url && (() => {
 			film && filmId && (
 				<div class="film wrap">
 					<div class="photo frame" data-film={filmId}>
-						<Image
-							image={film.image}
+						<Photo
+							photo={film.image}
 							width={1280}
 							height={720}
 							sizes="(min-width: 76rem) 50rem, (min-width: 64rem) 66vw, calc(100vw - 2.5rem)"
-							placeholder={false}
 						/>
-						<a class="play" href={film.youtube_url} aria-label={`Play the film: ${film.headline ?? `${film.name}, ${film.age}`}`}>
+						<a class="play" href={film.youtubeUrl} aria-label={`Play the film: ${film.headline ?? `${film.name}, ${film.age}`}`}>
 							<span class="btn">
 								<svg viewBox="0 0 16 16" aria-hidden="true">
 									<path d="M5 3l8 5-8 5z" />
@@ -234,7 +232,7 @@ const filmId = film?.youtube_url && (() => {
 								film.headline && `${film.name}, ${film.age}`,
 								film.location,
 								film.pronouns,
-								Number.isFinite(film.duration_minutes) && `${film.duration_minutes} min`,
+								film.durationMinutes && `${film.durationMinutes} min`,
 							]
 								.filter(Boolean)
 								.map((item, j) => (
@@ -375,10 +373,10 @@ const filmId = film?.youtube_url && (() => {
 		flex-direction: column;
 		min-height: calc(100svh - var(--header) + var(--handoff));
 		padding-block: 0 var(--handoff);
-		background: var(--paper);
+		background: var(--grain), var(--paper);
 	}
 
-	/* Above the grain that covers the scene. */
+	/* Above the drawing, which runs up into the sky for the tallest figures. */
 	.hero-copy {
 		position: relative;
 		z-index: 1;
@@ -439,15 +437,6 @@ const filmId = film?.youtube_url && (() => {
 		.front {
 			display: none;
 		}
-	}
-
-	/* Grain over sky and hills alike, under the words. */
-	.hero::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background: var(--grain);
-		pointer-events: none;
 	}
 
 	/*

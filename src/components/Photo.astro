@@ -1,0 +1,29 @@
+---
+import type { Photo } from '../lib/contentful';
+
+interface Props {
+	photo: Photo;
+	/** The frame's largest display size; the photo is cropped to this ratio. */
+	width: number;
+	height: number;
+	sizes: string;
+}
+
+const { photo, width, height, sizes } = Astro.props;
+// Contentful's image API crops to the frame around any faces and serves WebP at each width, so nothing is processed at build.
+const src = (w: number) => `${photo.url}?w=${w}&h=${Math.round((w * height) / width)}&fit=fill&f=faces&fm=webp&q=80`;
+const widths = [...new Set([0.5, 0.75, 1, 1.5, 2].map((f) => Math.round(width * f)))].filter(
+	(w) => w <= width || !photo.width || w <= photo.width,
+);
+---
+
+<img
+	src={src(width)}
+	srcset={widths.map((w) => `${src(w)} ${w}w`).join(', ')}
+	sizes={sizes}
+	width={width}
+	height={height}
+	alt={photo.alt}
+	loading="lazy"
+	decoding="async"
+/>
