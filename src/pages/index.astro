@@ -24,6 +24,13 @@ const walkers = [
 	[3, -17, 1], [3, -14, 0.85],
 	[4, 14, 1],
 ];
+// Left to look at the hero, each hill's group talks: left to right they take turns leaning in to their neighbour.
+// Someone alone on a hill looks around instead.
+const chat = walkers.map((w) => {
+	const group = walkers.filter(([hi]) => hi === w[0]).sort((a, b) => a[1] - b[1]);
+	const turn = group.indexOf(w);
+	return { turn, alone: group.length === 1, lean: turn === 0 ? 8 : -8 };
+});
 
 // The newest two written stories and the newest film in the feed.
 const stories = (await getStories()).filter((s) => s.inFeed);
@@ -90,8 +97,13 @@ const filmId = film?.youtubeUrl && (() => {
 									<g transform={`rotate(${deg} ${h.cx} ${h.cy}) translate(${h.cx} ${h.cy - h.r}) scale(${s * 1.25})`} fill="var(--ink)">
 										<g class="step">
 											<g class="hop">
-												<circle cy="-34" r="6" />
-												<rect x="-6" y="-26" width="12" height="27" rx="6" />
+												<g
+													class:list={['chat', { alone: chat[i].alone }]}
+													style={`--hill:${hi}; --turn:${chat[i].turn}; --lean:${chat[i].lean}deg`}
+												>
+													<circle class="head" cy="-34" r="6" />
+													<rect x="-6" y="-26" width="12" height="27" rx="6" />
+												</g>
 											</g>
 										</g>
 									</g>
@@ -102,10 +114,16 @@ const filmId = film?.youtubeUrl && (() => {
 				}
 			</svg>
 		</div>
-		<a class="btn btn-paper hero-cta" href="#ageism" aria-label="Learn more: why ageism is the problem">
-			Learn more
-			<svg viewBox="0 0 16 24" aria-hidden="true"><path d="M8 2v19M2 15l6 6 6-6" /></svg>
-		</a>
+		<div class="hero-actions">
+			<button class="btn btn-paper chat-toggle" type="button" hidden>
+				<svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-pause" d="M5 3v10M11 3v10" /><path class="i-play" d="M5 3l8 5-8 5z" /></svg>
+				<span class="sr-only">Pause the people talking</span>
+			</button>
+			<a class="btn btn-paper hero-cta" href="#ageism" aria-label="Learn more: why ageism is the problem">
+				Learn more
+				<svg viewBox="0 0 16 24" aria-hidden="true"><path d="M8 2v19M2 15l6 6 6-6" /></svg>
+			</a>
+		</div>
 	</section>
 
 	<!-- From here the page is one walk: each section rises as the crown of the next hill. -->
@@ -308,6 +326,33 @@ const filmId = film?.youtubeUrl && (() => {
 </Layout>
 
 <script>
+	// Left to look at the hero for a few seconds, the people on the hills talk. A scroll, key, tap or click freezes them
+	// where they are (no snapping back), and they carry on after the next quiet spell. The button stops them for good.
+	const hero = document.querySelector<HTMLElement>('.hero')!;
+	const chatToggle = hero.querySelector<HTMLButtonElement>('.chat-toggle')!;
+	if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+		chatToggle.hidden = false;
+		let inView = false;
+		let quiet = 0;
+		const stir = () => {
+			hero.removeAttribute('data-chatting');
+			clearTimeout(quiet);
+			if (inView) quiet = setTimeout(() => hero.setAttribute('data-chatting', ''), 4000);
+		};
+		new IntersectionObserver(
+			([e]) => {
+				inView = e.isIntersecting;
+				stir();
+			},
+			{ threshold: 0.5 },
+		).observe(hero);
+		for (const type of ['scroll', 'wheel', 'keydown', 'touchstart', 'pointerdown']) addEventListener(type, stir, { passive: true });
+		chatToggle.addEventListener('click', () => {
+			const paused = hero.toggleAttribute('data-paused');
+			chatToggle.querySelector('.sr-only')!.textContent = `${paused ? 'Play' : 'Pause'} the people talking`;
+		});
+	}
+
 	// The people on the closing hill shout only while their sheet is on screen, and stop for good once paused.
 	const talk = document.querySelector<HTMLElement>('.talk')!;
 	new IntersectionObserver(([e]) => talk.toggleAttribute('data-shouting', e.isIntersecting)).observe(talk);
@@ -402,14 +447,69 @@ const filmId = film?.youtubeUrl && (() => {
 		font-weight: 400;
 	}
 
-	.hero-cta {
+	/* The one action, with a small pause for the people's talk above it. */
+	.hero-actions {
 		position: absolute;
 		inset: auto 0 calc(var(--handoff) + clamp(1.25rem, 4vh, 2.5rem));
 		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		gap: 0.625rem;
-		width: fit-content;
-		margin-inline: auto;
+		pointer-events: none;
+	}
+
+	.hero-actions > * {
+		pointer-events: auto;
+	}
+
+	.hero-cta {
+		gap: 0.625rem;
 		outline: 4px solid;
+	}
+
+	/*
+	 * Icon only and far smaller than the action, so it reads as a control for the scene, not a second destination.
+	 * 1.75rem (28px) stays above the 24px minimum target.
+	 */
+	.chat-toggle {
+		--rim: 2px;
+		justify-content: center;
+		width: 1.75rem;
+		min-height: 1.75rem;
+		padding: 0;
+		cursor: pointer;
+	}
+
+	/* Too small for the paper button's inset focus ring; it rings outside instead. */
+	.chat-toggle:focus-visible {
+		outline-offset: 3px;
+	}
+
+	.chat-toggle svg {
+		width: 0.75rem;
+		height: 0.75rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2.5;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.chat-toggle .i-play {
+		fill: currentColor;
+		stroke-width: 2;
+	}
+
+	/* The icon names what pressing it does: pause while they can talk, play once stopped. */
+	.hero:not([data-paused]) .chat-toggle .i-play,
+	.hero[data-paused] .chat-toggle .i-pause {
+		display: none;
+	}
+
+	/* .btn sets a display, so the hidden attribute (no script, or reduced motion) needs saying again. */
+	.chat-toggle[hidden] {
+		display: none;
 	}
 
 	.hero-cta svg {
@@ -428,6 +528,11 @@ const filmId = film?.youtubeUrl && (() => {
 
 	/* A phone on its side: the button drops to the header's target size, and the people on the two front hills step out of its way. */
 	@media (height < 28rem) {
+		.hero-actions {
+			flex-direction: row;
+			justify-content: center;
+		}
+
 		.hero-cta {
 			min-height: 3rem;
 			padding-block: 0;
@@ -486,8 +591,39 @@ const filmId = film?.youtubeUrl && (() => {
 			animation-delay: calc(var(--i) * 0.25s + 0.1s);
 		}
 
-		.hero-cta {
+		.hero-actions {
 			animation: land 0.7s var(--ease) 1.5s backwards;
+		}
+
+		/*
+		 * Left to look, the people talk: every 4.8s each group passes the word left to right, one leaning in with two
+		 * nods while the others wait, each hill a beat after the last. Someone alone looks around. It runs only while the
+		 * visitor is still (the script sets data-chatting) and freezes in place otherwise, so nobody snaps upright.
+		 */
+		.chat,
+		.head {
+			animation: 4.8s ease-in-out calc(var(--hill) * 0.7s + var(--turn) * 1.5s) infinite both paused;
+		}
+
+		.chat {
+			animation-name: chat;
+			transform-origin: 0 0;
+		}
+
+		.chat.alone {
+			animation-name: look;
+		}
+
+		.head {
+			animation-name: nod;
+		}
+
+		.alone .head {
+			animation: none;
+		}
+
+		.hero[data-chatting]:not([data-paused]) :is(.chat, .head) {
+			animation-play-state: running;
 		}
 
 		.hill {
@@ -511,16 +647,22 @@ const filmId = film?.youtubeUrl && (() => {
 			animation-delay: calc(var(--i) * 0.04s);
 		}
 
-		/* Scrolling on, the people walk on with you. Only where scroll timelines exist; otherwise they stand. */
-		@supports (animation-timeline: view()) {
-			.hero {
-				view-timeline: --hero block;
-			}
-
+		/*
+		 * Scrolling on, the people walk on with you, from the first pixel of scroll to one screen down. Tied to the page
+		 * scroll rather than the hero leaving, which starts only after the hand-off below the fold has passed and would
+		 * move them while they are already under the header. Only where scroll timelines exist; otherwise they stand.
+		 */
+		@supports (animation-timeline: scroll()) {
+			/*
+			 * Longhands on purpose: given the `animation` shorthand, the production CSS minifier folds the timeline into
+			 * it, which browsers reject (the timeline may only be set on its own), so the whole animation was dropped.
+			 */
 			.stroll {
-				animation: stroll linear both;
-				animation-timeline: --hero;
-				animation-range: exit 0% exit 100%;
+				animation-name: stroll;
+				animation-timing-function: linear;
+				animation-fill-mode: both;
+				animation-timeline: scroll(root block);
+				animation-range: 0 100svh;
 			}
 		}
 	}
@@ -555,6 +697,54 @@ const filmId = film?.youtubeUrl && (() => {
 	@keyframes hop {
 		40% {
 			translate: 0 -9px;
+		}
+	}
+
+	@keyframes chat {
+		0%,
+		34%,
+		100% {
+			rotate: 0deg;
+		}
+
+		6%,
+		27% {
+			rotate: var(--lean);
+		}
+	}
+
+	@keyframes nod {
+		0%,
+		9%,
+		15%,
+		21%,
+		27%,
+		100% {
+			translate: 0 0;
+		}
+
+		12%,
+		24% {
+			translate: 0 2px;
+		}
+	}
+
+	@keyframes look {
+		0%,
+		10%,
+		70%,
+		100% {
+			rotate: 0deg;
+		}
+
+		20%,
+		32% {
+			rotate: -7deg;
+		}
+
+		44%,
+		58% {
+			rotate: 7deg;
 		}
 	}
 
