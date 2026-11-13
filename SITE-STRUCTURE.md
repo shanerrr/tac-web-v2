@@ -54,7 +54,7 @@ All four audiences use one site. When they conflict, the public wins: stories le
 ## Constraints
 
 - Static Astro site on Cloudflare.
-- The CMS (probably EmDash) must give every story and film a URL slug.
+- The CMS (Contentful) must give every story and film a URL slug; its stories and films have none yet.
 - YouTube films load only on click, using the privacy-enhanced (no-cookie) player.
 - Accessibility follows `PRODUCT.md`.
 

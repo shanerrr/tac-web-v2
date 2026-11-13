@@ -44,7 +44,7 @@ Stated values (existing copy):
 **Stack and hosting**
 - Astro (scaffold on branch `refactor/cf`, migrating from the Next.js 16 site at commit `3582b8c`).
 - Deploys to **Cloudflare** (binding).
-- CMS: **EmDash is likely** (not final). It replaces Contentful. These content types need a home there:
+- CMS: **Contentful** (decided 2026-11-13, after trying EmDash and Payload: both ran their server on Workers and exceeded the Free plan). The site is static: content is fetched from Contentful's Delivery API at build time and goes live with the next deploy. Its content types:
   - Stories: name, age, decade, pronoun, location, quote, portrait, rich-text body, related stories/films, show flag
   - Films: title, subject name, age, location, duration, banner, YouTube URL
   - Resources: title, description, thumbnail, tags, external link, featured flag
