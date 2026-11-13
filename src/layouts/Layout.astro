@@ -199,33 +199,11 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 		font-size: clamp(2.25rem, 5vw, 3.75rem);
 	}
 
+	/* Lettering is printed solid: the grain stays on grounds and artwork. */
 	h1,
 	h2,
 	h1 span {
 		color: var(--type, var(--ink));
-	}
-
-	/* Display lettering takes the print grain. Body text never does. */
-	@supports (background-clip: text) {
-		h1,
-		h2,
-		h1 span {
-			/* Room below the box so the clipped fill reaches descenders. */
-			margin-bottom: -0.2em;
-			padding-bottom: 0.2em;
-			background: var(--grain), var(--type, var(--ink));
-			background-clip: text;
-			color: transparent;
-		}
-
-		@media (forced-colors: active) {
-			h1,
-			h2,
-			h1 span {
-				background: none;
-				color: CanvasText;
-			}
-		}
 	}
 
 	h3 {
@@ -233,8 +211,10 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 		line-height: 1.15;
 	}
 
+	/* No word left alone on a paragraph's last line. */
 	p {
 		max-width: 34rem;
+		text-wrap: pretty;
 	}
 
 	ul {
@@ -274,23 +254,31 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 		background: var(--grain), var(--sheet, var(--paper));
 	}
 
-	/* The one button: a flat pill of ink. Its fill changes when it is used: ink to rust, or whatever --fill-used names. */
+	/*
+	 * The one button: a flat pill of ink with a rim of the same ink. Used, it un-prints: the fill drops out to paper and
+	 * the rim and label stay ink, so it reads on every ground (paper, the sheet inks, a photo) without a second colour.
+	 */
 	.btn {
+		--rim: 3px;
 		display: inline-flex;
 		align-items: center;
 		min-height: 3.5rem;
-		padding: 0.75rem 2rem;
+		padding: calc(0.75rem - var(--rim)) calc(2rem - var(--rim));
+		border: var(--rim) solid var(--edge, var(--ink));
 		border-radius: 999px;
 		background-color: var(--fill, var(--ink));
-		color: var(--paper);
+		color: var(--label, var(--paper));
 		font-weight: 700;
 		font-size: 1.25rem;
 		text-decoration: none;
-		transition: background-color 0.2s;
+		transition:
+			background-color 0.2s,
+			color 0.2s;
 	}
 
 	.btn:is(:hover, :focus-visible, :active) {
-		background-color: var(--fill-used, var(--rust));
+		background-color: var(--fill-used, var(--paper));
+		color: var(--label-used, var(--ink));
 	}
 
 	.btn:focus-visible {
@@ -298,25 +286,20 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 	}
 
 	/*
-	 * On a dark ground (the hills, a rust sheet) the button prints in paper. Used, it inverts to ink with a paper label;
-	 * its focus ring sits inside the pill. Flat like every button: a grain layer can't fade with the fill, so it flickered.
+	 * On a dark ground (the hills, the ink sheet) the button prints in paper with a paper rim. Used, it un-prints the
+	 * same way: the fill drops out to ink and the rim and label stay paper. Its focus ring sits inside the pill.
 	 */
 	.btn-paper {
+		--edge: var(--paper);
 		--fill: var(--paper);
+		--label: var(--ink);
 		--fill-used: var(--ink);
-		color: var(--ink);
-		transition:
-			background-color 0.2s,
-			color 0.2s;
-	}
-
-	.btn-paper:is(:hover, :focus-visible, :active) {
-		color: var(--paper);
+		--label-used: var(--paper);
 	}
 
 	.btn-paper:focus-visible {
 		outline-color: var(--paper);
-		outline-offset: -6px;
+		outline-offset: -8px;
 	}
 
 	.skip {
@@ -399,8 +382,7 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 	.menu-btn {
 		flex: none;
 		min-height: 3rem;
-		padding: 0 1.25rem;
-		border: 0;
+		padding: 0 calc(1.25rem - var(--rim));
 		font-family: inherit;
 		font-size: 1.125rem;
 		cursor: pointer;

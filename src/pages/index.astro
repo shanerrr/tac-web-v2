@@ -1,6 +1,7 @@
 ---
+import { getEmDashCollection } from 'emdash';
+import { Image } from 'emdash/ui';
 import Layout from '../layouts/Layout.astro';
-import Arcs from '../components/Arcs.astro';
 
 // The ring hills: circles whose centres sit below the frame, in the 1440 x 900 space of the approved sketch.
 // Listed back to front. Each is opaque and covers the ones before it, so ring lines never cross.
@@ -22,12 +23,38 @@ const walkers = [
 	[4, 14, 1],
 ];
 
-// ponytail: placeholders until EmDash is wired. Replace with the newest stories and films from the CMS.
-const featured = [
-	{ format: 'story', ink: 'var(--rust)' },
-	{ format: 'story', ink: 'var(--sage)' },
-	{ format: 'film', ink: 'var(--must)' },
-];
+const newest = (format: 'written' | 'film', limit: number) =>
+	getEmDashCollection('stories', { where: { format, in_feed: true }, orderBy: { published_at: 'desc' }, limit });
+const results = await Promise.all([
+	// The newest two written stories and the newest film in the feed.
+	newest('written', 2),
+	newest('film', 1),
+]);
+// A failed query must not be cached for a day as a home page without stories.
+if (results.some((r) => r.error)) Astro.cache?.set(false);
+else if (Astro.cache?.enabled) for (const r of results) Astro.cache.set(r.cacheHint);
+
+// The two labels stay close in length: past 160 characters a label keeps the person's opening sentences, whole, and
+// marks the rest as left out; the full words are in their story. Their own quote marks are dropped; the label sets its own.
+const sentences = new Intl.Segmenter('en-CA', { granularity: 'sentence' });
+const excerpt = (quote: string) => {
+	const words = quote.trim().replace(/^["“]|["”]$/g, '');
+	if (words.length <= 160) return words;
+	let out = '';
+	for (const { segment } of sentences.segment(words)) {
+		if (out && (out + segment).trim().length > 160) break;
+		out += segment;
+	}
+	return `${out.trim()} …`;
+};
+const faces = results[0].entries.map(({ data }, i) => ({ ...data, ink: ['rust', 'sage'][i], line: data.quote && excerpt(data.quote) }));
+
+const film = results[1].entries[0]?.data;
+// The film plays here from YouTube's privacy-enhanced player once asked for; without script its link opens YouTube.
+const filmId = film?.youtube_url && (() => {
+	const url = new URL(film.youtube_url);
+	return url.hostname.endsWith('youtu.be') ? url.pathname.slice(1) : url.searchParams.get('v');
+})();
 ---
 
 <Layout>
@@ -68,39 +95,13 @@ const featured = [
 				}
 			</svg>
 		</div>
-		<a class="btn btn-paper hero-cta" href="#stories" aria-label="Learn more: read the stories">
+		<a class="btn btn-paper hero-cta" href="#ageism" aria-label="Learn more: why ageism is the problem">
 			Learn more
 			<svg viewBox="0 0 16 24" aria-hidden="true"><path d="M8 2v19M2 15l6 6 6-6" /></svg>
 		</a>
 	</section>
 
-	<section class="stories wrap" id="stories" aria-labelledby="stories-h">
-		<div class="stories-head">
-			<h2 id="stories-h">In their own words.</h2>
-			<p>Real people tell us what growing older is actually like. Read a story, or watch a short film.</p>
-		</div>
-		<ul class="plates">
-			{
-				featured.map((f) => (
-					<li class={`plate ${f.format}`}>
-						<div class="slot" style={`--slot:${f.ink}`}>
-							<Arcs />
-							<span>Placeholder {f.format === 'film' ? 'film still' : 'portrait'}</span>
-						</div>
-						<div class="plate-copy">
-							<h3>{f.format === 'film' ? 'Film title' : 'Name, age'}</h3>
-							<p class="meta">{f.format === 'film' ? 'Name, age · Place · Duration' : 'Place · Pronouns'}</p>
-							{f.format === 'story' && <p class="line">“A line from their story, in their own words.”</p>}
-							<a href="/stories">{f.format === 'film' ? 'Watch the film' : 'Read the story'}</a>
-						</div>
-					</li>
-				))
-			}
-			<li class="more"><a class="btn" href="/stories">All stories and films</a></li>
-		</ul>
-	</section>
-
-	<section class="ageism sheet" aria-labelledby="ageism-h">
+	<section class="ageism" id="ageism" aria-labelledby="ageism-h">
 		<div class="wrap ageism-grid">
 			<div>
 				<h2 id="ageism-h">Aging isn’t the problem. <span>Ageism is.</span></h2>
@@ -115,8 +116,8 @@ const featured = [
 				<figure>
 					<blockquote>
 						<p>
-							Racism, sexism, etc. - none of this is okay, but ageism is somehow still acceptable in a
-							lot of different sectors.
+							“Racism, sexism, etc. – none of this is okay, but ageism is somehow still acceptable in a
+							lot of different sectors.”
 						</p>
 					</blockquote>
 					<figcaption>Jamie, 24</figcaption>
@@ -124,14 +125,92 @@ const featured = [
 				<figure>
 					<blockquote>
 						<p>
-							Some seniors are being abused, even by their own families. Some are new immigrant
-							seniors who don’t understand the system.
+							“Some seniors are being abused, even by their own families. Some are new immigrant
+							seniors who don’t understand the system.”
 						</p>
 					</blockquote>
 					<figcaption>Sushila, 72</figcaption>
 				</figure>
 			</div>
 		</div>
+	</section>
+
+	<section class="stories" id="stories" aria-labelledby="stories-h">
+		<div class="stories-head wrap">
+			<h2 id="stories-h">In their own words.</h2>
+			<a class="btn" href="/stories">
+				See all stories and films
+				<svg viewBox="0 0 24 16" aria-hidden="true"><path d="M2 8h19M15 2l6 6-6 6" /></svg>
+			</a>
+		</div>
+		<ul class="row wrap">
+			{
+				faces.map((f) => (
+					<li class:list={['face', f.ink]}>
+						<div class="photo">
+							<Image
+								image={f.image}
+								width={480}
+								height={600}
+								sizes="(min-width: 87rem) 19rem, (min-width: 64rem) 22vw, (min-width: 48rem) 45vw, calc(100vw - 2.5rem)"
+								placeholder={false}
+							/>
+						</div>
+						<div class="label">
+							<p class="name">
+								{f.name}, {f.age}
+							</p>
+							{f.line && <p class="line">“{f.line}”</p>}
+						</div>
+					</li>
+				))
+			}
+			{
+				film && filmId && (
+					<li class="film">
+						<div class="photo frame" data-film={filmId}>
+							<Image
+								image={film.image}
+								width={960}
+								height={540}
+								sizes="(min-width: 76rem) 36rem, (min-width: 64rem) 40vw, calc(100vw - 2.5rem)"
+								placeholder={false}
+							/>
+							<a class="play" href={film.youtube_url} aria-label={`Play the film: ${film.headline ?? `${film.name}, ${film.age}`}`}>
+								<span class="btn">
+									<svg viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M5 3l8 5-8 5z" />
+									</svg>
+									Play the film
+								</span>
+							</a>
+						</div>
+						<div class="label">
+							<h3 class="name">{film.headline ?? `${film.name}, ${film.age}`}</h3>
+							{film.quote && <p class="line">“{excerpt(film.quote)}”</p>}
+							<p class="meta">
+							{[
+								film.headline && `${film.name}, ${film.age}`,
+								film.location,
+								film.pronouns,
+								Number.isFinite(film.duration_minutes) && `${film.duration_minutes} min`,
+							]
+								.filter(Boolean)
+								.map((item, j) => (
+									<>
+										{j > 0 && ' '}
+										<span>
+											{j > 0 && '· '}
+											{item}
+										</span>
+									</>
+								))}
+							</p>
+						</div>
+					</li>
+				)
+			}
+		</ul>
 	</section>
 
 	<section class="projects wrap" aria-labelledby="projects-h">
@@ -149,29 +228,16 @@ const featured = [
 			<article class="project sheet" style="--sheet:var(--sage)">
 				<h3>My Aging Story</h3>
 				<p class="figure">22 stories</p>
-				<p>Collected over three years and shown in person in Edmonton on February 21–22, 2025.</p>
+				<p>Collected over three years and shown in person in Edmonton on February 21–&#8288;22, 2025.</p>
 				<a href="/projects/my-aging-story">See the exhibit</a>
 			</article>
-		</div>
-	</section>
-
-	<section class="resource wrap" aria-labelledby="resource-h">
-		<div class="slot" style="--slot:var(--tang)">
-			<Arcs />
-			<span>Placeholder thumbnail</span>
-		</div>
-		<div>
-			<h2 id="resource-h">Something to take with you.</h2>
-			<h3>Featured resource title</h3>
-			<p>A short description of the featured resource will sit here once the CMS is connected.</p>
-			<a href="/resources">Browse all resources</a>
 		</div>
 	</section>
 
 	<section class="talk sheet" aria-labelledby="talk-h">
 		<svg class="talk-hill" viewBox="0 0 600 300" aria-hidden="true">
 			<g class="hill">
-				<circle cx="300" cy="420" r="380" fill="var(--sage)"></circle>
+				<circle cx="300" cy="420" r="380" fill="var(--rust)"></circle>
 				{rings(380).map((r) => <circle cx="300" cy="420" r={r} fill="none" stroke="var(--paper)" stroke-width="5" opacity=".75" />)}
 			</g>
 			{
@@ -191,9 +257,30 @@ const featured = [
 	</section>
 </Layout>
 
+<script>
+	// Pressing play swaps the still for the player, captions on, and hands it focus so the keyboard carries on there.
+	const frame = document.querySelector<HTMLElement>('[data-film]');
+	frame?.querySelector('.play')!.addEventListener('click', (e) => {
+		e.preventDefault();
+		const player = document.createElement('iframe');
+		player.src = `https://www.youtube-nocookie.com/embed/${frame.dataset.film}?autoplay=1&cc_load_policy=1&rel=0`;
+		player.title = frame.closest('.film')!.querySelector('h3')!.textContent!;
+		player.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+		player.allowFullscreen = true;
+		frame.replaceChildren(player);
+		frame.dataset.playing = '';
+		player.focus();
+	});
+</script>
+
 <style>
 	section {
 		padding-block: var(--space);
+	}
+
+	/* Two paper sections in a row share one interval, not two. */
+	.stories + .projects {
+		padding-top: 0;
 	}
 
 	section h2 + p,
@@ -225,18 +312,15 @@ const featured = [
 	}
 
 	/*
-	 * The tagline is set solid, without the print grain; each line carries its own ink, so the h1 prints nothing.
-	 * Its size is capped by height so it clears the hills on a short screen, and the cap rises again past
+	 * The tagline's size is capped by height so it clears the hills on a short screen, and the cap rises again past
 	 * about 2000px wide so it keeps its place beside the hills on a very large one.
 	 */
 	h1 {
-		background: none;
 		font-size: clamp(2.25rem, min(6vw, 10vh), max(4.75rem, 3.75vw));
 	}
 
 	h1 span {
 		display: block;
-		background: none;
 		color: var(--ink);
 	}
 
@@ -252,7 +336,7 @@ const featured = [
 		gap: 0.625rem;
 		width: fit-content;
 		margin-inline: auto;
-        outline: 4px solid;
+		outline: 4px solid;
 	}
 
 	.hero-cta svg {
@@ -415,102 +499,270 @@ const featured = [
 		}
 	}
 
-	/* Stories */
+	/*
+	 * Stories: two portraits at a fixed size, each with its person's name and words on a band of ink that starts over
+	 * the photo's foot and hangs below it, so the words never cover a face. The newest film fills the rest of the row,
+	 * on a band of its own, and the way to all stories is a button beside the headline. Below 64rem the film drops under the portraits;
+	 * below 48rem all stacks.
+	 */
+	.stories {
+		--face: clamp(15rem, 22vw, 19rem);
+		--gap: clamp(1rem, 2vw, 1.5rem);
+	}
+
+	/* The way to all stories is the section's one button, beside the headline (under it on a phone). */
 	.stories-head {
 		display: grid;
-		gap: 1.25rem;
-	}
-
-	.plates {
-		display: grid;
-		gap: clamp(2rem, 4vw, 3rem);
-		margin-top: clamp(2.5rem, 5vw, 4rem);
-	}
-
-	.plate {
-		display: grid;
-		gap: 1.25rem;
-		align-content: start;
-	}
-
-	.slot {
-		position: relative;
-		display: grid;
-		place-items: end start;
-		overflow: hidden;
-		aspect-ratio: 4 / 5;
-		border: 3px dashed var(--ink);
-		border-radius: 6px;
-		background: var(--grain), var(--slot);
-	}
-
-	.film .slot {
-		aspect-ratio: 16 / 9;
-	}
-
-	.slot span {
-		position: relative;
-		margin: 0.75rem;
-		padding: 0.25rem 0.75rem;
-		border-radius: 1rem;
-		background: var(--ink);
-		color: var(--paper);
-		font-size: 1.0625rem;
-		font-weight: 700;
-	}
-
-	.plate-copy {
-		display: grid;
-		gap: 0.5rem;
+		gap: 2rem;
 		justify-items: start;
 	}
 
-	.meta {
+	/* Its arrow is drawn like the hero button's, turned to point on, and steps on when the button is used. */
+	.stories-head .btn {
+		gap: 0.625rem;
+	}
+
+	.stories-head svg {
+		width: 1.25em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2.5;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		transition: translate 0.25s var(--ease);
+	}
+
+	.stories-head .btn:is(:hover, :focus-visible) svg {
+		translate: 0.25rem 0;
+	}
+
+	.row {
+		display: grid;
+		gap: var(--gap);
+		margin-top: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	/*
+	 * A real photograph is printed as it is: full colour, no frame, no grain over the face.
+	 * Its ground (--slot) shows until the photo arrives.
+	 */
+	.photo {
+		position: relative;
+		/* Clipped, so a photo delivered at another shape is cropped to the frame rather than growing it. */
+		overflow: hidden;
+		aspect-ratio: 4 / 5;
+		background: var(--slot);
+	}
+
+	.photo :global(img) {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/*
+	 * A plate: a picture over its label. Portraits and the film are printed alike; side by side they stretch to one
+	 * height, so their bands end level.
+	 */
+	.face,
+	.film {
+		--name: clamp(1.0625rem, 8cqi, 1.5rem);
+		display: flex;
+		flex-direction: column;
+		container-type: inline-size;
+	}
+
+	/* Each portrait is given one ink by its place: rust, then sage. Rust is the dark ink, so its words are paper. */
+	.face.rust {
+		--slot: var(--rust);
+		--on-slot: var(--paper);
+	}
+
+	.face.sage {
+		--slot: var(--sage);
+	}
+
+	/*
+	 * The label: a flat band of the portrait's ink. Its name line prints over the photo's foot, where the name always
+	 * sat; the person's words continue below the photo. Type steps with the portrait's width, never under 1.0625rem.
+	 */
+	.row .label {
+		position: relative;
+		flex: 1;
+		display: grid;
+		align-content: start;
+		gap: 0.375rem;
+		margin-top: calc(-0.75rem - 1.15 * var(--name) - 0.375rem);
+		padding: 0.75rem 0.875rem 1rem;
+		background: var(--slot);
+		color: var(--on-slot, var(--ink));
+	}
+
+	.row .name {
+		font: 800 var(--name) / 1.15 var(--font-display);
+		letter-spacing: -0.02em;
+		text-wrap: balance;
+	}
+
+	/* Their words in curly quotes, the opening mark hung so the words keep the label's edge. */
+	.row .line {
+		font: 500 clamp(1.0625rem, 6cqi, 1.1875rem) / 1.35 var(--font-display);
+		text-indent: -0.4em;
+		text-wrap: pretty;
+	}
+
+	/* Paper on rust blooms, so the rust label's words take the ageism sheet's extra tracking. */
+	.face.rust .line {
+		letter-spacing: 0.01em;
+	}
+
+	/* The film's plate is the third ink, tangerine: its still's ground until it loads, then the band under it. */
+	.film {
+		--slot: var(--tang);
+	}
+
+	.film .frame {
+		aspect-ratio: 16 / 9;
+	}
+
+	/* On a phone a 16:9 still under its band is a sliver with the play button over the faces; it stands at 4:3 until played. */
+	@media (width < 48rem) {
+		.film .frame:not([data-playing]) {
+			aspect-ratio: 4 / 3;
+		}
+	}
+
+	/* Playing, the frame is grounded in the player's own ink and the band steps off its foot, where the controls are. */
+	.film .frame[data-playing] {
+		background: var(--ink);
+	}
+
+	.film .frame[data-playing] + .label {
+		margin-top: 0;
+	}
+
+	/* Global: the player is added by script, so it never carries this page's scoping attribute. */
+	.frame :global(iframe) {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+
+	/* The whole still is the play target; the Ink pill on it un-prints when any of it is used. */
+	.play {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		text-decoration: none;
+	}
+
+	.play .btn {
+		gap: 0.625rem;
+	}
+
+	.play:is(:hover, :focus-visible, :active) .btn {
+		background-color: var(--paper);
+		color: var(--ink);
+	}
+
+	.play svg {
+		width: 0.875em;
+		height: 0.875em;
+		fill: currentColor;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linejoin: round;
+	}
+
+	.film .meta {
+		margin-top: 0.125rem;
+	}
+
+	/* Labels (metadata lines, captions) sit a step under the reading text. Each metadata item keeps together. */
+	.meta,
+	.voices figcaption {
+		font-size: 1.125rem;
 		font-weight: 700;
 	}
 
-	.line {
-		font: 500 1.375rem/1.35 var(--font-display);
+	.meta span {
+		white-space: nowrap;
 	}
 
-	.plate-copy a,
-	.project a,
-	.resource a {
+	@media (min-width: 48rem) {
+		.row {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.film {
+			grid-column: 1 / -1;
+		}
+	}
+
+	/* From 64rem the portraits keep their marquee size and the film takes the rest. */
+	@media (min-width: 64rem) {
+		.row {
+			grid-template-columns: var(--face) var(--face) 1fr;
+		}
+
+		.film {
+			grid-column: auto;
+		}
+
+		/* Beside the portraits the still grows to their height, so the film's band stays short and ends level. */
+		.film .frame {
+			flex: 1;
+			aspect-ratio: auto;
+		}
+
+		.film .label {
+			flex: none;
+		}
+
+	}
+
+	/* People's own words are set in curly quotes; the opening mark hangs so the words keep the block's left edge. */
+	.voices blockquote p {
+		text-indent: -0.4em;
+	}
+
+	.project a {
 		display: inline-flex;
 		align-items: center;
 		min-height: 2.75rem;
 		font-weight: 700;
+		text-wrap: balance;
 	}
 
 	@media (min-width: 48rem) {
 		.stories-head {
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: 1fr auto;
 			align-items: end;
-		}
-
-		.plates {
-			grid-template-columns: minmax(0, 0.8fr) 1.2fr;
-			grid-template-rows: auto auto 1fr;
-		}
-
-		.plate:first-child {
-			grid-row: span 3;
-		}
-
-		.more {
-			align-self: end;
-		}
-
-		.plate:not(:first-child) {
-			grid-template-columns: minmax(0, 0.8fr) 1fr;
-			align-items: center;
 		}
 	}
 
-	/* Ageism: a whole sheet of rust, two voices pinned to it. Rust is dark, so the sheet's own text is paper. */
+	/* Ageism: a whole sheet of ink straight after the hero, two voices pinned to it. Its own text is paper. */
 	.ageism {
-		--sheet: var(--rust);
+		position: relative;
+		isolation: isolate;
+		background: var(--ink);
 		color: var(--paper);
+	}
+
+	/*
+	 * Full grain on a dark ink eats the edges of paper-coloured reading text (the olive footer drops it for the same
+	 * reason). The ink keeps its print texture, printed at half strength.
+	 */
+	.ageism::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--grain);
+		opacity: 0.45;
 	}
 
 	.ageism h2 {
@@ -522,16 +774,25 @@ const featured = [
 		gap: clamp(3rem, 6vw, 5rem);
 	}
 
+	/* Said like the tagline: the claim plainly, the answer in weight (and in mustard). */
 	.ageism h2 {
 		font-size: clamp(2.5rem, 6vw, 4.75rem);
+		font-weight: 400;
 	}
 
+	/* The answer prints in mustard (6.38:1 on ink), so the turn of the sentence carries the colour. */
 	.ageism h2 span {
+		--type: var(--must);
 		display: block;
+		font-weight: 800;
+		color: var(--type);
 	}
 
+	/* Paper on a dark ink blooms a little, so the reading text gets a touch more leading and tracking than ink on paper. */
 	.ageism h2 + p {
 		margin-top: 2rem;
+		line-height: 1.6;
+		letter-spacing: 0.01em;
 	}
 
 	.ageism .btn {
@@ -544,41 +805,48 @@ const featured = [
 		align-content: center;
 	}
 
-	/* Knockouts: the rust is not printed here, so the paper shows through, and the words on it are ink again. */
+	/* Each voice is a sheet of a light ink, tangerine then sage, so the words on it are ink again (5.5:1 and up). */
 	.voices figure {
 		padding: clamp(1.5rem, 3vw, 2.25rem);
-		background: var(--grain), var(--paper);
+		background: var(--grain), var(--tang);
 		color: var(--ink);
+	}
+
+	.voices figure + figure {
+		background: var(--grain), var(--sage);
 	}
 
 	.voices figure + figure {
 		margin-left: clamp(1.5rem, 5vw, 4rem);
 	}
 
+	/* In a narrow stacked box, even lines read calmer than a ragged last line. */
 	.voices blockquote p {
 		font: 500 clamp(1.25rem, 2vw, 1.5rem) / 1.35 var(--font-display);
+		text-wrap: balance;
 	}
 
 	.voices figcaption {
 		margin-top: 1rem;
-		font-weight: 700;
 	}
 
 	@media (min-width: 60rem) {
 		.ageism-grid {
 			grid-template-columns: 1.1fr 1fr;
 		}
+
+		/* Beside the argument the boxes are wide enough to fill; balancing would leave them half empty. */
+		.voices blockquote p {
+			text-wrap: pretty;
+		}
 	}
 
 	/* Projects: two sheets, one real number each. */
 	.project-pair {
+		--lap: 2rem;
 		display: grid;
 		isolation: isolate;
 		margin-top: clamp(2.5rem, 5vw, 4rem);
-	}
-
-	.project-pair {
-		--lap: 2rem;
 	}
 
 	.project {
@@ -634,35 +902,9 @@ const featured = [
 		}
 	}
 
-	/* Featured resource */
-	.resource {
-		display: grid;
-		gap: clamp(2rem, 5vw, 4rem);
-		align-items: center;
-		padding-top: 0;
-	}
-
-	.resource .slot {
-		aspect-ratio: 4 / 3;
-	}
-
-	.resource h3 {
-		margin-top: 2rem;
-	}
-
-	.resource a {
-		margin-top: 0.75rem;
-	}
-
-	@media (min-width: 48rem) {
-		.resource {
-			grid-template-columns: 0.8fr 1fr;
-		}
-	}
-
-	/* The close: the tagline's second half, on a sheet of orange. */
+	/* The close: the tagline's second half on a sheet of mustard, which runs on into the olive footer as the hero's hills do. */
 	.talk {
-		--sheet: var(--tang);
+		--sheet: var(--must);
 		position: relative;
 		isolation: isolate;
 		overflow: hidden;
@@ -675,7 +917,6 @@ const featured = [
 		z-index: -1;
 		width: min(44%, 36rem);
 		overflow: visible;
-		mix-blend-mode: multiply;
 	}
 
 	.talk-hill .hill {
