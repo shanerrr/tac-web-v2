@@ -1,0 +1,66 @@
+---
+/*
+ * A ridge: the crown of a ring hill that a section rises on, so the page reads as one walk over hill after hill.
+ * It sits on the top edge of its section (which must be position: relative) and rises into the one above.
+ * Hills are listed back to front in a 1440 x h drawing whose foot is the section's top edge. Each crown stands s units
+ * above the foot; unless r is given, its sides come down to the foot at both edges, so the section below starts flush.
+ */
+import { grain } from '../grain';
+
+interface Props {
+	hills: { ink: string; s: number; cx?: number; r?: number; rings?: boolean }[];
+	h?: number;
+	/** Grain strength over the hills: 0.45 on the Ink sheet, as the sheet itself prints it. */
+	grain?: number;
+}
+
+const { hills, h = 160, grain: strength = 1 } = Astro.props;
+const w = 1440;
+const shapes = hills.map(({ s, cx = w / 2, r, ...rest }) => {
+	const half = Math.max(cx, w - cx);
+	const R = r ?? (half * half + s * s) / (2 * s);
+	return { ...rest, cx, r: R, cy: h - s + R };
+});
+const rings = (r: number) => Array.from({ length: Math.floor((r - 20) / 26) }, (_, i) => r - 26 * (i + 1));
+const id = `grain-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<svg class="ridge" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMax slice" aria-hidden="true" style={`--w:${w}; --h:${h}`}>
+	<defs>
+		<pattern id={id} patternUnits="userSpaceOnUse" width="240" height="240">
+			<image href={grain} width="240" height="240" />
+		</pattern>
+	</defs>
+	{
+		shapes.map((g) => (
+			<g>
+				<circle cx={g.cx} cy={g.cy} r={g.r} fill={g.ink} />
+				{g.rings &&
+					rings(g.r).map((r) => (
+						<circle cx={g.cx} cy={g.cy} r={r} fill="none" stroke="var(--paper)" stroke-width="5" opacity=".75" />
+					))}
+				<circle cx={g.cx} cy={g.cy} r={g.r} fill={`url(#${id})`} opacity={strength} />
+			</g>
+		))
+	}
+</svg>
+
+<style>
+	/*
+	 * As wide as its section, in proportion, and overlapping it by a pixel so no seam shows. Under 2.5rem tall
+	 * (a phone) it is cropped at the sides instead of flattening further.
+	 */
+	.ridge {
+		position: absolute;
+		bottom: calc(100% - 1px);
+		left: 0;
+		z-index: 1;
+		width: 100%;
+		height: auto;
+		aspect-ratio: var(--w) / var(--h);
+		min-height: 2.5rem;
+		/* The circles run on far below and beside the drawing; only the crowns show. */
+		overflow: hidden;
+		pointer-events: none;
+	}
+</style>

@@ -1,0 +1,251 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "The Age Collective",
+		"description": "Stories, films, resources and the GOLD anthology"
+	},
+	"settings": {
+		"title": "The Age Collective",
+		"tagline": "We’re all aging. Let’s talk about it.",
+		"timezone": "America/Edmonton",
+		"social": {
+			"instagram": "theagecollective",
+			"linkedin": "company/the-age-collective",
+			"youtube": "@TheAgeCollective"
+		}
+	},
+	"blockTypes": [
+		{
+			"slug": "photo",
+			"label": "Photo",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{ "slug": "image", "label": "Image", "type": "image", "required": true },
+						{ "slug": "caption", "label": "Caption", "type": "string" }
+					]
+				}
+			]
+		},
+		{
+			"slug": "video",
+			"label": "Video",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "video",
+							"label": "Video file",
+							"type": "file",
+							"required": true,
+							"validation": { "allowedMimeTypes": ["video/mp4", "video/webm"] }
+						},
+						{ "slug": "poster", "label": "Poster image", "type": "image", "required": true },
+						{ "slug": "caption", "label": "Caption", "type": "string" }
+					]
+				}
+			]
+		},
+		{
+			"slug": "poem",
+			"label": "Poem",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{ "slug": "title", "label": "Title", "type": "string", "required": true },
+						{
+							"slug": "theme",
+							"label": "Theme",
+							"type": "select",
+							"validation": { "options": ["Time & legacy", "Place & belonging", "Self & identity"] }
+						},
+						{ "slug": "text", "label": "Poem", "type": "portableText" },
+						{ "slug": "centered", "label": "Center the lines", "type": "boolean", "defaultValue": false }
+					]
+				}
+			]
+		}
+	],
+	"collections": [
+		{
+			"slug": "stories",
+			"label": "Stories",
+			"labelSingular": "Story",
+			"description": "Written stories and films. Each entry is one person's (or couple's) story.",
+			"icon": "book-open-text",
+			"sortOrder": 1,
+			"supports": ["drafts", "revisions", "preview", "seo"],
+			"urlPattern": "/stories/{slug}",
+			"titleField": "name",
+			"dateField": "publishedAt",
+			"admin": { "listColumns": ["format", "age", "location", "in_feed"] },
+			"fields": [
+				{
+					"slug": "format",
+					"label": "Format",
+					"type": "select",
+					"required": true,
+					"indexed": true,
+					"defaultValue": "written",
+					"validation": { "options": ["written", "film"] }
+				},
+				{ "slug": "name", "label": "Name", "type": "string", "required": true, "validation": { "maxLength": 80 } },
+				{ "slug": "age", "label": "Age", "type": "integer", "required": true, "indexed": true, "validation": { "min": 0, "max": 120 } },
+				{
+					"slug": "pronouns",
+					"label": "Pronouns",
+					"type": "select",
+					"validation": { "options": ["she/her", "he/him", "they/them"] }
+				},
+				{ "slug": "location", "label": "Location", "type": "string", "required": true, "validation": { "maxLength": 80 } },
+				{
+					"slug": "headline",
+					"label": "Headline",
+					"type": "string",
+					"validation": { "maxLength": 140 }
+				},
+				{ "slug": "quote", "label": "Pull quote", "type": "text", "options": { "rows": 4 }, "validation": { "maxLength": 400 } },
+				{
+					"slug": "image",
+					"label": "Portrait or film still",
+					"type": "image",
+					"required": true,
+					"validation": { "allowedMimeTypes": ["image/jpeg", "image/png", "image/webp", "image/avif"] }
+				},
+				{ "slug": "body", "label": "Story", "type": "portableText" },
+				{
+					"slug": "youtube_url",
+					"label": "YouTube URL (films)",
+					"type": "url",
+					"validation": { "pattern": "^https://(www\\.)?(youtube\\.com/watch\\?v=|youtu\\.be/)[\\w-]{11}" }
+				},
+				{ "slug": "duration_minutes", "label": "Length in minutes (films)", "type": "integer", "validation": { "min": 1, "max": 600 } },
+				{ "slug": "in_feed", "label": "Show in the stories feed", "type": "boolean", "defaultValue": true },
+				{ "slug": "related", "label": "Related stories and films", "type": "reference", "validation": { "relation": "story_related", "relationSide": "parent" } }
+			]
+		},
+		{
+			"slug": "resources",
+			"label": "Resources",
+			"labelSingular": "Resource",
+			"description": "External links for the resources hub. Tag them with Topics.",
+			"icon": "link",
+			"sortOrder": 2,
+			"routable": false,
+			"supports": ["drafts", "revisions"],
+			"titleField": "title",
+			"admin": { "listColumns": ["featured"] },
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "validation": { "maxLength": 160 } },
+				{ "slug": "description", "label": "Description", "type": "text", "required": true, "options": { "rows": 4 }, "validation": { "maxLength": 1000 } },
+				{ "slug": "url", "label": "Link", "type": "url", "required": true },
+				{
+					"slug": "thumbnail",
+					"label": "Thumbnail",
+					"type": "image",
+					"required": true,
+					"validation": { "allowedMimeTypes": ["image/jpeg", "image/png", "image/webp", "image/avif"] }
+				},
+				{ "slug": "featured", "label": "Featured (the newest featured resource is shown)", "type": "boolean", "defaultValue": false, "indexed": true }
+			]
+		},
+		{
+			"slug": "gold_contributors",
+			"label": "GOLD contributors",
+			"labelSingular": "GOLD contributor",
+			"description": "Judges and poets of the GOLD poetry anthology.",
+			"icon": "feather",
+			"sortOrder": 3,
+			"routable": false,
+			"supports": ["drafts", "revisions"],
+			"titleField": "name",
+			"admin": { "listColumns": ["role", "location"] },
+			"fields": [
+				{ "slug": "role", "label": "Role", "type": "select", "required": true, "indexed": true, "validation": { "options": ["judge", "poet"] } },
+				{ "slug": "name", "label": "Name", "type": "string", "required": true, "validation": { "maxLength": 120 } },
+				{
+					"slug": "photo",
+					"label": "Photo",
+					"type": "image",
+					"validation": { "allowedMimeTypes": ["image/jpeg", "image/png", "image/webp", "image/avif"] }
+				},
+				{ "slug": "bio", "label": "Bio", "type": "text", "options": { "rows": 6 } },
+				{ "slug": "age", "label": "Age at submission (poets)", "type": "integer", "validation": { "min": 0, "max": 120 } },
+				{ "slug": "location", "label": "Location (poets)", "type": "string", "validation": { "maxLength": 80 } },
+				{ "slug": "poems", "label": "Poems (poets)", "type": "blocks", "validation": { "allowedTypes": ["poem"], "maxItems": 10 } },
+				{
+					"slug": "links",
+					"label": "Links",
+					"type": "repeater",
+					"validation": {
+						"maxItems": 4,
+						"subFields": [
+							{ "slug": "label", "label": "Label", "type": "string", "required": true },
+							{ "slug": "url", "label": "URL or mailto: link", "type": "url", "required": true }
+						]
+					}
+				},
+				{ "slug": "sort_order", "label": "Display order (judges)", "type": "integer", "indexed": true, "validation": { "min": 0 } }
+			]
+		},
+		{
+			"slug": "galleries",
+			"label": "Galleries",
+			"labelSingular": "Gallery",
+			"description": "Ordered photo and video sets used on the About, GOLD and My Aging Story pages. The slug is how a page finds its gallery.",
+			"icon": "images",
+			"sortOrder": 4,
+			"routable": false,
+			"supports": ["drafts", "revisions"],
+			"titleField": "title",
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "items", "label": "Photos and videos", "type": "blocks", "validation": { "allowedTypes": ["photo", "video"], "maxItems": 40 } }
+			]
+		},
+		{
+			"slug": "announcements",
+			"label": "Announcements",
+			"labelSingular": "Announcement",
+			"description": "The sitewide banner. The newest published announcement is shown; unpublish it to hide the banner.",
+			"icon": "megaphone",
+			"sortOrder": 5,
+			"routable": false,
+			"supports": ["drafts", "revisions"],
+			"titleField": "message",
+			"dateField": "publishedAt",
+			"fields": [
+				{ "slug": "message", "label": "Message", "type": "string", "required": true, "validation": { "maxLength": 160 } },
+				{ "slug": "link", "label": "Link", "type": "url" },
+				{ "slug": "link_text", "label": "Link text", "type": "string", "validation": { "maxLength": 40 } }
+			]
+		}
+	],
+	"relations": [
+		{
+			"slug": "story_related",
+			"parentCollection": "stories",
+			"childCollection": "stories",
+			"parentLabel": "Related from",
+			"childLabel": "Related stories and films",
+			"maxChildrenPerParent": 3
+		}
+	],
+	"taxonomies": [
+		{
+			"name": "tag",
+			"label": "Topics",
+			"labelSingular": "Topic",
+			"hierarchical": false,
+			"collections": ["resources"]
+		}
+	],
+	"redirects": [{ "source": "/films", "destination": "/stories?format=film", "type": 301, "enabled": true }]
+}

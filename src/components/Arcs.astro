@@ -1,0 +1,16 @@
+---
+// Ring arcs rising from the bottom edge: the hill in the corner of the phone menu.
+---
+
+<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+	{[150, 118, 86, 54, 22].map((r) => <circle cx="100" cy="230" r={r} fill="none" stroke="var(--paper)" stroke-width="6" />)}
+</svg>
+
+<style>
+	svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+</style>

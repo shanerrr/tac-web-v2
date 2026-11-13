@@ -1,0 +1,12 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "tac-web",
+	"main": "./src/worker.ts",
+	"compatibility_date": "2026-11-10",
+	"compatibility_flags": ["nodejs_compat"],
+	// Binding names must match the d1()/r2() adapters in astro.config.mjs.
+	"d1_databases": [{ "binding": "DB", "database_name": "tac-web" }],
+	"r2_buckets": [{ "binding": "MEDIA", "bucket_name": "tac-web-media" }],
+	// Scheduled publishing and maintenance.
+	"triggers": { "crons": ["* * * * *"] },
+}
