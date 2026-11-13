@@ -24,8 +24,9 @@ const walkers = [
 	[4, 14, 1],
 ];
 
+// EmDash filters take strings only; booleans are stored as INTEGER 0/1, and SQLite matches '1' against that column.
 const newest = (format: 'written' | 'film', limit: number) =>
-	getEmDashCollection('stories', { where: { format, in_feed: true }, orderBy: { published_at: 'desc' }, limit });
+	getEmDashCollection('stories', { where: { format, in_feed: '1' }, orderBy: { published_at: 'desc' }, limit });
 const results = await Promise.all([
 	// The newest two written stories and the newest film in the feed.
 	newest('written', 2),
