@@ -19,7 +19,7 @@ export default defineConfig({
 		},
 		{
 			provider: fontProviders.google(),
-			name: 'Atkinson Hyperlegible Next',
+			name: 'Outfit',
 			cssVariable: '--font-body',
 			weights: ['200 800'],
 			styles: ['normal'],

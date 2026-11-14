@@ -113,7 +113,7 @@ const filmId = film?.youtubeUrl && (() => {
 				}
 			</svg>
 		</div>
-		<a class="btn btn-paper hero-cta" href="#ageism" aria-label="Learn more: how we’re changing the narrative around aging">
+		<a class="btn btn-paper hero-cta" href="#ageism" aria-label="Learn more: how we’re redefining what it means to grow older">
 			Learn more
 			<svg viewBox="0 0 16 24" aria-hidden="true"><path d="M8 2v19M2 15l6 6 6-6" /></svg>
 		</a>
@@ -127,9 +127,9 @@ const filmId = film?.youtubeUrl && (() => {
 	<section class="ageism" id="ageism" aria-labelledby="ageism-h">
 		<Ridge h={120} hills={[{ ink: 'var(--ink)', s: 104 }]} grain={0.45} />
 		<div class="wrap">
-			<h2 id="ageism-h">We’re changing the narrative <span>around aging.</span></h2>
+			<h2 id="ageism-h">We’re redefining what it means <span>to grow older.</span></h2>
 			<div class="ageism-grid">
-				<div>
+				<div class="argument">
 					<p>
 						How we think about aging shapes how we grow older, how we treat one another, and the kind of
 						communities we build together.
@@ -243,6 +243,7 @@ const filmId = film?.youtubeUrl && (() => {
 						</a>
 					</div>
 					<div class="label">
+						<p class="kind">Film{film.durationMinutes && ` · ${film.durationMinutes} min`}</p>
 						<h3 class="name">{film.headline ?? `${film.name}, ${film.age}`}</h3>
 						{film.quote && <p class="line">“{excerpt(film.quote)}”</p>}
 						<p class="meta">
@@ -250,7 +251,6 @@ const filmId = film?.youtubeUrl && (() => {
 								film.headline && `${film.name}, ${film.age}`,
 								film.location,
 								film.pronouns,
-								film.durationMinutes && `${film.durationMinutes} min`,
 							]
 								.filter(Boolean)
 								.map((item, j) => (
@@ -709,7 +709,18 @@ const filmId = film?.youtubeUrl && (() => {
 		color: var(--paper);
 	}
 
-	/* Said like the tagline: the claim plainly, its subject as a poster line in mustard (6.38:1 on ink). */
+	/* The column is the headline's container, so the poster line can be held to the column's width. */
+	.ageism .wrap {
+		container-type: inline-size;
+	}
+
+	/*
+	 * Said like the tagline: the claim plainly, its subject as a poster line in mustard (6.38:1 on ink). The two lines
+	 * print to one width, a block of type: in Besley, "We’re redefining what it means" (400) inks 14.87em wide and
+	 * "to grow older." (700, -0.035em) 6.81em, so the poster is set 2.18 times the first line. Below about 530px the
+	 * first line wraps, and the poster just fills the column (14.6cqi, a hair short of it) instead. The poster is the
+	 * section's one heavy line, at 700 rather than 800 so it anchors the sheet without shouting over it.
+	 */
 	.ageism h2 {
 		--type: var(--paper);
 		font-size: clamp(2rem, 4.4vw, 3.75rem);
@@ -721,28 +732,33 @@ const filmId = film?.youtubeUrl && (() => {
 		--type: var(--must);
 		display: block;
 		margin-top: 0.04em;
-		/* "around aging." is 13 characters, so the poster stops at 9rem to stay on the column at every width. */
-		font-size: clamp(3rem, 10.5vw, 9rem);
-		font-weight: 800;
+		font-size: 2.18em;
+		font-size: min(2.18em, 14.6cqi);
+		font-weight: 700;
 		line-height: 0.92;
 		letter-spacing: -0.035em;
 		color: var(--type);
 	}
 
-	/* The argument and its way on, then the two voices in a row under it, so no corner of the sheet is left empty. */
+	/* The argument and its way on, then the two voices; wide, they share the sheet half and half (see below). */
 	.ageism-grid {
 		display: grid;
 		gap: clamp(2.5rem, 5vw, 4rem);
 		margin-top: clamp(2rem, 4vw, 3.5rem);
 	}
 
-	/* Paper on a dark ink blooms a little, so the reading text gets a touch more leading and tracking. */
-	.ageism-grid p {
+	/*
+	 * Light type on a dark ink blooms, and the grain shows between thin strokes, so the argument prints a size up from
+	 * body text on wide screens (22px from about 1300px; 20px on phones), with a little more leading and tracking. It
+	 * stays at regular weight: heavier, it read as one more bold block beside the poster and the notes.
+	 */
+	.argument p {
+		font-size: clamp(1.25rem, 1.05rem + 0.4vw, 1.375rem);
 		line-height: 1.6;
 		letter-spacing: 0.01em;
 	}
 
-	.ageism-grid p + p {
+	.argument p + p {
 		margin-top: 1.25rem;
 	}
 
@@ -772,31 +788,49 @@ const filmId = film?.youtubeUrl && (() => {
 		rotate: 0.5deg;
 	}
 
-	/* People's own words in curly quotes; the opening mark hangs so the words keep the block's left edge. */
+	/*
+	 * People's own words in curly quotes; the opening mark hangs so the words keep the block's left edge. Regular weight
+	 * and a size under the argument's lead, so the two notes sit beside the argument rather than shout over it.
+	 */
 	.voices blockquote p {
-		font: 500 clamp(1.25rem, 2vw, 1.5rem) / 1.35 var(--font-display);
+		font: 400 clamp(1.1875rem, 1.7vw, 1.375rem) / 1.4 var(--font-display);
 		text-indent: -0.4em;
 		text-wrap: balance;
 	}
 
+	/* The name signs the words rather than heading them: medium, not bold. */
 	.voices figcaption {
 		margin-top: 1rem;
 		font-size: 1.125rem;
-		font-weight: 700;
+		font-weight: 500;
 	}
 
-	/* Side by side, the two voices share one top line. */
+	/*
+	 * Wide, the argument sits on the left and the two voices stack on the right, sharing one top line under the
+	 * headline, so the argument stays with its headline and the sheet has no empty half beside it.
+	 */
 	@media (min-width: 60rem) {
-		.voices {
+		.ageism-grid {
 			grid-template-columns: 1fr 1fr;
+			column-gap: clamp(3rem, 6vw, 6rem);
+			align-items: start;
 		}
 
 		.voices figure + figure {
-			margin-left: 0;
+			margin-left: clamp(2rem, 4vw, 4rem);
 		}
 
 		.voices blockquote p {
 			text-wrap: pretty;
+		}
+
+		/*
+		 * Optical alignment: the first line's leading would sit its capitals about 12px under the first note's top
+		 * edge, so it is trimmed to the cap height and the two start on one line. Where text-box is unsupported the
+		 * layout is unchanged.
+		 */
+		.argument p:first-child {
+			text-box: trim-start cap alphabetic;
 		}
 	}
 
@@ -1017,17 +1051,23 @@ const filmId = film?.youtubeUrl && (() => {
 		border: 0;
 	}
 
-	/* Title and words from the top, details at the foot, so the band reads full with or without a quote. */
+	/* The band's words sit together, centred in its height, so it never reads half empty. */
 	.film .label {
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 		gap: 0.75rem;
 		padding: clamp(1.5rem, 3vw, 2.5rem);
 		background: var(--grain-soft), var(--tang);
 	}
 
+	.film .kind {
+		font-size: 1.125rem;
+		font-weight: 700;
+	}
+
 	.film .name {
-		font-size: clamp(1.625rem, 2.8vw, 2.25rem);
+		font-size: clamp(1.75rem, 3vw, 2.5rem);
 	}
 
 	.film .line {
@@ -1036,8 +1076,6 @@ const filmId = film?.youtubeUrl && (() => {
 	}
 
 	.film .meta {
-		margin-top: auto;
-		padding-top: 0.75rem;
 		font-size: 1.125rem;
 		font-weight: 700;
 		text-wrap: balance;
