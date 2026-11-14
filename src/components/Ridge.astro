@@ -10,7 +10,7 @@ import { grain } from '../grain';
 interface Props {
 	hills: { ink: string; s: number; cx?: number; r?: number; rings?: boolean }[];
 	h?: number;
-	/** Grain strength over the hills: 0.45 on the Ink sheet, as the sheet itself prints it. */
+	/** Grain strength over the hills: 0.45 on a sheet that carries text (--grain-soft), as the sheet itself prints it. */
 	grain?: number;
 }
 

@@ -1,7 +1,7 @@
 ---
 import { Font } from 'astro:assets';
 import Arcs from '../components/Arcs.astro';
-import { grain } from '../grain';
+import { grain, grainSoft } from '../grain';
 
 interface Props {
 	title?: string;
@@ -29,7 +29,7 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 ---
 
 <!doctype html>
-<html lang="en-CA" style={`--grain: url("${grain}")`}>
+<html lang="en-CA" style={`--grain: url("${grain}"); --grain-soft: url("${grainSoft}")`}>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -60,6 +60,10 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 		<main id="main"><slot /></main>
 
 		<footer class="site-footer">
+			<!--
+				The print's margin. Every section above is ink printed on the sheet; the footer is where the print ends: a
+				straight trim edge with an Ink rule (the header's rule, mirrored), then the bare paper, with the printer's slug.
+			-->
 			<div class="wrap footer-grid">
 				<div>
 					<p class="footer-tag">We’re all aging.<br />Let’s talk about it.</p>
@@ -84,6 +88,10 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 					<span>© {new Date().getFullYear()} The Age Collective</span>
 					<a href="/privacy">Privacy Policy</a>
 					<a href="/terms">Terms of Use</a>
+					<!-- The colour bar a printer runs along a sheet's margin: one square of each ink this site prints in. -->
+					<span class="inks" aria-hidden="true">
+						{['rust', 'tang', 'must', 'sage', 'olive', 'ink'].map((ink) => <i style={`background:var(--${ink})`} />)}
+					</span>
 				</p>
 			</div>
 		</footer>
@@ -248,9 +256,9 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 		margin-inline: auto;
 	}
 
-	/* A whole sheet of one ink. Set --sheet on the element. */
+	/* A whole sheet of one ink. Set --sheet on the element. Sheets carry text, so their grain prints soft. */
 	.sheet {
-		background: var(--grain), var(--sheet, var(--paper));
+		background: var(--grain-soft), var(--sheet, var(--paper));
 	}
 
 	/*
@@ -535,11 +543,15 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 		}
 	}
 
+	/*
+	 * The print's margin: bare paper below a straight trim edge, its Ink rule the header's rule mirrored, so the page
+	 * is bound by two rules. Ink on paper is the strongest pairing in the system (11.76:1).
+	 */
 	.site-footer {
-		/* No grain here: white speckle on the darkest ink costs small text its edges. */
-		background: var(--olive);
+		border-top: 3px solid var(--ink);
+		background: var(--grain), var(--paper);
 		padding-block: var(--space) 3rem;
-		color: var(--paper);
+		color: var(--ink);
 		font-size: 1.125rem;
 	}
 
@@ -582,13 +594,32 @@ const current = (href: string) => (path.startsWith(href) ? 'page' : undefined);
 		grid-column: 1 / -1;
 	}
 
+	/* The colour bar ends the slug at the column's right edge: square, flat, in register, a hairline of paper between inks. */
+	.inks {
+		display: flex;
+		gap: 3px;
+		margin-left: auto;
+	}
+
+	.inks i {
+		width: 1.125rem;
+		aspect-ratio: 1;
+	}
+
+	/* Side by side, the links stand at the right through the first two rows, so the acknowledgement sits beside them, not under a gap. */
 	@media (min-width: 48rem) {
 		.footer-grid {
 			grid-template-columns: 1.2fr 1fr;
 		}
 
 		.site-footer nav {
+			grid-column: 2;
+			grid-row: 1 / span 2;
 			justify-content: flex-end;
+		}
+
+		.land {
+			grid-column: 1;
 		}
 	}
 
